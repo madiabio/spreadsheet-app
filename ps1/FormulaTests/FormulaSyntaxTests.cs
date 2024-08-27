@@ -94,25 +94,25 @@ public class FormulaSyntaxTests
 
     /// <summary>
     /// <para>
-    ///     This test checks that scientific notation will be accepted as valid in a valid expression with a lowercase e.
+    ///     This test checks that scientific notation will be accepted as valid with a lowercase e.
     /// </para>
     /// </summary>
     [TestMethod]
     public void FormulaConstructor_TestValidTokenScientificNotationLowercase_Valid()
     {
-        _ = new Formula("1e1+1");
+        _ = new Formula("1e1");
     }
 
 
     /// <summary>
     /// <para>
-    ///     This test checks that scientific notation will be accepted as valid in a valid expression with a capital E.
+    ///     This test checks that scientific notation will be accepted as valid with a capital E.
     /// </para>
     /// </summary>
     [TestMethod]
     public void FormulaConstructor_TestValidTokenScientificNotationUppercase_Valid()
     {
-        _ = new Formula("1E1+1");
+        _ = new Formula("1E1");
     }
 
 
@@ -129,7 +129,7 @@ public class FormulaSyntaxTests
     [ExpectedException(typeof(FormulaFormatException))]
     public void FormulaConstructor_TestValidTokenVariable_Invalid()
     {
-        _ = new Formula("1a1+1");
+        _ = new Formula("1a1");
     }
 
 
@@ -166,6 +166,13 @@ public class FormulaSyntaxTests
         _ = new Formula("1+1)");
     }
 
+    [TestMethod]
+    [ExpectedException(typeof(FormulaFormatException))]
+    public void FormulaConstructor_TestClosingParenthesesWithBalancedParenthesis_Invalid()
+    {
+        _ = new Formula("(1)+1)");
+    }
+
 
 
     // --- Tests for Balanced Parentheses Rule
@@ -193,7 +200,6 @@ public class FormulaSyntaxTests
     ///     </remarks>
     /// </summary>
     [TestMethod]
-
     [ExpectedException(typeof(FormulaFormatException))]
     public void FormulaConstructor_TestBalancedParentheses_Invalid()
     {
@@ -203,6 +209,7 @@ public class FormulaSyntaxTests
 
 
     // --- Tests for First Token Rule
+
     /// <summary>
     ///   <para>
     ///     Make sure a simple well formed formula is accepted by the constructor (the constructor
@@ -219,7 +226,22 @@ public class FormulaSyntaxTests
         _ = new Formula( "1+1" );
     }
 
+    /// <summary>
+    ///     <para>
+    ///         Checks that the correct kind of exception is thrown when there is an invalid token
+    ///         as the first character of an expression.
+    ///     </para>
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(FormulaFormatException))]
+    public void FormulaConstructor_TestFirstTokenOperator_Invalid()
+    {
+        _ = new Formula("+1");
+    }
+
+
     // --- Tests for  Last Token Rule ---
+
     /// <summary>
     ///     <para>
     ///         This test checks that the correct kind of exception is thrown when
@@ -234,6 +256,19 @@ public class FormulaSyntaxTests
     public void FormulaConstructor_TestLastTokenNumber_Invalid()
     {
         _ = new Formula("1+");
+    }
+
+    /// <summary>
+    ///     <para>
+    ///         This checks that the correct kind of exception is thrown when there is an
+    ///         opeartor before the last token, but the last token is invalid.
+    ///     </para>
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(FormulaFormatException))]
+    public void FormulaConstructor_TestLastTokenNumber_Valid()
+    {
+        _ = new Formula("1+()");
     }
 
 
