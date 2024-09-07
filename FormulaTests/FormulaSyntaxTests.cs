@@ -426,4 +426,30 @@ public class FormulaSyntaxTests
         _ = new Formula("1a1");
     }
 
+    /// <summary>
+    ///  This checks to see that GetVariables returns the proper form. (variables should be normalised to upppercase)
+    /// </summary>
+    [TestMethod]
+    public void GetVariables_TestVariablesAreReturned_Valid()
+    {
+        Formula _ = new Formula("a1+b1+xYz1");
+        ISet<string> variables = _.GetVariables();
+        List<string> variablesList = new List<string>(variables); // convert to list bc it doesn't work otherwise.
+
+        List<string> expectedVariables = new List<string> { "A1", "B1", "XYZ1"};
+        CollectionAssert.AreEquivalent(expectedVariables, variablesList);
+
+    }
+
+    /// <summary>
+    /// This checks that ToString returns strings correctly normalised (trailing zeros removed, spaces removed, variables capitolised)
+    /// </summary>
+    [TestMethod]
+    public void ToString_TestVariablesAreFormatted_Valid()
+    {
+        Formula _ = new Formula("a1 + 5.00");
+        string formulaString = _.ToString();
+        Assert.AreEqual("A1+5", formulaString);
+    }
+
 }
