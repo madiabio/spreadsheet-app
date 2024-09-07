@@ -1,12 +1,12 @@
 ﻿```
 Author:	Madeline Abio
 Partner: None
-Start Date: 21/08/2024
+Start Date: 04/09/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
 Date: Day-Month-Year Time (when submission was completed)
-Project: Spreadsheet
+Project: Formula
 Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
 ```
 
