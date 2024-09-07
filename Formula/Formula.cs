@@ -17,6 +17,7 @@
 
 namespace CS3500.Formula;
 
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -48,12 +49,35 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class Formula
 {
+
+
+   
+
+
+    /// <summary>
+    /// Only alphanumeric characters or (, ), +, -, *, / are valid in a token.
+    /// This pattern includes only valid characters.
+    /// </summary>
+    private const string ValidCharactersPattern = @"^[a-zA-Z0-9\(\)\+\-\*/\.]+$";
+
+    /// <summary>
+    /// Used to match trailing zeros
+    /// </summary>
+    private const string TrailingZerosPattern = @"\.?0+$";
+
+
     /// <summary>
     ///   All variables are letters followed by numbers.  This pattern
     ///   represents valid variable name strings.
     /// </summary>
     private const string VariableRegExPattern = @"[a-zA-Z]+\d+";
+    
+    
+    // Class variables
 
+    private string formulaString;
+    private List<string> tokens;
+    private ISet<string> vars;
     /// <summary>
     ///   Initializes a new instance of the <see cref="Formula"/> class.
     ///   <para>
@@ -81,12 +105,116 @@ public class Formula
     ///   </list>
     /// </summary>
     /// <param name="formula"> The string representation of the formula to be created.</param>
+
     public Formula( string formula )
     {
-        // FIXME: implement your code here
+        // FIXME: implement your code here;
 
+
+        if (string.IsNullOrWhiteSpace(formula))
+        {
+            throw new FormulaFormatException("Formula cannot be empty.");
+        }
+
+
+
+        List<string> tokens = GetTokens(formula);
+        if (tokens.Count == 0)
+        {
+            throw new FormulaFormatException("Formula cannot be empty.");
+        }
+
+        this.ValidateSyntax(tokens);
+
+        this.tokens = tokens;
+
+        this.formulaString = formula;
+    }
+
+    /// <summary>
+    /// Validates the syntax of all tokens in a formula, also performs normalization.
+    /// </summary>
+    /// <param name="tokens">list of tokens in formula</param>
+    private void ValidateSyntax( List<string> tokens )
+    {
+        string openParenthesisOrOperatorPattern = @"^[(+\-*/]$";
+        string closingParenthesisOrOperatorPattern = @"^[)+\-*/]$";
+        // open & closed parenthesis counters
+        int openCount = 0;
+        int closeCount = 0;
+       
+
+        for (int i = 0; i < tokens.Count; i++)
+        {
+
+            // FORMATTING:
+            tokens[i] = tokens[i].ToUpper(); // Normalise token
+
+
+            if (IsNumber(tokens[i])) // Remove trailing zeros from token if its a number
+            {
+                tokens[i] = Regex.Replace(tokens[i], TrailingZerosPattern, string.Empty);
+            }
+
+            // PARENTHESIS COUNT
+            if (tokens[i] == "(")
+            {
+                openCount += 1;
+            }
+            else if (tokens[i] == ")")
+            {
+                closeCount += 1;
+            }
+
+            // SYNTAX CHECKING:
+            if (closeCount > openCount) // CLOSED PARENTHESIS RULE: when reading tokens left to right, there should never be more closed parentehsis than open parenthesis.
+            {
+                throw new FormulaFormatException($"Number of closed parenthesis seen so far exceeds number of open parenthesis seen so far.");
+            }
+
+            if (!Regex.IsMatch(tokens[i], ValidCharactersPattern)) // VALID TOKENS: if there are invalid characters in the token, raise error
+            {
+                throw new FormulaFormatException($"Invalid character in token {tokens[i]}.");
+            }
+
+            if (i == 0 && !(IsVar(tokens[i]) || (tokens[i] == "(") || IsNumber(tokens[i]) )) // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
+            {
+                throw new FormulaFormatException($"First token in formula must be either a variable, number, or (. Token was {tokens[i]}");
+
+            } else if (i == (tokens.Count - 1) && !(IsVar(tokens[i]) || (tokens[i] == ")") || IsNumber(tokens[i]))) // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
+            {
+                throw new FormulaFormatException($"Last token in formula must be either a variable, number, or ). Token was {tokens[i]}");
+            }
+
+            if ( (i < (tokens.Count - 1) && Regex.IsMatch(tokens[i], openParenthesisOrOperatorPattern)) && !(IsVar(tokens[i+1]) || (tokens[i+1] == "(") || IsNumber(tokens[i+1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
+            {
+                throw new FormulaFormatException($"Only a variable, number or open parenthesis may immediately follow an open parenthesis or operator. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
+            }
+
+            if ((i < (tokens.Count - 1) && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) && !Regex.IsMatch(tokens[i+1], closingParenthesisOrOperatorPattern)) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
+            {
+                throw new FormulaFormatException($"Only an operator or closing parenthesis may immediately follow a number, variable, or closing parenthesis. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
+            }
+        }
+
+        if (openCount != closeCount) // BALANCED PARENTEHSIS RULE: Total num opening parenthesis must equal total num closing parenthesis.
+        {
+            throw new FormulaFormatException($"Parenthesis are not balanced. Num open = {openCount}, num close = {closeCount}");
+        }
 
     }
+
+    /// <summary>
+    /// Checks if a token is a number (could be float, int, or exponential)
+    /// </summary>
+    /// <param name="token">a token in the formula</param>
+    /// <returns>Returns True if it is a number, False if else. </returns>
+    private static bool IsNumber(string token)
+    {
+        double result;
+        return double.TryParse(token, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out result);
+    }
+
 
     /// <summary>
     ///   <para>
@@ -105,10 +233,27 @@ public class Formula
     ///   </list>
     /// </summary>
     /// <returns> the set of variables (string names) representing the variables referenced by the formula. </returns>
-    public ISet<string> GetVariables( )
+    public ISet<string> GetVariables(List<string> tokens)
     {
         // FIXME: implement your code here
-        return new HashSet<string>();
+
+        ISet<string> vars = new HashSet<string>();
+
+        /// <summary>
+        /// Uses isvar function to check if a token is a variable, if so, adds it to the set of variables.
+        /// </summary>
+        foreach (string token in tokens)
+        {
+            if (IsVar(token))
+            {
+                string token_upper = token.ToUpper(); // normalise token
+                vars.Add(token_upper);
+            }
+        }
+
+        this.vars = vars;
+
+        return vars;
     }
 
     /// <summary>
@@ -213,6 +358,10 @@ public class Formula
         return results;
     }
 }
+
+
+
+
 
 
 /// <summary>

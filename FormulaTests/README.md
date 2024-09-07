@@ -18,7 +18,7 @@ This assignment stands on its own.
 N/A
 
 # Consulted Peers:
-Consulted with Sadie Bowen
+	1. Sadie Bowen
 
 
 # References:

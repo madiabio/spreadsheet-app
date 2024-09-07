@@ -5,71 +5,95 @@ Start Date: 04/09/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
-Date: Day-Month-Year Time (when submission was completed)
+Date: 07/09/2024 12:56pm (when submission was completed)
 Project: Formula
 Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
 ```
 
 # Comments to Evaluators:
-Please add any comments you need the graders to know about when grading.  
-For example, let us know if there are known bugs or deficiencies, or if 
-there are extra features that would not normally be seen.  If you have no 
-comments, briefly state that your work "stands on its own".
-
+This work stands on its own.
 
 # Assignment Specific Topics:
-Any additional feedback or write up required by the assignment
-
-Leave a space for a new paragraph
-
-Make sure you spell check your file (did you instlal the VS spell checker?)
-and use your best writing ability
-
+	1. Time estimation: 2 hrs to implement, 1 hr to read/set up stuff
+	2. Time spent: 3 hrs coding, 1ish hrs reading/setting up things
 # Consulted Peers:
-List any peers (or other people) in the class (or outside for that matter) that you talked about the project
-with for more than one minute
-
-
-
-Put the name of all peers you worked with toward the assignment, including any study groups you had 
-or any "random" person you talked to about specifics of solving the assignment. Use this as an excuse 
-to ask people their names... or even talk to them about life, the universe, and everything. If you don't 
-talk to anyone in the class for the entire week, put a message to that effect telling us why you 
-chose not to communicate with and learn from others.
+	1. Sadie Bowen
 
 
 # References:
-	1. Title of page - URL
-	2. Title of page - URL
-	3. Title of page - URL
+	1. C# Documentation - https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/
+    2. ChatGPT - https://chatgpt.com/
 
-You are required to cite all sources of information you used in creating your solution.
-Need to Cite:
-Stack Overflow articles related to your programming work
-PluralSight tutorials related to your programming work
-Web based tutorials strongly related to your programming work
-API Documentation - If you commonly go to the MS Doc sites for C#, list this (you don't need to list all the 
-individual pages, but the overall site). 
+# ChatGPT:
 
-Basic Syntax sites: If you commonly go to a site like Dot Net Perls, list this site (again, you don't need to 
-list every single page, but do list the overall site and any page you spend a reasonable amount of time on)
+__Query 1:__
+~~~
+can you fix this regex pattern for me:
+/// <summary>
+/// Only alphanumeric characters or (, ), +, -, *, / are valid in a token.
+/// </summary>
+private const string ValidTokensPattern = @"^[a-zA-Z0-9()+-*/]+$";
+~~~
+_Respose:_
+~~~
+private const string ValidTokensPattern = @"^[a-zA-Z0-9\(\)\+\-\*/]+$";
+~~~
 
-Warning: while you are not allowed to read/reference/use any code that you personally do not write from your own 
-brain/finger combination, if you do, cite where you got it from!  (E.g., I used github/jimsoldnotprivaterepo/Spreadsheet, 
-or I talked with and looked at jim’s laptop to get some of my code, or I used tests that I didn’t write but I was given 
-last semester, etc.)  
+__Query 2.__
+~~~
+how do you remove unnecessary .00s etc from a string that represents a number? (ie, "5.000" to "5") with regex
+~~~
 
-Again, you are not allowed to do any of these things, but if you do, and you cite it, you will not be failed for 
-academic misconduct in the course.  You will receive a zero on the assignment. It should be noted that failure to 
-lists your references will result in a lower grade.  If your only “reference” is your majestic brain and my lecture slides, 
-you should write that down.  It seems hard to imagine how any student would craft a solution to an assignment without 
-referencing some textbook or websites.
+_Response:_
+~~~
+To remove unnecessary trailing .00 (or other trailing zeros) from a string representing a number, you can use a regular expression to match these patterns and replace them.
 
-Reminder: any site (or book) that you visit and that contains code that you use "directly" in your program should be cited 
-in the README.  (Further, you should also reference the site directly in your code).  Once again, code on how to use C# to 
-find all elements of a certain nature in an array might be appropriate to directly re-use in your assignment.  Code that 
-someone else wrote to solve a similar problem (e.g., last year’s assignment) is expressly disallowed.
+Here's a step-by-step approach:
 
-Reminder: Every site (or book, or person ;^) that you gain meaningful insights from should be referenced in your README. 
-For example, if you visit w3schools many times while learning C#, you should state so in your references.  
-You do not need to list every specific w3schools.com web page, but instead simply list the site in total.
+Pattern: The regex pattern should identify:
+
+Trailing zeroes after a decimal point.
+Remove the decimal point itself if all digits after the decimal are zeros.
+Regex Pattern:
+
+Pattern: @"\.?0+$"
+\.: Matches the decimal point (if it exists).
+0+: Matches one or more zeros.
+?: Makes the decimal point optional (in case there are only trailing zeros).
+$: Ensures it matches only at the end of the string.
+C# Example:
+csharp
+Copy code
+using System;
+using System.Text.RegularExpressions;
+
+public class Program
+{
+    public static void Main()
+    {
+        string[] numbers = { "5.000", "123.4500", "10.00", "3.14159", "0.00" };
+
+        foreach (string number in numbers)
+        {
+            string cleanedNumber = RemoveTrailingZeros(number);
+            Console.WriteLine(cleanedNumber);  // Output: 5, 123.45, 10, 3.14159, 0
+        }
+    }
+
+    public static string RemoveTrailingZeros(string number)
+    {
+        return Regex.Replace(number, @"\.?0+$", "");
+    }
+}
+~~~
+__Query 3.__
+~~~
+how to match if a string is (, +, -, *, /
+~~~
+_Response_
+~~~
+To match a string that consists of one of the characters (, +, -, *, / in C#, you can use the following regular expression:
+
+Regex Pattern:
+^[()+\-*/]$
+~~~
