@@ -34,6 +34,7 @@
 
 namespace CS3500.Formula;
 
+using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -76,11 +77,6 @@ public class Formula
     /// This pattern includes only valid characters.
     /// </summary>
     private const string ValidCharactersPattern = @"^[a-zA-Z0-9\(\)\+\-\*/\.]+$";
-
-    /// <summary>
-    /// Used to match trailing zeros
-    /// </summary>
-    private const string TrailingZerosPattern = @"\.?0+$";
 
 
     /// <summary>
@@ -171,7 +167,6 @@ public class Formula
     /// <returns> the set of variables (string names) representing the variables referenced by the formula. </returns>
     public ISet<string> GetVariables()
     {
-        // FIXME: implement your code here
 
         ISet<string> vars = new HashSet<string>();
 
@@ -234,8 +229,11 @@ public class Formula
     /// <param name="tokens">list of tokens in formula</param>
     private void ValidateSyntax(List<string> tokens)
     {
-        string openParenthesisOrOperatorPattern = @"^[(+\-*/]$";
-        string closingParenthesisOrOperatorPattern = @"^[)+\-*/]$";
+        Regex openParenthesisOrOperatorPattern = new Regex(@"^[(+\-*/]$");
+        Regex closingParenthesisOrOperatorPattern = new Regex(@"^[)+\-*/]$");
+        Regex scientificNotationPattern = new Regex(@"^([+-]?\d+(\.\d+)?)[eE]([+-]?\d+)$"); // Matches explicitely defined scientific notation (ie, when there is a +/-)
+        Regex TrailingZerosPattern = new Regex(@"\.?0+$");
+        
         // open & closed parenthesis counters
         int openCount = 0;
         int closeCount = 0;
@@ -247,11 +245,27 @@ public class Formula
             // FORMATTING:
             tokens[i] = tokens[i].ToUpper(); // Normalise token
 
-
-            if (IsNumber(tokens[i])) // Remove trailing zeros from token if its a number
+            if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count == 1) // Normalise implicitely defined scientfic notation
             {
-                tokens[i] = Regex.Replace(tokens[i], TrailingZerosPattern, string.Empty);
+                Match scientficMatch = scientificNotationPattern.Match(tokens[i]);
+                string basePart = scientficMatch.Groups[1].Value; // Capture base (eg 1.1)
+                string exponentPart = scientficMatch.Groups[3].Value; // Capture exponent (eg +10)
+
+                if (!exponentPart.StartsWith("-") && !exponentPart.StartsWith("+")) // Add the missing + sign
+                {
+                    exponentPart = "+" + exponentPart; // append + sign to exponent part
+                    tokens[i] = basePart + "E" + exponentPart; // re-assign tokens[i] with fixed part. 
+                }
             }
+            else if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count > 1) // Convert scientific notation to double form if other tokens in expression
+            {
+                tokens[i] = $"{double.Parse(tokens[i])}";
+            }
+            else if (IsNumber(tokens[i])) // Remove trailing zeros from token if its a number
+            {
+                tokens[i] = TrailingZerosPattern.Replace(tokens[i], string.Empty);
+            }
+
 
             // PARENTHESIS COUNT
             if (tokens[i] == "(")
@@ -284,12 +298,12 @@ public class Formula
                 throw new FormulaFormatException($"Last token in formula must be either a variable, number, or ). Token was {tokens[i]}");
             }
 
-            if ((i < (tokens.Count - 1) && Regex.IsMatch(tokens[i], openParenthesisOrOperatorPattern)) && !(IsVar(tokens[i + 1]) || (tokens[i + 1] == "(") || IsNumber(tokens[i + 1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
+            if ((i < (tokens.Count - 1) && openParenthesisOrOperatorPattern.IsMatch(tokens[i])) && !(IsVar(tokens[i + 1]) || (tokens[i + 1] == "(") || IsNumber(tokens[i + 1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
             {
                 throw new FormulaFormatException($"Only a variable, number or open parenthesis may immediately follow an open parenthesis or operator. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
 
-            if ((i < (tokens.Count - 1) && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) && !Regex.IsMatch(tokens[i + 1], closingParenthesisOrOperatorPattern)) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
+            if ((i < (tokens.Count - 1) && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) && !closingParenthesisOrOperatorPattern.IsMatch(tokens[i + 1])) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
             {
                 throw new FormulaFormatException($"Only an operator or closing parenthesis may immediately follow a number, variable, or closing parenthesis. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
