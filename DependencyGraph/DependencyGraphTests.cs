@@ -1,8 +1,24 @@
 /// <copyright file="DependencyGraphTests.cs" company="UofU-CS3500">
 ///   Copyright © 2024 UofU-CS3500. All rights reserved.
 /// </copyright>
-/// <authors> Madeline Abio </authors>
-/// <date> 12/09/2024 </date>
+/// <summary>
+/// Author:    Madeline Abio
+/// Partner:   N/A
+/// Date:      09/12/2024
+/// Course:    CS 3500, University of Utah, School of Computing
+/// Copyright: CS 3500 and Madeline Abio - This work may not 
+///            be copied for use in Academic Coursework.
+///
+/// I, Madeline Abio, certify that I wrote this code from scratch and
+/// did not copy it in part or whole from another source.  All 
+/// references used in the completion of the assignments are cited 
+/// in my README file.
+///
+/// File Contents
+///
+///    This file contains tests written for the DependencyGraph class.
+/// </summary>
+
 namespace CS3500.DevelopmentTests;
 
 using CS3500.DependencyGraph;
