@@ -14,7 +14,14 @@ Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Ac
 Assignment stands on its own
 
 # Assignment Specific Topics:
-N/A
+
+Hours
+Estimated/Worked,   Assignment,        Note
+
+    3/4,            Assignment 2,      N/A
+    3,              Assignment 3,      N/A
+
+
 # Consulted Peers:
 	1. Sadie Bowen
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="Formula_PS2.cs" company="UofU-CS3500">
+﻿// <copyright file="Formula.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
 // <summary>
@@ -108,7 +108,8 @@ public class Formula
 
     public Formula( string formula )
     {
-        // FIXME: implement your code here;
+        // TODO: public void ToString_DifferentNumberRepresentations_EquateToSameCanonicalForm2( )
+        // TODO: public void ToString_Numbers_UsesCanonicalForm( )
 
 
         if (string.IsNullOrWhiteSpace(formula))
@@ -206,7 +207,6 @@ public class Formula
     /// </returns>
     public override string ToString( )
     {
-        // FIXME: add your code here.
         return this.formulaString;
     }
 
