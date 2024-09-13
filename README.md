@@ -5,7 +5,7 @@ Start Date: 21/08/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
-Date: 07/09/2024 1:12pm (when submission was completed)
+Date: 13/09/2024 2:10pm (when submission was completed)
 Project: Spreadsheet
 Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
 ```
@@ -19,7 +19,7 @@ Hours
 Estimated/Worked,   Assignment,        Note
 
     3/4,            Assignment 2,      N/A
-    3,              Assignment 3,      N/A
+    3/4,            Assignment 3,      Spent about an hour extra debugging A2.
 
 
 # Consulted Peers:
@@ -28,7 +28,7 @@ Estimated/Worked,   Assignment,        Note
 # References:
 	1. C# Documentation - https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/
 	2. ChatGPT - https://chatgpt.com/
-	3. Title of page - URL
+	2. Dot Net Pearls - https://www.dotnetperls.com/
 
 # ChatGPT:
 

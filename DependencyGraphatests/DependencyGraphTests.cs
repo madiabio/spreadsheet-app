@@ -228,18 +228,6 @@ public class DependencyGraphExampleStressTests
 
     
     /// <summary>
-    /// Tests <see cref="DependencyGraph.RemoveDependency(string, string)"/> does not work
-    /// when the relationship is not in the graph.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException]
-    public void DependencyGraphConstructor_TestRemoveDependency_Invalid()
-    {
-        // TODO: Implement TestRemoveDependency_Invalid
-    }
-
-
-    /// <summary>
     /// Tests that <see cref="DependencyGraph.ReplaceDependents(string, IEnumerable{string})"/>
     /// works as expected
     /// </summary>
@@ -260,7 +248,7 @@ public class DependencyGraphExampleStressTests
 
 
         ISet<string> newDependents = new HashSet<string> { "e", "f", "g" };
-        dg.ReplaceDependents(relationship1.Item1, newDependents); // replace all dependents of a with newDependents set. 
+        dg.ReplaceDependents(relationship1.Item1, newDependents); // replace all dependents of a with trueNewDependents set. 
         
         Assert.IsTrue(newDependents.SetEquals(new HashSet<string>(dg.GetDependents(relationship1.Item1))));
 
@@ -282,15 +270,14 @@ public class DependencyGraphExampleStressTests
         dg.AddDependency(relationship2.Item1, relationship2.Item2);
         dg.AddDependency(relationship3.Item1, relationship3.Item2);
 
-        ISet<string> oldDependees = new HashSet<string> { "b", "c", "d" };
-        Assert.IsTrue(oldDependees.SetEquals(new HashSet<string>(dg.GetDependees(relationship1.Item1))));
+        ISet<string> trueOldDependees = new HashSet<string> { "b", "c", "d" };
+        HashSet<string> oldDependees = new HashSet<string>(dg.GetDependees(relationship1.Item2));
+        Assert.IsTrue(trueOldDependees.SetEquals(oldDependees)); 
 
-
-        ISet<string> newDependees = new HashSet<string> { "e", "f", "g" };
-        dg.ReplaceDependents(relationship1.Item1, newDependees); // replace all dependees of a with newDependees set. 
-
-        Assert.IsTrue(newDependees.SetEquals(new HashSet<string>(dg.GetDependees(relationship1.Item1))));
-
+        ISet<string> trueNewDependees = new HashSet<string> { "e", "f", "g" };
+        dg.ReplaceDependees(relationship1.Item2, trueNewDependees); // replace all dependees of a with trueNewDependents set. 
+        HashSet <string> newDependees = new HashSet<string> (dg.GetDependees(relationship1.Item2));
+        Assert.IsTrue(trueNewDependees.SetEquals(newDependees));
     }
 
 
@@ -388,28 +375,23 @@ public class DependencyGraphExampleStressTests
             Assert.IsTrue( dependees[i].SetEquals( new HashSet<string>( dg.GetDependees( letters[i] ) ) ) );
         }
 
-        /*
-        ISet<string> newDependents = new HashSet<string>();
-        ISet<string> newDependees = new HashSet<string>();
+
+        // Tests replace depenedents
+        HashSet<string> trueNewDependents = new HashSet<string>();
         for (int i = 0; i < SIZE; i += 1) 
         {
-            newDependents.Add(($"{letters[i]}"));
-            newDependees.Add(($"{letters[i]}"));
+            trueNewDependents.Add(letters[i]); // add a bunch of letters to the set of new dependents
         }
 
-
-        // Tests replace depenedents and dependees
         for (int i = 0; i < SIZE; i++)
         {
-            for (int j = 0; j < SIZE; j++)
-            {
-                dg.ReplaceDependents(letters[i], newDependents);
-                dg.ReplaceDependents(letters[j], newDependees);
-            }
-            Assert.IsTrue(dependents[i].SetEquals(new HashSet<string>(dg.GetDependents(letters[i]))));
-            Assert.IsTrue(dependees[i].SetEquals(new HashSet<string>(dg.GetDependees(letters[i]))));
-
+            dg.ReplaceDependents(letters[i], trueNewDependents); // replace dependents w/ new dependents into the graph
+            dependents[i] = trueNewDependents; // adjust dictionary so we can check
+            
+            HashSet<string> newDependents = new HashSet<string>(dg.GetDependents(letters[i])); // delaring this for debugging purposes
+            Assert.IsTrue(dependents[i].SetEquals(newDependents)); // check truth
         }
-        */
+       
+
     }
 }
