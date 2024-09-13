@@ -72,13 +72,31 @@ namespace CS3500.DependencyGraph;
 ///   </code>
 /// </summary>
 public class DependencyGraph
-{ 
+{
+
+    private Dictionary<string, ISet<string>> dependees;
+    private Dictionary<string, ISet<string>> dependents;
+
+
+    /// <summary>
+    ///  Node class for the DependencyGraph
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    private class Node<T>
+    {
+        public T Data { get; set; }
+        public ISet<Node<T>> Dependees { get; set; }
+        public ISet<Node<T>> Dependents { get; set; }
+    }
+
     /// <summary>
     ///   Initializes a new instance of the <see cref="DependencyGraph"/> class.
     ///   The initial DependencyGraph is empty.
     /// </summary>
     public DependencyGraph( )
     {
+        // TODO Implement this
+
     }
 
     /// <summary>
@@ -86,6 +104,7 @@ public class DependencyGraph
     /// </summary>
     public int Size
     {
+        //TODO Implement Size
         get { return 0; }
     }
 
@@ -96,6 +115,7 @@ public class DependencyGraph
     /// <returns> true if the node has dependents. </returns>
     public bool HasDependents( string nodeName )
     {
+        // TODO Implement HasDependents
         return false;
     }
 
@@ -106,6 +126,7 @@ public class DependencyGraph
     /// <param name="nodeName">The name of the node.</param>
     public bool HasDependees( string nodeName )
     {
+        // TODO implement HasDependees
         return false;
     }
 
@@ -118,7 +139,7 @@ public class DependencyGraph
     /// <returns> The dependents of nodeName. </returns>
     public IEnumerable<string> GetDependents( string nodeName )
     {
-        return new List<string>(); // Choose your own data structure
+        return new List<string>(); // TODO: Choose your own data structure
     }
 
     /// <summary>
@@ -130,7 +151,7 @@ public class DependencyGraph
     /// <returns> The dependees of nodeName. </returns>
     public IEnumerable<string> GetDependees( string nodeName )
     {
-        return new List<string>(); // Choose your own data structure
+        return new List<string>(); // TODO: Choose your own data structure
     }
 
     /// <summary>
@@ -145,6 +166,7 @@ public class DependencyGraph
     /// <param name="dependent"> The name of the node that cannot be evaluated until after the other node has been. </param>
     public void AddDependency( string dependee, string dependent )
     {
+        // TODO: Implement AddDependency method
     }
 
     /// <summary>
@@ -156,6 +178,7 @@ public class DependencyGraph
     /// <param name="dependent"> The name of the node that cannot be evaluated until the other node has been. </param>
     public void RemoveDependency( string dependee, string dependent )
     {
+        // TODO: Implement RemoveDependency method
     }
 
     /// <summary>
@@ -178,5 +201,6 @@ public class DependencyGraph
     /// <param name="newDependees"> The new dependees for nodeName. Could be empty.</param>
     public void ReplaceDependees( string nodeName, IEnumerable<string> newDependees )
     {
+        // TODO: Implement ReplaceDependees method
     }
 }

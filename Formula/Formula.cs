@@ -121,8 +121,6 @@ public class Formula
 
     public Formula( string formula )
     {
-        // TODO: public void ToString_DifferentNumberRepresentations_EquateToSameCanonicalForm2( )
-        // TODO: public void ToString_Numbers_UsesCanonicalForm( )
 
 
         if (string.IsNullOrWhiteSpace(formula))
