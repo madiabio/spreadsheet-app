@@ -14,8 +14,8 @@ Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Ac
 This assignment stands on its own.
 
 # Assignment Specific Topics:
-Estimation: 2 hours
-Actual: 3 hours to write dependency graph code.
+Estimation: 1 hours
+Actual: 1 hr to read & setup, 1 hr to write tests.
 
 # Consulted Peers:
 	1. Sadie Bowen

@@ -19,7 +19,7 @@ Hours
 Estimated/Worked,   Assignment,        Note
 
     3/4,            Assignment 2,      N/A
-    3/4,            Assignment 3,      Spent about an hour extra debugging A2.
+    3/5,            Assignment 3,      Spent about an hour extra debugging A2.
 
 
 # Consulted Peers:
