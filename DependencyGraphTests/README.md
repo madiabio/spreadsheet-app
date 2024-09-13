@@ -6,7 +6,7 @@ Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
 Date: 13/09/2024 2:11pm (when submission was completed)
-Project: DependencyGraph
+Project: DependencyGraphTests
 Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
 ```
 
