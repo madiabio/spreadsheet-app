@@ -7,8 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Formula", "Formula\Formula.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FC08C755-5B74-4D29-9013-8C7F1C4AA78B}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
 		.editorconfig = .editorconfig
+		README.md = README.md
 		README_template.md = README_template.md
 	EndProjectSection
 EndProject
@@ -16,10 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormulaTests", "FormulaTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraph", "DependencyGraph\DependencyGraph.csproj", "{3C0299ED-76DA-4CCF-978C-3B83C28BF8BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependencyGraphTests", "DependencyGraphatests\DependencyGraphTests.csproj", "{2DE92EA2-06A0-457E-A323-241E08236B7D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{3C0299ED-76DA-4CCF-978C-3B83C28BF8BD} = {3C0299ED-76DA-4CCF-978C-3B83C28BF8BD}
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraphTests", "DependencyGraphTests\DependencyGraphTests.csproj", "{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +36,10 @@ Global
 		{3C0299ED-76DA-4CCF-978C-3B83C28BF8BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C0299ED-76DA-4CCF-978C-3B83C28BF8BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C0299ED-76DA-4CCF-978C-3B83C28BF8BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2DE92EA2-06A0-457E-A323-241E08236B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2DE92EA2-06A0-457E-A323-241E08236B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2DE92EA2-06A0-457E-A323-241E08236B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2DE92EA2-06A0-457E-A323-241E08236B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
