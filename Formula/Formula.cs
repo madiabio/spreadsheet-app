@@ -122,13 +122,10 @@ public class Formula
     public Formula(string formula)
     {
 
-
         if (string.IsNullOrWhiteSpace(formula))
         {
             throw new FormulaFormatException("Formula cannot be empty.");
         }
-
-
 
         List<string> tokens = GetTokens(formula);
         if (tokens.Count == 0)
@@ -391,10 +388,6 @@ public class Formula
         return results;
     }
 }
-
-
-
-
 
 
 /// <summary>

@@ -19,13 +19,107 @@
 ///    This file contains the tests for the Spreadsheet class.
 /// </summary>
 namespace SpreadsheetTests;
-
+using Spreadsheet;
+using Formula;
 [TestClass]
 public class SpreadsheetTests
 {
+    /// <summary>
+    /// This test checks  <see cref="Spreadsheet.SetCellContents(string, double)"/> will not work when an incorrect 
+    /// cell name is passed in.
+    /// </summary>
+
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell when the contents is a string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
     [TestMethod]
-    public void TestSimpleMethod()
+    public void SpreadsheetConstructor_TestSetCellContentsString_ExpectedBehvaiour()
     {
-        Assert.AreEqual(1, 1);
+        Spreadsheet ss = new Spreadsheet();
+        string trueContents = "test";
+
+        ss.SetCellContents("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+
     }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, double)"/> method works as expected
+    /// by setting the contents of a cell with a double, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsDouble_ExpectedBehvaiour()
+    {
+        Spreadsheet ss = new Spreadsheet();
+        double trueContents = 1.1;
+
+        ss.SetCellContents("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, Formula)"/> method works as expected
+    /// by setting the contents of a cell with a <see cref="Formula"/>, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsFormula_ExpectedBehvaiour()
+    {
+        Spreadsheet ss = new Spreadsheet();
+        Formula trueContents = new Formula("1+1");
+
+        ss.SetCellContents("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringReturnsEmptyString_ExpectedBehvaiour()
+    {
+        Spreadsheet ss = new Spreadsheet();
+        string trueContents = string.Empty;
+
+        ss.SetCellContents("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringNotInGraph_ExpectedBehvaiour()
+    {
+        Spreadsheet ss = new Spreadsheet();
+        string trueContents = string.Empty;
+
+        ss.SetCellContents("A1", trueContents);
+
+        bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
+        Assert.IsFalse(condition);
+    }
+
+
+
+
 }

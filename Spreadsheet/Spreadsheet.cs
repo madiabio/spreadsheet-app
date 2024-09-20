@@ -27,6 +27,8 @@
 namespace Spreadsheet;
 
 using Formula;
+using DependencyGraph;
+using System.Text.RegularExpressions;
 
 /// <summary>
 ///   <para>
@@ -44,7 +46,118 @@ public class CircularException : Exception
 /// </summary>
 public class InvalidNameException : Exception
 {
+    public InvalidNameException(string? message) : base(message)
+    {
+    }
 }
+
+/// <summary>
+///   <para>
+///     Thrown to indicate that the _contents attempting to be set are invalid.
+///   </para>
+/// </summary>
+public class InvalidContentsException : Exception
+{
+    public InvalidContentsException(string message) // allow a message to be thrown with the exception
+    : base(message)
+    {
+    }
+
+}
+
+/// <summary>
+/// <para>
+/// The <see cref="Cell"/> class is used in the <see cref="Spreadsheet"/> class to contain
+/// cell name, cell contents, and cell value of each cell.
+/// </para>
+/// <para>
+/// This class also handles errors regarding setting invalid cell names and values.
+/// </para>
+/// </summary>
+public class Cell
+{
+    // Private fields to store the _contents and _value
+    private string _name;
+    private object _contents;
+    private object _value;
+
+    /// <summary>
+    ///   All variables are letters followed by numbers.  This pattern
+    ///   represents valid variable name strings.
+    /// </summary>
+    private const string VariableRegExPattern = @"[a-zA-Z]+\d+";
+
+
+    // Public property for the Name of the cell
+    public string Name
+    {
+        get { return _name; }
+        set
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new InvalidNameException("Cell name cannot be null or empty.");
+            }
+            else if (!Regex.IsMatch(value, VariableRegExPattern))
+            {
+                throw new InvalidNameException("Invalid name pattern.");
+            }
+            _name = value.ToUpper();
+
+
+        }
+    }
+
+    // Public property for the Contents of the cell
+    public object Contents
+    {
+        get { return _contents; }
+        set // Only allow set for string, double or Formula data types. Otherwise, throw exception.
+        {
+            if (value is string str && string.IsNullOrWhiteSpace(str)) // handle if string  is empty
+            {
+                throw new InvalidContentsException("Contents may not be null or whitespace.");
+            }
+            else if ( value is string || value is double || value is Formula)
+            {
+                _contents = value;
+
+                UpdateValue();
+
+            }
+            else
+            {
+                throw new InvalidContentsException("Contents must be a string, double, or Formula.");
+            }
+        }
+    }
+
+    public object Value
+    {
+        get { return _value; }
+    }
+
+    // Update the value based on the contents
+    private void UpdateValue()
+    {
+        if (_contents is string str)
+        {
+            _value = str; // If contents is a string, the value is the same string
+        }
+        else if (_contents is double dbl)
+        {
+            _value = dbl; // If contents is a double, the value is the same number
+        }
+        else if (_contents is Formula formula)
+        {
+            // FIXME: for when Evaluate is implemented
+            // _value = formula.Evaluate(); // Evaluate the formula and set the value
+            _value = formula;
+        }
+    }
+}
+
+
 
 /// <summary>
 ///   <para>
@@ -62,31 +175,31 @@ public class InvalidNameException : Exception
 /// <para>
 ///     A spreadsheet represents a cell corresponding to every possible cell name.  (This
 ///     means that a spreadsheet contains an infinite number of cells.)  In addition to
-///     a name, each cell has a contents and a value.  The distinction is important.
+///     a name, each cell has a _contents and a _value.  The distinction is important.
 /// </para>
 /// <para>
-///     The <b>contents</b> of a cell can be (1) a string, (2) a double, or (3) a Formula.
-///     If the contents of a cell is set to the empty string, the cell is considered empty.
+///     The <b>_contents</b> of a cell can be (1) a string, (2) a double, or (3) a Formula.
+///     If the _contents of a cell is set to the empty string, the cell is considered empty.
 /// </para>
 /// <para>
-///     By analogy, the contents of a cell in Excel is what is displayed on
+///     By analogy, the _contents of a cell in Excel is what is displayed on
 ///     the editing line when the cell is selected.
 /// </para>
 /// <para>
-///     In a new spreadsheet, the contents of every cell is the empty string. Note:
+///     In a new spreadsheet, the _contents of every cell is the empty string. Note:
 ///     this is by definition (it is IMPLIED, not stored).
 /// </para>
 /// <para>
-///     The <b>value</b> of a cell can be (1) a string, (2) a double, or (3) a FormulaError.
-///     (By analogy, the value of an Excel cell is what is displayed in that cell's position
+///     The <b>_value</b> of a cell can be (1) a string, (2) a double, or (3) a FormulaError.
+///     (By analogy, the _value of an Excel cell is what is displayed in that cell's position
 ///     in the grid.)
 /// </para>
 /// <list type="number">
-///   <item>If a cell's contents is a string, its value is that string.</item>
-///   <item>If a cell's contents is a double, its value is that double.</item>
+///   <item>If a cell's _contents is a string, its _value is that string.</item>
+///   <item>If a cell's _contents is a double, its _value is that double.</item>
 ///   <item>
 ///     <para>
-///       If a cell's contents is a Formula, its value is either a double or a FormulaError,
+///       If a cell's _contents is a Formula, its _value is either a double or a FormulaError,
 ///       as reported by the Evaluate method of the Formula class.  For this assignment,
 ///       you are not dealing with values yet.
 ///     </para>
@@ -100,8 +213,13 @@ public class InvalidNameException : Exception
 ///     dependency.
 /// </para>
 /// </summary>
+
 public class Spreadsheet
 {
+
+    private DependencyGraph dg; // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
+    private HashSet<Cell> cells; // HashSet containing all of the cells in the spreadsheet
+
     /// <summary>
     ///   Provides a copy of the names of all of the cells in the spreadsheet
     ///   that contain information (i.e., not empty cells).
@@ -115,7 +233,7 @@ public class Spreadsheet
     }
 
     /// <summary>
-    ///   Returns the contents (as opposed to the value) of the named cell.
+    ///   Returns the _contents (as opposed to the _value) of the named cell.
     /// </summary>
     ///
     /// <exception cref="InvalidNameException">
@@ -124,7 +242,7 @@ public class Spreadsheet
     ///
     /// <param name="name">The name of the spreadsheet cell to query. </param>
     /// <returns>
-    ///   The contents as either a string, a double, or a Formula.
+    ///   The _contents as either a string, a double, or a Formula.
     ///   See the class header summary.
     /// </returns>
     public object GetCellContents(string name)
@@ -133,7 +251,7 @@ public class Spreadsheet
     }
 
     /// <summary>
-    ///  Set the contents of the named cell to the given number.
+    ///  Set the _contents of the named cell to the given number.
     /// </summary>
     ///
     /// <exception cref="InvalidNameException">
@@ -145,7 +263,7 @@ public class Spreadsheet
     /// <returns>
     ///   <para>
     ///     This method returns an ordered list consisting of the passed in name
-    ///     followed by the names of all other cells whose value depends, directly
+    ///     followed by the names of all other cells whose _value depends, directly
     ///     or indirectly, on the named cell.
     ///   </para>
     ///   <para>
@@ -165,7 +283,7 @@ public class Spreadsheet
     }
 
     /// <summary>
-    ///   The contents of the named cell becomes the given text.
+    ///   The _contents of the named cell becomes the given text.
     /// </summary>
     ///
     /// <exception cref="InvalidNameException">
@@ -182,14 +300,14 @@ public class Spreadsheet
     }
 
     /// <summary>
-    ///   Set the contents of the named cell to the given formula.
+    ///   Set the _contents of the named cell to the given formula.
     /// </summary>
     /// <exception cref="InvalidNameException">
     ///   If the name is invalid, throw an InvalidNameException.
     /// </exception>
     /// <exception cref="CircularException">
     ///   <para>
-    ///     If changing the contents of the named cell to be the formula would
+    ///     If changing the _contents of the named cell to be the formula would
     ///     cause a circular dependency, throw a CircularException.
     ///   </para>
     ///   <para>
@@ -208,7 +326,7 @@ public class Spreadsheet
 
     /// <summary>
     ///   Returns an enumeration, without duplicates, of the names of all cells whose
-    ///   values depend directly on the value of the named cell.
+    ///   values depend directly on the _value of the named cell.
     /// </summary>
     /// <param name="name"> This <b>MUST</b> be a valid name.  </param>
     /// <returns>
@@ -236,7 +354,7 @@ public class Spreadsheet
     ///   </para>
     ///   <para>
     ///     Returns an enumeration of the names of all cells whose values must
-    ///     be recalculated, assuming that the contents of the cell referred
+    ///     be recalculated, assuming that the _contents of the cell referred
     ///     to by name has changed.  The cell names are enumerated in an order
     ///     in which the calculations should be done.
     ///   </para>
@@ -310,3 +428,4 @@ public class Spreadsheet
         changed.AddFirst(name);
     }
 }
+
