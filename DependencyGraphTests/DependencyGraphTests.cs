@@ -18,10 +18,9 @@
 ///
 ///    This file contains tests written for the DependencyGraph class.
 /// </summary>
+namespace DependencyGraphTests;
 
-namespace CS3500.DependencyGraph;
-
-using CS3500.DependencyGraph;
+using DependencyGraph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Drawing;
 
@@ -69,7 +68,7 @@ public class DependencyGraphExampleStressTests
     {
         DependencyGraph dg = new();
         (string, string) relationship = ("a", "b");
-        
+
         HashSet<string> dependees = new HashSet<string> { relationship.Item1 };
         dg.AddDependency(relationship.Item1, relationship.Item2);
 
@@ -154,7 +153,7 @@ public class DependencyGraphExampleStressTests
         (string, string) relationship = ("a", "b");
 
         dg.AddDependency(relationship.Item1, relationship.Item2);
-        
+
         Assert.IsTrue(dg.HasDependents(relationship.Item1));
         Assert.IsFalse(dg.HasDependents(relationship.Item2));
     }
@@ -226,7 +225,7 @@ public class DependencyGraphExampleStressTests
         Assert.IsFalse(dg.HasDependees(relationship2.Item1));
     }
 
-    
+
     /// <summary>
     /// Tests that <see cref="DependencyGraph.ReplaceDependents(string, IEnumerable{string})"/>
     /// works as expected
@@ -249,7 +248,7 @@ public class DependencyGraphExampleStressTests
 
         ISet<string> newDependents = new HashSet<string> { "e", "f", "g" };
         dg.ReplaceDependents(relationship1.Item1, newDependents); // replace all dependents of a with trueNewDependents set. 
-        
+
         Assert.IsTrue(newDependents.SetEquals(new HashSet<string>(dg.GetDependents(relationship1.Item1))));
 
     }
@@ -272,11 +271,11 @@ public class DependencyGraphExampleStressTests
 
         ISet<string> trueOldDependees = new HashSet<string> { "b", "c", "d" };
         HashSet<string> oldDependees = new HashSet<string>(dg.GetDependees(relationship1.Item2));
-        Assert.IsTrue(trueOldDependees.SetEquals(oldDependees)); 
+        Assert.IsTrue(trueOldDependees.SetEquals(oldDependees));
 
         ISet<string> trueNewDependees = new HashSet<string> { "e", "f", "g" };
         dg.ReplaceDependees(relationship1.Item2, trueNewDependees); // replace all dependees of a with trueNewDependents set. 
-        HashSet <string> newDependees = new HashSet<string> (dg.GetDependees(relationship1.Item2));
+        HashSet<string> newDependees = new HashSet<string>(dg.GetDependees(relationship1.Item2));
         Assert.IsTrue(trueNewDependees.SetEquals(newDependees));
     }
 
@@ -298,26 +297,26 @@ public class DependencyGraphExampleStressTests
     ///    that are used to compare at the end against the dg way of storing these values.
     /// </summary>
     [TestMethod]
-    [Timeout( 2000 )]  // FIXME: 2 second run time limit <--  remove this comment
-    public void StressTest( )
+    [Timeout(2000)]  // FIXME: 2 second run time limit <--  remove this comment
+    public void StressTest()
     {
         DependencyGraph dg = new();
 
         // A bunch of strings to use
         const int SIZE = 200;
         string[] letters = new string[SIZE];
-        for ( int i = 0; i < SIZE; i++ )
+        for (int i = 0; i < SIZE; i++)
         {
-            letters[i] = string.Empty + ( (char) ( 'a' + i ) ); 
+            letters[i] = string.Empty + (char)('a' + i);
         }
 
         // The correct answers
         // this creates a hashset of strings which are each an ASCII character.
         // Note, there's 126 ASCII chars but SIZE=200, so some will be 'reapeated',
         // but since its a HashSet it won't actually be.
-        HashSet<string>[] dependents = new HashSet<string>[SIZE]; 
+        HashSet<string>[] dependents = new HashSet<string>[SIZE];
         HashSet<string>[] dependees = new HashSet<string>[SIZE];
-        for ( int i = 0; i < SIZE; i++ )
+        for (int i = 0; i < SIZE; i++)
         {
             dependents[i] = [];
             dependees[i] = [];
@@ -325,60 +324,60 @@ public class DependencyGraphExampleStressTests
 
         // Add a bunch of dependencies
         // this code adds dependencies to each letter in letters
-        for ( int i = 0; i < SIZE; i++) 
+        for (int i = 0; i < SIZE; i++)
         {
-            for ( int j = i + 1; j < SIZE; j++ )
+            for (int j = i + 1; j < SIZE; j++)
             {
-                dg.AddDependency( letters[i], letters[j] );
-                dependents[i].Add( letters[j] );
-                dependees[j].Add( letters[i] );
+                dg.AddDependency(letters[i], letters[j]);
+                dependents[i].Add(letters[j]);
+                dependees[j].Add(letters[i]);
             }
         }
 
         // Remove a bunch of dependencies
-        for ( int i = 0; i < SIZE; i++ )
+        for (int i = 0; i < SIZE; i++)
         {
-            for ( int j = i + 4; j < SIZE; j += 4 )
+            for (int j = i + 4; j < SIZE; j += 4)
             {
-                dg.RemoveDependency( letters[i], letters[j] );
-                dependents[i].Remove( letters[j] );
-                dependees[j].Remove( letters[i] );
+                dg.RemoveDependency(letters[i], letters[j]);
+                dependents[i].Remove(letters[j]);
+                dependees[j].Remove(letters[i]);
             }
         }
 
         // Add some back
-        for ( int i = 0; i < SIZE; i++ )
+        for (int i = 0; i < SIZE; i++)
         {
-            for ( int j = i + 1; j < SIZE; j += 2 )
+            for (int j = i + 1; j < SIZE; j += 2)
             {
-                dg.AddDependency( letters[i], letters[j] );
-                dependents[i].Add( letters[j] );
-                dependees[j].Add( letters[i] );
+                dg.AddDependency(letters[i], letters[j]);
+                dependents[i].Add(letters[j]);
+                dependees[j].Add(letters[i]);
             }
         }
 
         // Remove some more
-        for ( int i = 0; i < SIZE; i += 2 )
+        for (int i = 0; i < SIZE; i += 2)
         {
-            for ( int j = i + 3; j < SIZE; j += 3 )
+            for (int j = i + 3; j < SIZE; j += 3)
             {
-                dg.RemoveDependency( letters[i], letters[j] );
-                dependents[i].Remove( letters[j] );
-                dependees[j].Remove( letters[i] );
+                dg.RemoveDependency(letters[i], letters[j]);
+                dependents[i].Remove(letters[j]);
+                dependees[j].Remove(letters[i]);
             }
         }
 
         // Make sure everything is right
-        for ( int i = 0; i < SIZE; i++ )
+        for (int i = 0; i < SIZE; i++)
         {
-            Assert.IsTrue( dependents[i].SetEquals( new HashSet<string>( dg.GetDependents( letters[i] ) ) ) );
-            Assert.IsTrue( dependees[i].SetEquals( new HashSet<string>( dg.GetDependees( letters[i] ) ) ) );
+            Assert.IsTrue(dependents[i].SetEquals(new HashSet<string>(dg.GetDependents(letters[i]))));
+            Assert.IsTrue(dependees[i].SetEquals(new HashSet<string>(dg.GetDependees(letters[i]))));
         }
 
 
         // Tests replace depenedents
         HashSet<string> trueNewDependents = new HashSet<string>();
-        for (int i = 0; i < SIZE; i += 1) 
+        for (int i = 0; i < SIZE; i += 1)
         {
             trueNewDependents.Add(letters[i]); // add a bunch of letters to the set of new dependents
         }
@@ -387,11 +386,11 @@ public class DependencyGraphExampleStressTests
         {
             dg.ReplaceDependents(letters[i], trueNewDependents); // replace dependents w/ new dependents into the graph
             dependents[i] = trueNewDependents; // adjust dictionary so we can check
-            
+
             HashSet<string> newDependents = new HashSet<string>(dg.GetDependents(letters[i])); // delaring this for debugging purposes
             Assert.IsTrue(dependents[i].SetEquals(newDependents)); // check truth
         }
-       
+
 
     }
 }

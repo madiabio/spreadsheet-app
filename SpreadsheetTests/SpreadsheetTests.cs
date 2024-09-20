@@ -16,16 +16,16 @@
 ///
 /// File Contents
 ///
-///    This file contains the tests for the Spreadsheet class
+///    This file contains the tests for the Spreadsheet class.
+/// </summary>
+namespace SpreadsheetTests;
 
-namespace SpreadsheetTests
+[TestClass]
+public class SpreadsheetTests
 {
-    [TestClass]
-    public class SpreadsheetTests
+    [TestMethod]
+    public void TestSimpleMethod()
     {
-        [TestMethod]
-        public void TestMethod1()
-        {
-        }
+        Assert.AreEqual(1, 1);
     }
 }

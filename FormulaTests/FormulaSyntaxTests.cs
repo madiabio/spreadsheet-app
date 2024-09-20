@@ -3,6 +3,7 @@
 // </copyright>
 // <authors> Madeline Abio </authors>
 // <date> 08/21/2024 </date>
+
 /// <summary>
 /// Author:    Madeline Abio
 /// Partner:   N/A
@@ -20,10 +21,9 @@
 ///
 ///    This file contains syntax tests for the Formula class.
 /// </summary>
+namespace FormulaTests;
 
-namespace CS3500.FormulaTests;
-
-using CS3500.Formula; // Change this using statement to use different formula implementations.
+using Formula;
 
 /// <summary>
 ///   <para>
@@ -83,10 +83,10 @@ public class FormulaSyntaxTests
     ///   </example>
     /// </summary>
     [TestMethod]
-    [ExpectedException( typeof( FormulaFormatException ) )]
-    public void FormulaConstructor_TestNoTokens_Invalid( )
+    [ExpectedException(typeof(FormulaFormatException))]
+    public void FormulaConstructor_TestNoTokens_Invalid()
     {
-        _ = new Formula( string.Empty );
+        _ = new Formula(string.Empty);
     }
 
     // --- Tests for Valid Token Rule ---
@@ -329,7 +329,7 @@ public class FormulaSyntaxTests
     [TestMethod]
     public void FormulaConstructor_TestFirstTokenNumber_Valid()
     {
-        _ = new Formula( "1+1" );
+        _ = new Formula("1+1");
     }
 
     /// <summary>
@@ -453,7 +453,7 @@ public class FormulaSyntaxTests
         ISet<string> variables = _.GetVariables();
         List<string> variablesList = new List<string>(variables); // convert to list bc it doesn't work otherwise.
 
-        List<string> expectedVariables = new List<string> { "A1", "B1", "XYZ1"};
+        List<string> expectedVariables = new List<string> { "A1", "B1", "XYZ1" };
         CollectionAssert.AreEquivalent(expectedVariables, variablesList);
 
     }

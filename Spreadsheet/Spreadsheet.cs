@@ -24,9 +24,9 @@
 ///
 ///    This file contains the Spreadsheet class, which is used to store cells and their information.
 /// </summary>
-namespace CS3500.Spreadsheet;
+namespace Spreadsheet;
 
-using CS3500.Formula;
+using Formula;
 
 /// <summary>
 ///   <para>

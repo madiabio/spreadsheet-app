@@ -1,6 +1,4 @@
-﻿
-
-// Skeleton implementation written by Joe Zachary for CS 3500, September 2013.
+﻿// Skeleton implementation written by Joe Zachary for CS 3500, September 2013.
 // Version 1.1 (Fixed error in comment for RemoveDependency.)
 // Version 1.2 - Daniel Kopta
 // Version 1.3 - H. James de St. Germain Fall 2024
@@ -28,7 +26,7 @@
 ///
 ///    This file contains the code for the Dependency Graph class.
 /// </summary>
-namespace CS3500.DependencyGraph;
+namespace DependencyGraph;
 
 /// <summary>
 ///   <para>
@@ -160,7 +158,7 @@ public class DependencyGraph
             dependents[dependee] = new HashSet<string>();
         }
 
-        
+
         // If the dependee isnt in the graph at all, add it.
         if (!dependees.ContainsKey(dependent))
         {
@@ -183,7 +181,7 @@ public class DependencyGraph
     /// </summary>
     /// <param name="dependee"> The name of the node that must be evaluated first. </param>
     /// <param name="dependent"> The name of the node that cannot be evaluated until the other node has been. </param>
-    public void RemoveDependency( string dependee, string dependent )
+    public void RemoveDependency(string dependee, string dependent)
     {
         if (dependents.ContainsKey(dependee))
         {
@@ -203,23 +201,23 @@ public class DependencyGraph
     /// </summary>
     /// <param name="nodeName"> The name of the node who's dependents are being replaced. </param>
     /// <param name="newDependents"> The new dependents for nodeName. </param>
-    public void ReplaceDependents( string nodeName, IEnumerable<string> newDependents )
+    public void ReplaceDependents(string nodeName, IEnumerable<string> newDependents)
     {
 
         IEnumerable<string> oldDependents = GetDependents(nodeName); // get the set of dependents from the node.
-       
+
         // REMOVE OPERATIONS:
         foreach (string oldDependent in oldDependents)
         {
-                this.RemoveDependency(nodeName, oldDependent);
+            RemoveDependency(nodeName, oldDependent);
         }
 
         // ADD OPERATIONS:
         foreach (string newDependent in newDependents) // add the new dependencies
         {
-            this.AddDependency(nodeName, newDependent);
+            AddDependency(nodeName, newDependent);
         }
-    
+
 
     }
 
@@ -232,20 +230,20 @@ public class DependencyGraph
     /// </summary>
     /// <param name="nodeName"> The name of the node who's dependees are being replaced. </param>
     /// <param name="newDependees"> The new dependees for nodeName. Could be empty.</param>
-    public void ReplaceDependees( string nodeName, IEnumerable<string> newDependees )
+    public void ReplaceDependees(string nodeName, IEnumerable<string> newDependees)
     {
         IEnumerable<string> oldDependees = GetDependees(nodeName); // get setof dependees from node.
 
         // REMOVE OPERATIONS:
         foreach (string oldDependee in oldDependees)
         {
-            this.RemoveDependency(oldDependee, nodeName);
+            RemoveDependency(oldDependee, nodeName);
         }
 
         // ADD OPERATIONS:
         foreach (string newDependee in newDependees)
         {
-            this.AddDependency(newDependee, nodeName);
-        }    
+            AddDependency(newDependee, nodeName);
+        }
     }
 }

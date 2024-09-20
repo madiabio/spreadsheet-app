@@ -32,7 +32,7 @@
 ///    This file contains the Formula class which is used to construct formulas.
 /// </summary>
 
-namespace CS3500.Formula;
+namespace Formula;
 
 using System.ComponentModel.Design;
 using System.Runtime.CompilerServices;
@@ -69,7 +69,7 @@ public class Formula
 {
 
 
-   
+
 
 
     /// <summary>
@@ -84,8 +84,8 @@ public class Formula
     ///   represents valid variable name strings.
     /// </summary>
     private const string VariableRegExPattern = @"[a-zA-Z]+\d+";
-    
-    
+
+
     // Class variables
 
     private string formulaString;
@@ -119,7 +119,7 @@ public class Formula
     /// </summary>
     /// <param name="formula"> The string representation of the formula to be created.</param>
 
-    public Formula( string formula )
+    public Formula(string formula)
     {
 
 
@@ -136,13 +136,13 @@ public class Formula
             throw new FormulaFormatException("Formula cannot be empty.");
         }
 
-        this.ValidateSyntax(tokens);
+        ValidateSyntax(tokens);
 
         this.tokens = tokens;
 
         formula = string.Join(string.Empty, tokens); // join formatted tokens to create properly formatted formula
 
-        this.formulaString = formula;
+        formulaString = formula;
     }
 
 
@@ -171,7 +171,7 @@ public class Formula
         /// <summary>
         /// Uses isvar function to check if a token is a variable, if so, adds it to the set of variables.
         /// </summary>
-        foreach (string token in this.tokens)
+        foreach (string token in tokens)
         {
             if (IsVar(token))
             {
@@ -215,9 +215,9 @@ public class Formula
     ///   A canonical version (string) of the formula. All "equal" formulas
     ///   should have the same value here.
     /// </returns>
-    public override string ToString( )
+    public override string ToString()
     {
-        return this.formulaString;
+        return formulaString;
     }
 
 
@@ -231,7 +231,7 @@ public class Formula
         Regex closingParenthesisOrOperatorPattern = new Regex(@"^[)+\-*/]$");
         Regex scientificNotationPattern = new Regex(@"^([+-]?\d+(\.\d+)?)[eE]([+-]?\d+)$"); // Matches explicitely defined scientific notation (ie, when there is a +/-)
         Regex TrailingZerosPattern = new Regex(@"\.?0+$");
-        
+
         // open & closed parenthesis counters
         int openCount = 0;
         int closeCount = 0;
@@ -286,22 +286,22 @@ public class Formula
                 throw new FormulaFormatException($"Invalid character in token {tokens[i]}.");
             }
 
-            if (i == 0 && !(IsVar(tokens[i]) || (tokens[i] == "(") || IsNumber(tokens[i]))) // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
+            if (i == 0 && !(IsVar(tokens[i]) || tokens[i] == "(" || IsNumber(tokens[i]))) // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
             {
                 throw new FormulaFormatException($"First token in formula must be either a variable, number, or (. Token was {tokens[i]}");
 
             }
-            else if (i == (tokens.Count - 1) && !(IsVar(tokens[i]) || (tokens[i] == ")") || IsNumber(tokens[i]))) // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
+            else if (i == tokens.Count - 1 && !(IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
             {
                 throw new FormulaFormatException($"Last token in formula must be either a variable, number, or ). Token was {tokens[i]}");
             }
 
-            if ((i < (tokens.Count - 1) && openParenthesisOrOperatorPattern.IsMatch(tokens[i])) && !(IsVar(tokens[i + 1]) || (tokens[i + 1] == "(") || IsNumber(tokens[i + 1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
+            if (i < tokens.Count - 1 && openParenthesisOrOperatorPattern.IsMatch(tokens[i]) && !(IsVar(tokens[i + 1]) || tokens[i + 1] == "(" || IsNumber(tokens[i + 1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
             {
                 throw new FormulaFormatException($"Only a variable, number or open parenthesis may immediately follow an open parenthesis or operator. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
 
-            if ((i < (tokens.Count - 1) && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) && !closingParenthesisOrOperatorPattern.IsMatch(tokens[i + 1])) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
+            if (i < tokens.Count - 1 && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i])) && !closingParenthesisOrOperatorPattern.IsMatch(tokens[i + 1])) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
             {
                 throw new FormulaFormatException($"Only an operator or closing parenthesis may immediately follow a number, variable, or closing parenthesis. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
@@ -331,11 +331,11 @@ public class Formula
     /// </summary>
     /// <param name="token"> A token that may be a variable. </param>
     /// <returns> true if the string matches the requirements, e.g., A1 or a1. </returns>
-    private static bool IsVar( string token )
+    private static bool IsVar(string token)
     {
         // notice the use of ^ and $ to denote that the entire string being matched is just the variable
         string standaloneVarPattern = $"^{VariableRegExPattern}$";
-        return Regex.IsMatch( token, standaloneVarPattern );
+        return Regex.IsMatch(token, standaloneVarPattern);
     }
 
     /// <summary>
@@ -359,7 +359,7 @@ public class Formula
     /// </summary>
     /// <param name="formula"> A string representing an infix formula such as 1*B1/3.0. </param>
     /// <returns> The ordered list of tokens in the formula. </returns>
-    private static List<string> GetTokens( string formula )
+    private static List<string> GetTokens(string formula)
     {
         List<string> results = [];
 
@@ -380,11 +380,11 @@ public class Formula
                                         spacePattern);
 
         // Enumerate matching tokens that don't consist solely of white space.
-        foreach ( string s in Regex.Split( formula, pattern, RegexOptions.IgnorePatternWhitespace ) )
+        foreach (string s in Regex.Split(formula, pattern, RegexOptions.IgnorePatternWhitespace))
         {
-            if ( !Regex.IsMatch( s, @"^\s*$", RegexOptions.Singleline ) )
+            if (!Regex.IsMatch(s, @"^\s*$", RegexOptions.Singleline))
             {
-                results.Add( s );
+                results.Add(s);
             }
         }
 
@@ -409,8 +409,8 @@ public class FormulaFormatException : Exception
     ///   </para>
     /// </summary>
     /// <param name="message"> A developer defined message describing why the exception occured.</param>
-    public FormulaFormatException( string message )
-        : base( message )
+    public FormulaFormatException(string message)
+        : base(message)
     {
         // All this does is call the base constructor. No extra code needed.
     }
