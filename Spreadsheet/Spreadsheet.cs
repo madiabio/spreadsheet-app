@@ -1,4 +1,4 @@
-﻿// <copyright file="DeleteMeClass1.cs" company="UofU-CS3500">
+﻿// <copyright file="Spreadsheet.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,24 @@
 // Update by Profs Kopta and de St. Germain
 //     - Updated return types
 //     - Updated documentation
+
+/// <summary>
+/// Author:    Madeline Abio
+/// Partner:   N/A
+/// Date:      20/09/2024
+/// Course:    CS 3500, University of Utah, School of Computing
+/// Copyright: CS 3500 and Madeline Abio - This work may not 
+///            be copied for use in Academic Coursework.
+///
+/// I, Madeline Abio, certify that I wrote this code from scratch and
+/// did not copy it in part or whole from another source.  All 
+/// references used in the completion of the assignments are cited 
+/// in my README file.
+///
+/// File Contents
+///
+///    This file contains the Spreadsheet class, which is used to store cells and their information.
+/// </summary>
 namespace CS3500.Spreadsheet;
 
 using CS3500.Formula;
