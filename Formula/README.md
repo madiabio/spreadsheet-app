@@ -19,8 +19,7 @@ commits, where I was committing A5 work as A4.
 
 
 # Assignment Specific Topics:
-	1. Time estimation: 2 hrs to implement, 1 hr to read/set up stuff
-	2. Time spent: 3 hrs coding, 1ish hrs reading/setting up things
+
 # Consulted Peers:
 	1. Sadie Bowen
 

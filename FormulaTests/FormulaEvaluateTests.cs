@@ -49,6 +49,181 @@ public class FormulaEvaluateTests
     }
 
 
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple operators and parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestComplexExpression1NoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(2+3)*5+2");
+        Assert.AreEqual(27.0, f1.Evaluate(s => 0));
+    }
+
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple operators and parenthesis, with variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestComplexExpression1WithVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(A1+B1)*(A1+B1)+A1");
+        Assert.AreEqual(27.0, f1.Evaluate(MyVariables));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple addition operators and parenthesis, with variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleAdditionWithVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(A1+B1+A1+B1)");
+        Assert.AreEqual(10.0, f1.Evaluate(MyVariables));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple addition and parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleAdditionNoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(2+3+2+3)");
+        Assert.AreEqual(10.0, f1.Evaluate(s => 0));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple subtraction and parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleSubtractionNoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(2-3-2)");
+        Assert.AreEqual(-3.0, f1.Evaluate(s => 0));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple subtraction operators and parenthesis, with variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleSubtractionWithVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(A1-B1-A1)");
+        Assert.AreEqual(-3.0, f1.Evaluate(MyVariables));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple multiplication and parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleMultiplicationNoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(2*3*2)");
+        Assert.AreEqual(12.0, f1.Evaluate(s => 0));
+    }
+
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple multiplication operators and parenthesis, with variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleMultiplicationWithVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(A1*B1*A1)");
+        Assert.AreEqual(12.0, f1.Evaluate(MyVariables));
+    }
+
+
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple division and parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleDivisionNoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(100/10/10)");
+        Assert.AreEqual(1.0, f1.Evaluate(s => 0));
+    }
+
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a formula
+    /// when the formula contains multiple division operators and parenthesis, with variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleDivisionWithVariables_ExpectedBehaviour()
+    {
+        double TempMyVars(string name) // made a new function so i could have 100 and 10 as A1 and B1 for division
+        {
+            if (name == "A1")
+            {
+                return 100;
+            }
+            else if (name == "B1")
+            {
+                return 10;
+            }
+            else
+            {
+                throw new ArgumentException("Unknown variable");
+            }
+        }
+
+        Formula f1 = new Formula("(A1/B1/B1)");
+        Assert.AreEqual(1.0, f1.Evaluate(TempMyVars));
+    }
+
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly returns a <see cref="FormulaError"/>
+    /// when the formula contains multiple division with a div by zero after a right parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleDivisionDivByZeroErrorNoVariables_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(100/10)/0");
+        Assert.IsInstanceOfType(f1.Evaluate(s=>0), typeof(FormulaError));
+    }
+
+    /// <summary>
+    /// Tests if <see cref="Formula.Evaluate(Lookup)"/> correctly returns a <see cref="FormulaError"/>
+    /// when the formula contains multiple division with a div by zero after a right parenthesis, without variables.
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestMultipleDivisionDivByZeroErrorWithoVariables_ExpectedBehaviour()
+    {
+
+        double TempMyVars(string name) // made a new function so i could have div by zero with vars
+        {
+            if (name == "A1")
+            {
+                return 100;
+            }
+            else if (name == "B1")
+            {
+                return 10;
+            }
+            else
+            {
+                throw new ArgumentException("Unknown variable");
+            }
+        }
+
+        Formula f1 = new Formula("(A1/B1)/0");
+        Assert.IsInstanceOfType(f1.Evaluate(s => 0), typeof(FormulaError));
+    }
+
+
+
+
+
 
     /// <summary>
     /// Checks that <see cref="Formula.Evaluate(Lookup)"/> correctly evaluates a
@@ -58,7 +233,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateAddNoVariables_ExpectedBehaviour()
     {
         Formula f = new Formula("2+3");
-        Assert.AreEqual(5, f.Evaluate(s => 0));
+        Assert.AreEqual(5.0, f.Evaluate(s => 0));
     }
 
     /// <summary>
@@ -68,9 +243,10 @@ public class FormulaEvaluateTests
     [TestMethod]
     public void FormulaEvaluate_TestEvaluateAddKnownVariable_ExpectedBehaviour()
     {
-
+        
         Formula f = new Formula("A1 + 3");
-        Assert.AreEqual(5, f.Evaluate(MyVariables));
+        Object ans = f.Evaluate(MyVariables);
+        Assert.AreEqual(5.0, ans);
     }
 
     /// <summary>
@@ -82,7 +258,7 @@ public class FormulaEvaluateTests
     {
 
         Formula f = new Formula("A1 + B1");
-        Assert.AreEqual(5, f.Evaluate(MyVariables));
+        Assert.AreEqual(5.0, f.Evaluate(MyVariables));
     }
 
 
@@ -94,7 +270,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateSubNoVariables_ExpectedBehaviour()
     {
         Formula f = new Formula("3-2");
-        Assert.AreEqual(1, f.Evaluate(s => 0));
+        Assert.AreEqual(1.0, f.Evaluate(s => 0));
     }
 
     /// <summary>
@@ -105,7 +281,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateSubKnownVariable_ExpectedBehaviour()
     {
         Formula f = new Formula("B1-2");
-        Assert.AreEqual(1, f.Evaluate(MyVariables));
+        Assert.AreEqual(1.0, f.Evaluate(MyVariables));
     }
 
     /// <summary>
@@ -116,7 +292,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateDivNoVariables_ExpectedBehaviour()
     {
         Formula f = new Formula("2/2");
-        Assert.AreEqual(1, f.Evaluate(s => 0));
+        Assert.AreEqual(1.0, f.Evaluate(s => 0));
     }
 
     /// <summary>
@@ -127,7 +303,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateDivKnownVariable_ExpectedBehaviour()
     {
         Formula f = new Formula("A1/2");
-        Assert.AreEqual(1, f.Evaluate(MyVariables));
+        Assert.AreEqual(1.0, f.Evaluate(MyVariables));
     }
 
     /// <summary>
@@ -138,7 +314,7 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateMultiplyNoVariables_ExpectedBehaviour()
     {
         Formula f = new Formula("2*3");
-        Assert.AreEqual(6, f.Evaluate(s => 0));
+        Assert.AreEqual(6.0, f.Evaluate(s => 0));
     }
 
     /// <summary>
@@ -149,48 +325,48 @@ public class FormulaEvaluateTests
     public void FormulaEvaluate_TestEvaluateMultiplyKnownVariable_ExpectedBehaviour()
     {
         Formula f = new Formula("A1*B1");
-        Assert.AreEqual(6, f.Evaluate(MyVariables));
+        Assert.AreEqual(6.0, f.Evaluate(MyVariables));
     }
 
     /// <summary>
     /// <para>
-    /// Checks that an <see cref="ArgumentException"/> is thrown when two unknown variables
+    /// Checks that  a <see cref="FormulaError"/> is returned when two unknown variables
     /// are used in a <see cref="Formula"/> that is evaluated with <see cref="Formula.Evaluate(Lookup)"/>.  
     /// </para>
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void FormulaEvaluate_TestEvaluateTwoUnknownVariables_ExpectedBehaviour()
     {
         Formula f1 = new Formula("A2 + B2");
-        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError)); // not sure if this is necessary cus this might just cause an arg exception
+        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError));
     }
 
     /// <summary>
-    /// Checks that an <see cref="ArgumentException"/> is thrown when an unknown variable
+    /// Checks that  a <see cref="FormulaError"/> is returned when an unknown variable
     /// is used with a known variable in a <see cref="Formula"/> that is evaluated with 
     /// <see cref="Formula.Evaluate(Lookup)"/>
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
+    //[ExpectedException(typeof(ArgumentException))]
     public void FormulaEvaluate_TestEvaluateUnknownVariableWithKnownVariable_ExpectedBehaviour()
     {
         Formula f1 = new Formula("A1 + B2");
-        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError)); // not sure if this is necessary cus this might just cause an arg exception
+        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError)); 
     }
 
 
     /// <summary>
-    /// Checks that an <see cref="ArgumentException"/> is thrown when an unknown variable
+    /// Checks that a <see cref="FormulaError"/> is returned when an unknown variable
     /// is used a number in a <see cref="Formula"/> that is evaluated with 
     /// <see cref="Formula.Evaluate(Lookup)"/>
     /// </summary>
     [TestMethod]
-    [ExpectedException(typeof(ArgumentException))]
     public void FormulaEvaluate_TestEvaluateUnknownVariableWithNumber_ExpectedBehaviour()
     {
         Formula f1 = new Formula("A2 + 3");
-        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError)); // not sure if this is necessary cus this might just cause an arg exception
+        Object result = f1.Evaluate(MyVariables);
+        Assert.IsInstanceOfType(result, typeof(FormulaError));
     }
 
     /// <summary>
@@ -206,6 +382,52 @@ public class FormulaEvaluateTests
         Formula f1 = new Formula("1/0");
         Assert.IsInstanceOfType(f1.Evaluate(s => 0), typeof(FormulaError));
     }
+
+    /// <summary>
+    /// <para>
+    /// Tests <see cref="Formula.Evaluate(Lookup)"/> returns a 
+    /// <see cref="FormulaError"/> when an explicit division by zero occurs
+    /// explicitly (no variables), with parenthesis.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestEvaluateDivByZeroExplicitWithParenthesis_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(1/(2-2))");
+        Assert.IsInstanceOfType(f1.Evaluate(s => 0), typeof(FormulaError));
+    }
+
+    /// <summary>
+    /// <para>
+    /// Tests <see cref="Formula.Evaluate(Lookup)"/> returns a 
+    /// <see cref="FormulaError"/> when a division occurs on a subtraction
+    /// operation with parenthesis.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestEvaluateDivBySubtractionExpressionWithParenthesis_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("(4/(6-2))");
+        Assert.AreEqual(1.0, f1.Evaluate(s=>0));
+    }
+
+
+
+    /// <summary>
+    /// <para>
+    /// Tests <see cref="Formula.Evaluate(Lookup)"/> returns a 
+    /// <see cref="FormulaError"/> when an implicit division by zero occurs
+    /// explicitly (has a variables).
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void FormulaEvaluate_TestEvaluateDivByZeroImplicit_ExpectedBehaviour()
+    {
+        Formula f1 = new Formula("A1/0");
+        Assert.IsInstanceOfType(f1.Evaluate(MyVariables), typeof(FormulaError));
+    }
+
+
 
 
     /// <summary>

@@ -37,6 +37,7 @@ namespace Formula;
 using System.ComponentModel.Design;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -208,19 +209,6 @@ public class Formula
 
 
     /// <summary>
-    /// Actually just returns the number 5.
-    /// </summary>
-    /// <returns>
-    ///  5.0
-    /// </returns>
-    public double ReturnFive()
-    {
-        return 5.0;
-    }
-
-
-
-    /// <summary>
     ///   <para>
     ///     Evaluates this Formula, using the lookup delegate to determine the values of
     ///     variables.
@@ -250,6 +238,166 @@ public class Formula
     public object Evaluate(Lookup lookup)
     {
         // FIXME: Implement the required algorithm here.
+        Stack<string> vstack = new Stack<string>(); // value stack
+        Stack<string> ostack = new Stack<string>(); // operator stack
+        foreach (string t in tokens)
+        {
+            if (IsNumber(t))
+            {
+                if (ostack.Count > 0 && (ostack.Peek() == "*" || ostack.Peek() == "/"))
+                {
+                    double v1 = double.Parse(vstack.Pop()); // pop the value stack and make it a double
+                    string op = ostack.Pop(); // pop the operator stack
+                    double v2 = double.Parse(t); // make t a double
+                    if (op == "*") // do multiplication on the two values (and change it back to a string), then push it on the value stack.
+                    {
+                        vstack.Push((v1 * v2).ToString());
+                    }
+                    else if (op == "/") // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
+                    {
+                        if (v2 == 0)
+                        {
+                            return new FormulaError("Division by zero");
+                        }
+                        vstack.Push((v1 / v2).ToString());
+                    }
+                }
+                else // if not * or /, push t on the value stack.
+                {
+                    vstack.Push(t);
+                }
+            }
+            else if (IsVar(t))
+            {
+                try
+                {
+                    string t_val = lookup(t).ToString(); // lookup the value of the variable and make it a string
+                    if (ostack.Count > 0 && (ostack.Peek() == "*" || ostack.Peek() == "/"))
+                    {
+                        double v1 = double.Parse(vstack.Pop()); // pop the value stack and make it a double
+                        string op = ostack.Pop(); // pop the operator stack
+                        double v2 = double.Parse(t_val); // make t_val a double
+                        if (op == "*") // do multiplication on the two values (and change it back to a string), then push it on the value stack.
+                        {
+                            vstack.Push((v1 * v2).ToString());
+                        }
+                        else if (op == "/") // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
+                        {
+                            if (v2 == 0)
+                            {
+                                return new FormulaError("Division by zero");
+                            }
+                            vstack.Push((v1 / v2).ToString());
+                        }
+                    }
+                    else // if not * or /, push t_val on the value stack.
+                    {
+                        vstack.Push(t_val);
+                    }
+
+                }
+                catch (ArgumentException) // if the variable is not found, return a FormulaError
+                {
+                    return new FormulaError($"Unknown variable: {t}");
+                }
+            }
+            else if ((t == "+") || (t == "-"))
+            {
+                if (ostack.Count > 0 && (ostack.Peek() == "+" || ostack.Peek() == "-")) // if + or - is at top of operator stack,
+                {
+                    double v1 = double.Parse(vstack.Pop()); // pop the value stack twice (& make them doubles)
+                    double v2 = double.Parse(vstack.Pop());
+                    string op = ostack.Pop(); // pop the operator stack once
+
+                    // then apply operator to the vals, and push the result (as a string) on the value stack.
+                    if (op == "+")
+                    {
+                        vstack.Push((v1 + v2).ToString());
+                    }
+                    else
+                    {
+                        vstack.Push((v2 - v1).ToString());
+                    }
+                }
+                ostack.Push(t); // push t on to the operator stack
+            }
+            else if ((t == "*") || (t == "/")) // if t is * or /, push it on the operator stack.
+            {
+                ostack.Push(t);
+            }
+            else if (t == "(") // if t is left parenthesis, push it on the operator stack.
+            {
+                ostack.Push(t);
+            }
+            else if (t == ")")
+            {
+                if (ostack.Count > 0 && ((ostack.Peek() == "+") || (ostack.Peek() == "-")))// if + or - is at top of ostack, 
+                {
+                    // pop val stack twice and op stack once.
+                    double v1 = double.Parse(vstack.Pop());
+                    double v2 = double.Parse(vstack.Pop());
+                    string op = ostack.Pop();
+
+                    // apply operator to the vals, and push the result (as a string) on the value stack.
+                    if (op == "+")
+                    {
+                        vstack.Push((v1 + v2).ToString());
+                    }
+                    else
+                    {
+                        vstack.Push((v2 - v1).ToString());
+                    }
+                    op = ostack.Pop(); // pop the operator stack. top should be "(".
+                }
+                else // otherwise, the top of the stack is "("
+                {
+                    string op = ostack.Pop();
+                }
+
+                if (ostack.Count > 0 && ((ostack.Peek() == "*") || (ostack.Peek() == "/")))
+                {
+                    // pop value stack twice and operator stack once
+                    double v1 = double.Parse(vstack.Pop());
+                    double v2 = double.Parse(vstack.Pop());
+                    string op2 = ostack.Pop();
+
+                    // apply operator to the vals, and push the results (as a double) onto value stack
+                    if (op2 == "*")
+                    {
+                        vstack.Push((v1 * v2).ToString());
+                    }
+                    else
+                    {
+                        if (v1 == 0)
+                        {
+                            return new FormulaError("Division by zero");
+                        }
+                        vstack.Push((v2 / v1).ToString());
+                    }
+                }
+            }
+        }
+
+        // when the last token has been processed, two conditions:
+        if (ostack.Count == 0) // if operator stack is empty, then the value stack should have only one value, which is the result.
+        {
+            return double.Parse(vstack.Pop());
+        }
+        { // the operator will always either be + or -.
+            double v1 = double.Parse(vstack.Pop());
+            double v2 = double.Parse(vstack.Pop());
+            string op = ostack.Pop();
+
+            if (op == "+")
+            {
+                return v1 + v2;
+            }
+            else if (op == "-")
+            {
+                return v2 - v1;
+            }
+        }
+        throw new Exception("Unknown Issue"); // FIXME: Figure out what causes this to be necessary
     }
 
     /// <summary>
@@ -381,7 +529,9 @@ public class Formula
             }
             else if (IsNumber(tokens[i])) // Remove trailing zeros from token if its a number
             {
-                tokens[i] = TrailingZerosPattern.Replace(tokens[i], string.Empty);
+                // tokens[i] = TrailingZerosPattern.Replace(tokens[i], string.Empty);
+                tokens[i] = double.Parse(tokens[i]).ToString("G");
+
             }
 
 

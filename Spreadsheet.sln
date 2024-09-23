@@ -18,10 +18,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraph", "Dependen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyGraphTests", "DependencyGraphTests\DependencyGraphTests.csproj", "{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spreadsheet", "Spreadsheet\Spreadsheet.csproj", "{807F4A79-4971-44F3-AEF2-313384C7EF2B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{B6E9196E-F9DF-4495-9A81-A80F1DDFC34F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,14 +40,6 @@ Global
 		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BCABC2A-A0DE-4607-9CD0-E838EE08B118}.Release|Any CPU.Build.0 = Release|Any CPU
-		{807F4A79-4971-44F3-AEF2-313384C7EF2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{807F4A79-4971-44F3-AEF2-313384C7EF2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{807F4A79-4971-44F3-AEF2-313384C7EF2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{807F4A79-4971-44F3-AEF2-313384C7EF2B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6E9196E-F9DF-4495-9A81-A80F1DDFC34F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6E9196E-F9DF-4495-9A81-A80F1DDFC34F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6E9196E-F9DF-4495-9A81-A80F1DDFC34F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6E9196E-F9DF-4495-9A81-A80F1DDFC34F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

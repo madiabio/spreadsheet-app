@@ -20,7 +20,7 @@ Estimated/Worked,   Assignment,        Note
 
     3/4,            Assignment 2,      N/A
     3/5,            Assignment 3,      Spent about an hour extra debugging A2.
-    3/??,           Assignment 4,      N/A
+    3/6 ,           Assignment 4,      Was tired and a little defeated so took longer than usual
     4/??,           Assignment 5,      Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised.
 
 
