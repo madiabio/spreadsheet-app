@@ -35,6 +35,7 @@
 namespace Formula;
 
 using System.ComponentModel.Design;
+using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -153,8 +154,13 @@ public class Formula
     /// <returns> true if the two formulas are the same.</returns>
     public static bool operator ==(Formula f1, Formula f2)
     {
-        // FIXME: Write this method
+        if (f1.ToString() == f2.ToString())
+        {
+            return true;
+        }
+        return false;
     }
+
 
     /// <summary>
     ///   <para>
@@ -166,7 +172,12 @@ public class Formula
     /// <returns> true if the two formulas are not equal to each other.</returns>
     public static bool operator !=(Formula f1, Formula f2)
     {
-        // FIXME: Write this method
+        if (f1.ToString() != f2.ToString())
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -179,7 +190,7 @@ public class Formula
     ///   </para>
     ///   <para>
     ///     Two Formulas are considered equal if their canonical string representations
-    ///     (as defined by ToString) are equal.  
+    ///     (as defined by ToString) are equal.
     ///   </para>
     /// </summary>
     /// <param name="obj"> The other object.</param>
@@ -188,9 +199,26 @@ public class Formula
     /// </returns>
     public override bool Equals(object? obj)
     {
-        // FIXME: write this method
-        return true;
+        if (obj is Formula f)
+        {
+            return this.ToString() == f.ToString();
+        }
+        return false;
     }
+
+
+    /// <summary>
+    /// Actually just returns the number 5.
+    /// </summary>
+    /// <returns>
+    ///  5.0
+    /// </returns>
+    public double ReturnFive()
+    {
+        return 5.0;
+    }
+
+
 
     /// <summary>
     ///   <para>
@@ -234,7 +262,7 @@ public class Formula
     /// <returns> The hashcode for the object. </returns>
     public override int GetHashCode()
     {
-        // FIXME: Implement the required algorithm here.
+        return formulaString.GetHashCode();
     }
 
 

@@ -11,7 +11,12 @@ Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Ac
 ```
 
 # Comments to Evaluators:
-This work stands on its own.
+I accidentally started Assignment 5 on Friday instead of Assignment 4 and didn't finish it then because I read
+that there was no penalty for late submissions, then I was unable to work on the assignment again
+until Sunday night where I realised that A4 had late penalties (A5 does not for the weekend). I completed 
+half of A5 accidentally and I am hoping this is considered for my late penalty with A4. This can be verified with my git
+commits, where I was committing A5 work as A4.
+
 
 # Assignment Specific Topics:
 	1. Time estimation: 2 hrs to implement, 1 hr to read/set up stuff

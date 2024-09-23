@@ -297,7 +297,7 @@ public class DependencyGraphExampleStressTests
     ///    that are used to compare at the end against the dg way of storing these values.
     /// </summary>
     [TestMethod]
-    [Timeout(2000)]  // FIXME: 2 second run time limit <--  remove this comment
+    [Timeout(2000)]
     public void StressTest()
     {
         DependencyGraph dg = new();
