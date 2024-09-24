@@ -27,7 +27,7 @@
 namespace FormulaTests;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Formula;
+using CS3500.Formula;
 
 #pragma warning disable
 

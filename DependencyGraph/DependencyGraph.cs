@@ -26,7 +26,7 @@
 ///
 ///    This file contains the code for the Dependency Graph class.
 /// </summary>
-namespace DependencyGraph;
+namespace CS3500.DependencyGraph;
 
 /// <summary>
 ///   <para>

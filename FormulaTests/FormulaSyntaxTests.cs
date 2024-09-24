@@ -23,7 +23,7 @@
 /// </summary>
 namespace FormulaTests;
 
-using Formula;
+using CS3500.Formula;
 
 /// <summary>
 ///   <para>

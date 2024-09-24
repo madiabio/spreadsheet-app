@@ -18,9 +18,9 @@
 ///
 ///    This file contains tests written for the DependencyGraph class.
 /// </summary>
-namespace DependencyGraphTests;
+namespace CS3500.DependencyGraphTests;
 
-using DependencyGraph;
+using CS3500.DependencyGraph;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Drawing;
 

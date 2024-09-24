@@ -32,7 +32,7 @@
 ///    This file contains the Formula class which is used to construct formulas.
 /// </summary>
 
-namespace Formula;
+namespace CS3500.Formula;
 
 using System.ComponentModel.Design;
 using System.Linq.Expressions;

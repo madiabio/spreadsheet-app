@@ -20,7 +20,7 @@
 ///    that relate to <see cref="Formula.Evaluate()"/>. 
 /// </summary>
 namespace FormulaTests;
-using Formula;
+using CS3500.Formula;
 
 
 /// <summary>
