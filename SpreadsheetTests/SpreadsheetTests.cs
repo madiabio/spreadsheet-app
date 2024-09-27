@@ -18,9 +18,9 @@
 ///
 ///    This file contains the tests for the Spreadsheet class.
 /// </summary>
-namespace SpreadsheetTests;
-using Spreadsheet;
-using Formula;
+namespace CS3500.SpreadsheetTests;
+using CS3500.Spreadsheet;
+using CS3500.Formula;
 [TestClass]
 public class SpreadsheetTests
 {

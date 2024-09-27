@@ -24,10 +24,10 @@
 ///
 ///    This file contains the Spreadsheet class, which is used to store cells and their information.
 /// </summary>
-namespace Spreadsheet;
+namespace CS3500.Spreadsheet;
 
-using Formula;
-using DependencyGraph;
+using CS3500.Formula;
+using CS3500.DependencyGraph;
 using System.Text.RegularExpressions;
 
 /// <summary>
