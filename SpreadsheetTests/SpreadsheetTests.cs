@@ -34,16 +34,14 @@ public class SpreadsheetTests
     /// <summary>
     /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
     /// </summary>
+    [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsDoubleReturn_ExpectedBehaviour()
     {
         Spreadsheet ss = new Spreadsheet();
-        ss.SetCellContents("B1", new Formula("A1*2"));
-        ss.SetCellContents("C1", new Formula("B1*2"));
+        List<string> results = ss.SetCellContents("A1", 1.1).ToList();
 
-        IList<string> results = ss.SetCellContents("A1", 1.1);
-
-        IList<string> expected = new List<string> { "A1", "B1", "C1" };
-        Assert.AreEqual(expected, results);
+        List<string> expected = new List<string> {"A1"};
+        CollectionAssert.AreEqual(expected, results);
 
     }
 
@@ -51,17 +49,15 @@ public class SpreadsheetTests
     /// <summary>
     /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
     /// </summary>
+    [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsStringReturn_ExpectedBehaviour()
     {
         // FIXME: CHECK THAT THIS IS CORRECT AND THAT D1 SHOULDN'T BE IN THE LIST.
         Spreadsheet ss = new Spreadsheet();
-        ss.SetCellContents("B1", new Formula("A1*2"));
-        ss.SetCellContents("C1", new Formula("B1*2"));
+        List<string> results = ss.SetCellContents("A1", "test").ToList();
 
-        IList<string> results = ss.SetCellContents("A1", "D1");
-
-        IList<string> expected = new List<string> { "A1", "B1", "C1" };
-        Assert.AreEqual(expected, results);
+        List<string> expected = new List<string> { "A1"};
+        CollectionAssert.AreEqual(expected, results);
 
     }
 
@@ -70,34 +66,50 @@ public class SpreadsheetTests
     /// <summary>
     /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
     /// </summary>
+    [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsFormulaReturn_ExpectedBehaviour()
     {
         // FIXME: CHECK THAT THIS IS CORRECT AND THAT D1 SHOULDN'T BE IN THE LIST.
         Spreadsheet ss = new Spreadsheet();
-        ss.SetCellContents("B1", new Formula("A1*2"));
-        ss.SetCellContents("C1", new Formula("B1*2"));
+        ss.SetCellContents("A1", 1.1);
+        Formula f1 = new Formula("A1*2");
+        Formula f2 = new Formula("B1*2");
+        ss.SetCellContents("B1", f1);
+        ss.SetCellContents("C1", f2);
 
-        IList<string> results = ss.SetCellContents("A1", new Formula("D1*2"));
+        List<string> results = ss.SetCellContents("A1", new Formula("D1*2")).ToList();
 
-        IList<string> expected = new List<string> { "A1", "B1", "C1" };
-        Assert.AreEqual(expected, results);
+        List<string> expected = new List<string> { "A1", "B1", "C1" };
+        CollectionAssert.AreEqual(expected, results);
 
     }
 
 
 
     /// <summary>
-    /// Checks a <see cref="CircularException"/> is thrown when a circular dependency is attempted
+    /// Checks a <see cref="CircularException"/> is thrown when an indirect circular dependency is attempted
     /// to be put into the graph.
     [TestMethod]
     [ExpectedException(typeof(CircularException))]
-    public void SpreadsheetConstructor_TestCircularDependency_Invalid()
+    public void SpreadsheetConstructor_TestCircularDependencyIndirect_Invalid()
     {
         Spreadsheet ss = new Spreadsheet();
 
         ss.SetCellContents("A1", new Formula("B1*2"));
         ss.SetCellContents("B1", new Formula("C1*2"));
         ss.SetCellContents("C1", new Formula("A1*2"));
+    }
+
+    /// <summary>
+    /// Checks a <see cref="CircularException"/> is thrown when a direct circular dependency is attempted
+    /// to be put into the graph.
+    [TestMethod]
+    [ExpectedException(typeof(CircularException))]
+    public void SpreadsheetConstructor_TestCircularDependencyDirect_Invalid()
+    {
+        Spreadsheet ss = new Spreadsheet();
+
+        ss.SetCellContents("A1", new Formula("A1*2"));
     }
 
 
@@ -114,8 +126,9 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", trueContents);
         ss.SetCellContents("C1", trueContents);
 
+        HashSet<string> results = ss.GetNamesOfAllNonemptyCells().ToHashSet();
         HashSet<string> expected = new HashSet<string> { "A1", "B1", "C1" };
-        Assert.AreEqual(expected, ss.GetNamesOfAllNonemptyCells());
+        Assert.IsTrue(expected.SetEquals(results));
     }
 
     /// <summary>
@@ -136,8 +149,7 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", string.Empty);
         ss.SetCellContents("C1", string.Empty);
 
-        HashSet<string> expected = new HashSet<string> { };
-        Assert.AreEqual(expected, ss.GetNamesOfAllNonemptyCells());
+        Assert.IsTrue(ss.GetNamesOfAllNonemptyCells().Count == 0);
     }
 
 

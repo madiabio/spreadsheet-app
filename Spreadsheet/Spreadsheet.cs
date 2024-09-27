@@ -29,6 +29,8 @@ namespace CS3500.Spreadsheet;
 using CS3500.Formula;
 using CS3500.DependencyGraph;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using static System.Net.Mime.MediaTypeNames;
 
 /// <summary>
 ///   <para>
@@ -66,7 +68,34 @@ public class InvalidContentsException : Exception
 
 }
 
+/// <summary>
+/// Holds a helper function for cell and spreadsheet classes.
+/// </summary>
+public static class SpreadsheetUtils
+{
+    /// <summary>
+    /// This method validates if a given cell name is valid.
+    /// Returns false if the name is invalid, true otherwise.
+    /// </summary>
+    /// <param name="name">The name of the cell to validate</param>
+    public static bool IsValidCellName(string name)
+    {
+        const string VariableRegExPattern = @"^[a-zA-Z]+\d+$";
 
+        if (string.IsNullOrEmpty(name) || !Regex.IsMatch(name, VariableRegExPattern))
+        {
+            return false;
+        }
+        return true;
+    }
+}
+
+
+
+/// <summary>
+///   All variables are letters followed by numbers.  This pattern
+///   represents valid variable name strings.
+/// </summary>
 
 /// <summary>
 /// <para>
@@ -88,30 +117,29 @@ public class Cell
     ///   All variables are letters followed by numbers.  This pattern
     ///   represents valid variable name strings.
     /// </summary>
-    private const string VariableRegExPattern = @"^[a-zA-Z]+\d+$";
 
-
-    // Public property for the Name of the cell
+    /// <summary>
+    /// Public property for the Name of the cell
+    /// </summary>
     public string Name
     {
         get { return _name; }
         set
         {
-            if (string.IsNullOrEmpty(value))
+            if (SpreadsheetUtils.IsValidCellName(value))
             {
-                throw new InvalidNameException("Cell name cannot be null or empty.");
+                _name = value.ToUpper();
             }
-            else if (!Regex.IsMatch(value, VariableRegExPattern))
+            else
             {
-                throw new InvalidNameException("Invalid name pattern.");
+                throw new InvalidNameException($"{_name} is not a valid cell name.");
             }
-            _name = value.ToUpper();
-
-
         }
     }
 
-    // Public property for the Contents of the cell
+    /// <summary>
+    /// Public property for the Contents of the cell
+    /// </summary>
     public object Contents
     {
         get { return _contents; }
@@ -140,7 +168,9 @@ public class Cell
         get { return _value; }
     }
 
-    // Update the value based on the contents
+    /// <summary>
+    /// Update the value based on the contents
+    /// </summary>
     private void UpdateValue()
     {
         if (_contents is string str)
@@ -231,7 +261,7 @@ public class Spreadsheet
     /// </returns>
     public ISet<string> GetNamesOfAllNonemptyCells()
     {
-        return new HashSet<string>(cells.Keys;
+        return new HashSet<string>(cells.Keys);
     }
 
     /// <summary>
@@ -249,7 +279,24 @@ public class Spreadsheet
     /// </returns>
     public object GetCellContents(string name)
     {
-        throw new NotImplementedException();
+
+        // if a valid name is given, return either the contents of the cell,
+        // or an empty string (if the cell has no contents)
+        if (SpreadsheetUtils.IsValidCellName(name))
+        {
+            if (cells.ContainsKey(name))
+            {
+                return cells[name].Contents;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+        else
+        {
+            throw new InvalidNameException($"{name} is not a valid cell name.");
+        }
     }
 
     /// <summary>
@@ -281,7 +328,29 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, double number)
     {
-        throw new NotImplementedException();
+        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        {
+            name = name.ToUpper(); // Normalize the name to uppercase
+            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+            {
+                cells[name].Contents = number; // update the contents of the cell
+
+                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+            }
+            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            {
+                Cell newCell = new Cell();
+                newCell.Name = name;
+                newCell.Contents = number;
+                cells.Add(name, newCell);
+            }
+            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+
+        }
+        else // if Invalid name, throw exception.
+        {
+            throw new InvalidNameException($"{name} is not a valid cell name.");
+        }
     }
 
     /// <summary>
@@ -298,7 +367,40 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, string text)
     {
-        throw new NotImplementedException();
+        // FIXME: Need to adjust the tests to not use cell names as the second parameter? potentially.
+        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        {
+            name = name.ToUpper(); // Normalize the name to uppercase
+            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+            {
+                if (text == string.Empty)
+                {
+                    cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
+                }
+                else
+                {
+                    cells[name].Contents = text; // update the contents of the cell
+                }
+
+                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+            }
+            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            {
+                if (text != string.Empty) // only update if the string isn't empty.
+                {
+                    Cell newCell = new Cell();
+                    newCell.Name = name;
+                    newCell.Contents = text;
+                    cells.Add(name, newCell);
+                }
+            }
+            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+
+        }
+        else // if Invalid name, throw exception.
+        {
+            throw new InvalidNameException($"{name} is not a valid cell name.");
+        }
     }
 
     /// <summary>
@@ -323,7 +425,39 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, Formula formula)
     {
-        throw new NotImplementedException();
+        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        {
+            name = name.ToUpper(); // Normalize the name to uppercase
+
+            ISet<string> vars = formula.GetVariables(); // get formula variables
+            if (vars.Contains(name)) // If the formula contains the cell name, throw a circular exception.
+            { //TODO: add a test for this case (direct circular exception)
+                throw new CircularException();
+            }
+
+
+            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+            {
+
+                cells[name].Contents = formula; // update the contents of the cell
+            }
+            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            {
+                Cell newCell = new Cell();
+                newCell.Name = name;
+                newCell.Contents = formula;
+                cells.Add(name, newCell);
+            }
+
+            dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables
+            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+
+        }
+        else // if invalid name, throw exception.
+        {
+            throw new InvalidNameException($"{name} is not a valid cell name.");
+        }
+
     }
 
     /// <summary>
@@ -347,7 +481,7 @@ public class Spreadsheet
     /// </returns>
     private IEnumerable<string> GetDirectDependents(string name)
     {
-        throw new NotImplementedException();
+        return dg.GetDependents(name);
     }
 
     /// <summary>
@@ -410,7 +544,12 @@ public class Spreadsheet
 
     /// <summary>
     ///   A helper for the GetCellsToRecalculate method.
-    ///   FIXME: You should fully comment what is going on below using XML tags as appropriate.
+    /// Adds the node to the ordered list of visited nodes, 
+    /// iterates through each direct dependent of the node.
+    /// if the dependent is equal to the start node, throw a CircularException (this is a circular dependency)
+    /// otherwise, if the dependent has not been visited, visit it.
+    /// 
+    /// Put the changed node at the beginning of ordered list.
     /// </summary>
     private void Visit(string start, string name, ISet<string> visited, LinkedList<string> changed)
     {
