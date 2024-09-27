@@ -172,7 +172,7 @@ public class Cell
     /// Update the value based on the contents
     /// </summary>
     private void UpdateValue()
-    {
+    { //FIXME: Likely will need to be changed in future assignments once value handling is added
         if (_contents is string str)
         {
             _value = str; // If contents is a string, the value is the same string
@@ -183,7 +183,7 @@ public class Cell
         }
         else if (_contents is Formula formula)
         {
-            // FIXME: for when Evaluate is implemented
+            // FIXME: for when value handling is implemented
             //_value = formula.Evaluate(); // Evaluate the formula and set the value
             _value = formula;
         }
@@ -367,7 +367,6 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, string text)
     {
-        // FIXME: Need to adjust the tests to not use cell names as the second parameter? potentially.
         if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
         {
             name = name.ToUpper(); // Normalize the name to uppercase
@@ -431,7 +430,7 @@ public class Spreadsheet
 
             ISet<string> vars = formula.GetVariables(); // get formula variables
             if (vars.Contains(name)) // If the formula contains the cell name, throw a circular exception.
-            { //TODO: add a test for this case (direct circular exception)
+            {
                 throw new CircularException();
             }
 
