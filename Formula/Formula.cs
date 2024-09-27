@@ -13,7 +13,6 @@
 //     to represent your work and any changes you make.
 //   </para>
 // </summary>
-
 /// <summary>
 /// Author:    Madeline Abio
 /// Partner:   N/A
