@@ -30,6 +30,62 @@ using CS3500.Formula;
 public class SpreadsheetTests
 {
 
+    /// </returns>
+    /// <summary>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// </summary>
+    public void SpreadsheetConstructor_TestSetCellContentsDoubleReturn_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new Spreadsheet();
+        ss.SetCellContents("B1", new Formula("A1*2"));
+        ss.SetCellContents("C1", new Formula("B1*2"));
+
+        IList<string> results = ss.SetCellContents("A1", 1.1);
+
+        IList<string> expected = new List<string> { "A1", "B1", "C1" };
+        Assert.AreEqual(expected, results);
+
+    }
+
+    /// </returns>
+    /// <summary>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// </summary>
+    public void SpreadsheetConstructor_TestSetCellContentsStringReturn_ExpectedBehaviour()
+    {
+        // FIXME: CHECK THAT THIS IS CORRECT AND THAT D1 SHOULDN'T BE IN THE LIST.
+        Spreadsheet ss = new Spreadsheet();
+        ss.SetCellContents("B1", new Formula("A1*2"));
+        ss.SetCellContents("C1", new Formula("B1*2"));
+
+        IList<string> results = ss.SetCellContents("A1", "D1");
+
+        IList<string> expected = new List<string> { "A1", "B1", "C1" };
+        Assert.AreEqual(expected, results);
+
+    }
+
+
+    /// </returns>
+    /// <summary>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// </summary>
+    public void SpreadsheetConstructor_TestSetCellContentsFormulaReturn_ExpectedBehaviour()
+    {
+        // FIXME: CHECK THAT THIS IS CORRECT AND THAT D1 SHOULDN'T BE IN THE LIST.
+        Spreadsheet ss = new Spreadsheet();
+        ss.SetCellContents("B1", new Formula("A1*2"));
+        ss.SetCellContents("C1", new Formula("B1*2"));
+
+        IList<string> results = ss.SetCellContents("A1", new Formula("D1*2"));
+
+        IList<string> expected = new List<string> { "A1", "B1", "C1" };
+        Assert.AreEqual(expected, results);
+
+    }
+
+
+
     /// <summary>
     /// Checks a <see cref="CircularException"/> is thrown when a circular dependency is attempted
     /// to be put into the graph.
