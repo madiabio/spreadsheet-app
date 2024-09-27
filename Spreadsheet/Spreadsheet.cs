@@ -109,9 +109,12 @@ public static class SpreadsheetUtils
 public class Cell
 {
     // Private fields to store the _contents and _value
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private string _name;
     private object _contents;
     private object _value;
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+
 
     /// <summary>
     ///   All variables are letters followed by numbers.  This pattern
@@ -249,8 +252,8 @@ public class Cell
 public class Spreadsheet
 {
 
-    private readonly DependencyGraph dg = new DependencyGraph(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
-    private Dictionary<string, Cell> cells = new Dictionary<string, Cell>(); // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
+    private readonly DependencyGraph dg = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
+    private Dictionary<string, Cell> cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
     ///   Provides a copy of the names of all of the cells in the spreadsheet
@@ -337,9 +340,9 @@ public class Spreadsheet
 
                 dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
-            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            else // If empty cell, create new cell, add it to cells dictionary and update its contents.
             {
-                Cell newCell = new Cell();
+                Cell newCell = new();
                 newCell.Name = name;
                 newCell.Contents = number;
                 cells.Add(name, newCell);
@@ -383,11 +386,11 @@ public class Spreadsheet
 
                 dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
-            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            else // If empty cell, create new, add it to cells dictionary and update its contents.
             {
                 if (text != string.Empty) // only update if the string isn't empty.
                 {
-                    Cell newCell = new Cell();
+                    Cell newCell = new();
                     newCell.Name = name;
                     newCell.Contents = text;
                     cells.Add(name, newCell);
@@ -440,9 +443,9 @@ public class Spreadsheet
 
                 cells[name].Contents = formula; // update the contents of the cell
             }
-            else // If empty cell, create new Cell, add it to cells dictionary and update its contents.
+            else // If empty cell, create new, add it to cells dictionary and update its contents.
             {
-                Cell newCell = new Cell();
+                Cell newCell = new();
                 newCell.Name = name;
                 newCell.Contents = formula;
                 cells.Add(name, newCell);

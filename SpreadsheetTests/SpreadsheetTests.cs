@@ -65,7 +65,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsFormula_InvalidName()
     {
         Spreadsheet ss = new();
-        Formula f1 = new Formula("B1+1");
+        Formula f1 = new("B1+1");
         ss.SetCellContents("1A1A", f1);
     }
 
@@ -82,7 +82,7 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", "test");
 
         List<string> results = ss.SetCellContents("A1", "test").ToList(); // update A to no longer be dependent on B.
-        List<string> expected = new List<string> { "A1" };
+        List<string> expected = new() { "A1" };
 
         CollectionAssert.AreEqual(expected, results);
     }
@@ -99,7 +99,7 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", "test");
 
         List<string> results = ss.SetCellContents("A1", 1.1).ToList(); // update A to no longer be dependent on B.
-        List<string> expected = new List<string> { "A1" };
+        List<string> expected = new()  { "A1" };
 
         CollectionAssert.AreEqual(expected, results);
     }
@@ -114,7 +114,7 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         List<string> results = ss.SetCellContents("A1", 1.1).ToList();
 
-        List<string> expected = new List<string> {"A1"};
+        List<string> expected = new()  { "A1" };  
         CollectionAssert.AreEqual(expected, results);
 
     }
@@ -129,7 +129,7 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         List<string> results = ss.SetCellContents("A1", "test").ToList();
 
-        List<string> expected = new List<string> { "A1"};
+        List<string> expected = new()  { "A1" };
         CollectionAssert.AreEqual(expected, results);
 
     }
@@ -144,14 +144,14 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
         ss.SetCellContents("A1", 1.1);
-        Formula f1 = new Formula("A1*2");
-        Formula f2 = new Formula("B1*2");
+        Formula f1 = new("A1*2");
+        Formula f2 = new("B1*2");
         ss.SetCellContents("B1", f1);
         ss.SetCellContents("C1", f2);
 
         List<string> results = ss.SetCellContents("A1", new Formula("D1*2")).ToList();
 
-        List<string> expected = new List<string> { "A1", "B1", "C1" };
+        List<string> expected = new() { "A1", "B1", "C1" };
         CollectionAssert.AreEqual(expected, results);
 
     }
@@ -199,7 +199,7 @@ public class SpreadsheetTests
         ss.SetCellContents("C1", trueContents);
 
         HashSet<string> results = ss.GetNamesOfAllNonemptyCells().ToHashSet();
-        HashSet<string> expected = new HashSet<string> { "A1", "B1", "C1" };
+        HashSet<string> expected = new() { "A1", "B1", "C1" };
         Assert.IsTrue(expected.SetEquals(results));
     }
 
@@ -297,7 +297,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsFormula_ExpectedBehvaiour()
     {
         Spreadsheet ss = new();
-        Formula trueContents = new Formula("1+1");
+        Formula trueContents = new("1+1");
 
         ss.SetCellContents("A1", trueContents);
 
@@ -425,7 +425,7 @@ public class CellTests
     public void CellConstructor_TestContents_Invalid()
     {
         Cell cell = new();
-        HashSet<string> trueContents = new HashSet<string> { "a", "b", "c" };
+        HashSet<string> trueContents = new() { "a", "b", "c" };
 
         cell.Contents = trueContents;
     }

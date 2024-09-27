@@ -19,12 +19,12 @@
 /// Partner:   N/A
 /// Date:      07/09/2024
 /// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not 
+/// Copyright: CS 3500 and Madeline Abio - This work may not
 ///            be copied for use in Academic Coursework.
 ///
 /// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All 
-/// references used in the completion of the assignments are cited 
+/// did not copy it in part or whole from another source.  All
+/// references used in the completion of the assignments are cited
 /// in my README file.
 ///
 /// File Contents
@@ -69,17 +69,11 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class Formula
 {
-
-
-
-
-
     /// <summary>
     /// Only alphanumeric characters or (, ), +, -, *, / are valid in a token.
     /// This pattern includes only valid characters.
     /// </summary>
     private const string ValidCharactersPattern = @"^[a-zA-Z0-9\(\)\+\-\*/\.]+$";
-
 
     /// <summary>
     ///   All variables are letters followed by numbers.  This pattern
@@ -87,11 +81,10 @@ public class Formula
     /// </summary>
     private const string VariableRegExPattern = @"[a-zA-Z]+\d+";
 
-
     // Class variables
-
     private readonly string formulaString;
     private readonly List<string> tokens;
+
     /// <summary>
     ///   Initializes a new instance of the <see cref="Formula"/> class.
     ///   <para>
@@ -119,10 +112,8 @@ public class Formula
     ///   </list>
     /// </summary>
     /// <param name="formula"> The string representation of the formula to be created.</param>
-
     public Formula(string formula)
     {
-
         if (string.IsNullOrWhiteSpace(formula))
         {
             throw new FormulaFormatException("Formula cannot be empty.");
@@ -143,7 +134,6 @@ public class Formula
         formulaString = formula;
     }
 
-
     /// <summary>
     ///   <para>
     ///     Reports whether f1 == f2, using the notion of equality from the <see cref="Equals"/> method.
@@ -158,9 +148,9 @@ public class Formula
         {
             return true;
         }
+
         return false;
     }
-
 
     /// <summary>
     ///   <para>
@@ -185,7 +175,7 @@ public class Formula
     ///     Determines if two formula objects represent the same formula.
     ///   </para>
     ///   <para>
-    ///     By definition, if the parameter is null or does not reference 
+    ///     By definition, if the parameter is null or does not reference
     ///     a Formula Object then return false.
     ///   </para>
     ///   <para>
@@ -203,9 +193,9 @@ public class Formula
         {
             return this.ToString() == f.ToString();
         }
+
         return false;
     }
-
 
     /// <summary>
     ///   <para>
@@ -219,7 +209,7 @@ public class Formula
     ///   </remarks>
     ///   <para>
     ///     If no undefined variables or divisions by zero are encountered when evaluating
-    ///     this Formula, the numeric value of the formula is returned.  Otherwise, a 
+    ///     this Formula, the numeric value of the formula is returned.  Otherwise, a
     ///     FormulaError is returned (with a meaningful explanation as the Reason property).
     ///   </para>
     ///   <para>
@@ -229,7 +219,7 @@ public class Formula
     /// <param name="lookup">
     ///   <para>
     ///     Given a variable symbol as its parameter, lookup returns the variable's (double) value
-    ///     (if it has one) or throws an ArgumentException (otherwise).  This method should expect 
+    ///     (if it has one) or throws an ArgumentException (otherwise).  This method should expect
     ///     variable names to be capitalized.
     ///   </para>
     /// </param>
@@ -257,6 +247,7 @@ public class Formula
                         {
                             return new FormulaError("Division by zero");
                         }
+
                         vstack.Push((v1 / v2).ToString());
                     }
                 }
@@ -285,6 +276,7 @@ public class Formula
                             {
                                 return new FormulaError("Division by zero");
                             }
+
                             vstack.Push((v1 / v2).ToString());
                         }
                     }
@@ -292,7 +284,6 @@ public class Formula
                     {
                         vstack.Push(t_val);
                     }
-
                 }
                 catch (ArgumentException) // if the variable is not found, return a FormulaError
                 {
@@ -317,6 +308,7 @@ public class Formula
                         vstack.Push((v2 - v1).ToString());
                     }
                 }
+
                 ostack.Push(t); // push t on to the operator stack
             }
             else if ((t == "*") || (t == "/")) // if t is * or /, push it on the operator stack.
@@ -329,7 +321,7 @@ public class Formula
             }
             else if (t == ")")
             {
-                if (ostack.Count > 0 && ((ostack.Peek() == "+") || (ostack.Peek() == "-")))// if + or - is at top of ostack, 
+                if (ostack.Count > 0 && ((ostack.Peek() == "+") || (ostack.Peek() == "-")))// if + or - is at top of ostack,
                 {
                     // pop val stack twice and op stack once.
                     double v1 = double.Parse(vstack.Pop());
@@ -383,6 +375,7 @@ public class Formula
         {
             return double.Parse(vstack.Pop());
         }
+
         { // the operator will always either be + or -.
             double v1 = double.Parse(vstack.Pop());
             double v2 = double.Parse(vstack.Pop());
@@ -397,6 +390,7 @@ public class Formula
                 return v2 - v1;
             }
         }
+
         throw new Exception("Unknown Issue");
     }
 
@@ -412,7 +406,6 @@ public class Formula
     {
         return formulaString.GetHashCode();
     }
-
 
     /// <summary>
     ///   <para>
@@ -433,7 +426,6 @@ public class Formula
     /// <returns> the set of variables (string names) representing the variables referenced by the formula. </returns>
     public ISet<string> GetVariables()
     {
-
         ISet<string> vars = new HashSet<string>();
 
         /// <summary>
@@ -451,7 +443,6 @@ public class Formula
         return vars;
     }
 
-
     /// <returns>
     ///  A canonical version (string) of the formula. All "equal" formulas
     ///   should have the same value here.
@@ -463,7 +454,7 @@ public class Formula
     ///     The string will contain no spaces.
     ///   </para>
     ///   <para>
-    ///     If the string is passed to the Formula constructor, the new Formula f 
+    ///     If the string is passed to the Formula constructor, the new Formula f
     ///     will be such that this.ToString() == f.ToString().
     ///   </para>
     ///   <para>
@@ -486,11 +477,10 @@ public class Formula
         return formulaString;
     }
 
-
     /// <summary>
     /// Validates the syntax of all tokens in a formula, also performs normalization.
     /// </summary>
-    /// <param name="tokens">list of tokens in formula</param>
+    /// <param name="tokens">list of tokens in formula.</param>
     private static void ValidateSyntax(List<string> tokens)
     {
         Regex openParenthesisOrOperatorPattern = new(@"^[(+\-*/]$");
@@ -500,11 +490,8 @@ public class Formula
         // open & closed parenthesis counters
         int openCount = 0;
         int closeCount = 0;
-
-
         for (int i = 0; i < tokens.Count; i++)
         {
-
             // FORMATTING:
             tokens[i] = tokens[i].ToUpper(); // Normalise token
 
@@ -517,7 +504,7 @@ public class Formula
                 if (!exponentPart.StartsWith("-") && !exponentPart.StartsWith("+")) // Add the missing + sign
                 {
                     exponentPart = "+" + exponentPart; // append + sign to exponent part
-                    tokens[i] = basePart + "E" + exponentPart; // re-assign tokens[i] with fixed part. 
+                    tokens[i] = basePart + "E" + exponentPart; // re-assign tokens[i] with fixed part.
                 }
             }
             else if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count > 1) // Convert scientific notation to double form if other tokens in expression
@@ -528,9 +515,7 @@ public class Formula
             {
                 // tokens[i] = TrailingZerosPattern.Replace(tokens[i], string.Empty);
                 tokens[i] = double.Parse(tokens[i]).ToString("G");
-
             }
-
 
             // PARENTHESIS COUNT
             if (tokens[i] == "(")
@@ -556,7 +541,6 @@ public class Formula
             if (i == 0 && !(IsVar(tokens[i]) || tokens[i] == "(" || IsNumber(tokens[i]))) // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
             {
                 throw new FormulaFormatException($"First token in formula must be either a variable, number, or (. Token was {tokens[i]}");
-
             }
             else if (i == tokens.Count - 1 && !(IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
             {
@@ -578,13 +562,12 @@ public class Formula
         {
             throw new FormulaFormatException($"Parenthesis are not balanced. Num open = {openCount}, num close = {closeCount}");
         }
-
     }
 
     /// <summary>
-    /// Checks if a token is a number (could be float, int, or exponential)
+    /// Checks if a token is a number (could be float, int, or exponential).
     /// </summary>
-    /// <param name="token">a token in the formula</param>
+    /// <param name="token">a token in the formula.</param>
     /// <returns>Returns True if it is a number, False if else. </returns>
     private static bool IsNumber(string token)
     {
@@ -658,7 +641,6 @@ public class Formula
     }
 }
 
-
 /// <summary>
 ///   Used to report syntax errors in the argument to the Formula constructor.
 /// </summary>
@@ -677,7 +659,6 @@ public class FormulaFormatException : Exception
         // All this does is call the base constructor. No extra code needed.
     }
 }
-
 
 /// <summary>
 /// Used as a possible return value of the Formula.Evaluate method.
