@@ -37,6 +37,7 @@ using System.Text.RegularExpressions;
 /// </summary>
 public class CircularException : Exception
 {
+
 }
 
 /// <summary>
@@ -85,7 +86,7 @@ public class Cell
     ///   All variables are letters followed by numbers.  This pattern
     ///   represents valid variable name strings.
     /// </summary>
-    private const string VariableRegExPattern = @"[a-zA-Z]+\d+";
+    private const string VariableRegExPattern = @"^[a-zA-Z]+\d+$";
 
 
     // Public property for the Name of the cell
@@ -151,7 +152,7 @@ public class Cell
         else if (_contents is Formula formula)
         {
             // FIXME: for when Evaluate is implemented
-            // _value = formula.Evaluate(); // Evaluate the formula and set the value
+            //_value = formula.Evaluate(); // Evaluate the formula and set the value
             _value = formula;
         }
     }
@@ -217,8 +218,8 @@ public class Cell
 public class Spreadsheet
 {
 
-    private DependencyGraph dg; // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
-    private HashSet<Cell> cells; // HashSet containing all of the cells in the spreadsheet
+    private DependencyGraph dg = new DependencyGraph(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
+    private HashSet<string> cellNames = new HashSet<string>(); // HashSet containing all of the cell names in the spreadsheet
 
     /// <summary>
     ///   Provides a copy of the names of all of the cells in the spreadsheet
@@ -229,7 +230,7 @@ public class Spreadsheet
     /// </returns>
     public ISet<string> GetNamesOfAllNonemptyCells()
     {
-        throw new NotImplementedException();
+        return cellNames;
     }
 
     /// <summary>

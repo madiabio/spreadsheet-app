@@ -237,7 +237,6 @@ public class Formula
     /// <returns> Either a double or a formula error, based on evaluating the formula.</returns>
     public object Evaluate(Lookup lookup)
     {
-        // FIXME: Implement the required algorithm here.
         Stack<string> vstack = new Stack<string>(); // value stack
         Stack<string> ostack = new Stack<string>(); // operator stack
         foreach (string t in tokens)
@@ -397,7 +396,7 @@ public class Formula
                 return v2 - v1;
             }
         }
-        throw new Exception("Unknown Issue"); // FIXME: Figure out what causes this to be necessary
+        throw new Exception("Unknown Issue");
     }
 
     /// <summary>
