@@ -90,9 +90,8 @@ public class Formula
 
     // Class variables
 
-    private string formulaString;
-    private List<string> tokens;
-    private ISet<string> vars;
+    private readonly string formulaString;
+    private readonly List<string> tokens;
     /// <summary>
     ///   Initializes a new instance of the <see cref="Formula"/> class.
     ///   <para>
@@ -237,8 +236,8 @@ public class Formula
     /// <returns> Either a double or a formula error, based on evaluating the formula.</returns>
     public object Evaluate(Lookup lookup)
     {
-        Stack<string> vstack = new Stack<string>(); // value stack
-        Stack<string> ostack = new Stack<string>(); // operator stack
+        Stack<string> vstack = new(); // value stack
+        Stack<string> ostack = new(); // operator stack
         foreach (string t in tokens)
         {
             if (IsNumber(t))
@@ -346,11 +345,12 @@ public class Formula
                     {
                         vstack.Push((v2 - v1).ToString());
                     }
-                    op = ostack.Pop(); // pop the operator stack. top should be "(".
+
+                    ostack.Pop(); // pop the operator stack. top should be "(".
                 }
                 else // otherwise, the top of the stack is "("
                 {
-                    string op = ostack.Pop();
+                    ostack.Pop();
                 }
 
                 if (ostack.Count > 0 && ((ostack.Peek() == "*") || (ostack.Peek() == "/")))
@@ -371,6 +371,7 @@ public class Formula
                         {
                             return new FormulaError("Division by zero");
                         }
+
                         vstack.Push((v2 / v1).ToString());
                     }
                 }
@@ -447,12 +448,14 @@ public class Formula
             }
         }
 
-        this.vars = vars;
-
         return vars;
     }
 
-    /// <summary>
+
+    /// <returns>
+    ///  A canonical version (string) of the formula. All "equal" formulas
+    ///   should have the same value here.
+    /// </returns><summary>
     ///   <para>
     ///     Returns a string representation of a canonical form of the formula.
     ///   </para>
@@ -478,10 +481,6 @@ public class Formula
     ///     This code should execute in O(1) time.
     ///   <para>
     /// </summary>
-    /// <returns>
-    ///   A canonical version (string) of the formula. All "equal" formulas
-    ///   should have the same value here.
-    /// </returns>
     public override string ToString()
     {
         return formulaString;
@@ -492,12 +491,11 @@ public class Formula
     /// Validates the syntax of all tokens in a formula, also performs normalization.
     /// </summary>
     /// <param name="tokens">list of tokens in formula</param>
-    private void ValidateSyntax(List<string> tokens)
+    private static void ValidateSyntax(List<string> tokens)
     {
-        Regex openParenthesisOrOperatorPattern = new Regex(@"^[(+\-*/]$");
-        Regex closingParenthesisOrOperatorPattern = new Regex(@"^[)+\-*/]$");
-        Regex scientificNotationPattern = new Regex(@"^([+-]?\d+(\.\d+)?)[eE]([+-]?\d+)$"); // Matches explicitely defined scientific notation (ie, when there is a +/-)
-        Regex TrailingZerosPattern = new Regex(@"\.?0+$");
+        Regex openParenthesisOrOperatorPattern = new(@"^[(+\-*/]$");
+        Regex closingParenthesisOrOperatorPattern = new(@"^[)+\-*/]$");
+        Regex scientificNotationPattern = new(@"^([+-]?\d+(\.\d+)?)[eE]([+-]?\d+)$"); // Matches explicitely defined scientific notation (ie, when there is a +/-)
 
         // open & closed parenthesis counters
         int openCount = 0;
@@ -590,8 +588,7 @@ public class Formula
     /// <returns>Returns True if it is a number, False if else. </returns>
     private static bool IsNumber(string token)
     {
-        double result;
-        return double.TryParse(token, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out result);
+        return double.TryParse(token, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double result);
     }
 
     /// <summary>
