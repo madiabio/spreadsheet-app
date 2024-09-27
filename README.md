@@ -11,7 +11,7 @@ Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Ac
 ```
 
 # Comments to Evaluators:
-Assignment stands on its own
+At this stage, the Spreadsheet functionality has been implemented, though no GUI exists and also no methods for handling values of cells exist when the value relies on formulas.
 
 # Assignment Specific Topics:
 
@@ -21,8 +21,7 @@ Estimated/Worked,   Assignment,        Note
     3/4,            Assignment 2,      N/A
     3/5,            Assignment 3,      Spent about an hour extra debugging A2.
     3/6 ,           Assignment 4,      Was tired and a little defeated so took longer than usual
-    4/??,           Assignment 5,      Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised.
-
+    4/9,            Assignment 5,      Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired.
 
 # Consulted Peers:
 	1. Sadie Bowen
@@ -33,9 +32,15 @@ Estimated/Worked,   Assignment,        Note
 	2. Dot Net Pearls - https://www.dotnetperls.com/
 
 # Examples of Good Software Practice (GSP)
-    1.
-    2.
-    3.
+    1. DRY - Wrote a helper class inside of Spreadsheet.cs titled SpreadsheetUtils which contains a method that returns 
+    true if a cell name is valid and false otherwise. This avoids repetition as a valid name check is needed
+    many times in the Spreadsheet and Cell classes.
+    
+    2. Test methods - Wrote extensive testing for the name syntax test mentioned above in SpreadsheetTests. This ensure that
+    InvalidNameExceptions are thrown when they should be.
+    
+    3. Encapsulation - Developers can interface with the software through well documented public methods without needing a 
+    full understanding of what is occuring 'underneath the hood'.
   
 # ChatGPT:
 

@@ -250,7 +250,7 @@ public class Spreadsheet
 {
 
     private DependencyGraph dg = new DependencyGraph(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
-    private Dictionary<string, Cell> cells = new Dictionary<string, Cell>(); // Dictionary containing all of the cell names pointing to their actual cell in the spreadsheet
+    private Dictionary<string, Cell> cells = new Dictionary<string, Cell>(); // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
     ///   Provides a copy of the names of all of the cells in the spreadsheet
