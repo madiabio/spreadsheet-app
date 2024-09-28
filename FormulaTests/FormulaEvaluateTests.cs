@@ -2,30 +2,30 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-/// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      22/09/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All
-/// references used in the completion of the assignments are cited
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains tests for the methods in <see cref="Formula"/>
-///    that relate to <see cref="Formula.Evaluate()"/>.
-/// </summary>
+// <summary>
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      22/09/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+//
+// File Contents
+//
+//    This file contains tests for the methods in <see cref="Formula"/>
+//    that relate to <see cref="Formula.Evaluate()"/>.
+// </summary>
 namespace FormulaTests;
 using CS3500.Formula;
 
 /// <summary>
 /// Tests for the <see cref="Formula"/> class that relate to
-/// its <see cref="Formula.Evaluate()"/> method.
+/// its <see cref="Formula.Evaluate"/> method.
 /// </summary>
 [TestClass]
 public class FormulaEvaluateTests
@@ -407,7 +407,7 @@ public class FormulaEvaluateTests
     }
 
     /// <summary>
-    /// Checks that <see cref="bool Formula.operator ==(Formula f1, Formula f2)"/> works
+    /// Checks that equals sign overload works
     /// as expected when comparing two formulas with no varibles.
     /// </summary>
     [TestMethod]
@@ -419,7 +419,7 @@ public class FormulaEvaluateTests
     }
 
     /// <summary>
-    /// Checks that <see cref="bool Formula.operator ==(Formula f1, Formula f2)"/> works
+    /// Checks that equals sign overload works
     /// as expected when comparing two formulas with varibles.
     /// </summary>
     [TestMethod]
@@ -434,7 +434,7 @@ public class FormulaEvaluateTests
     }
 
     /// <summary>
-    /// Checks that <see cref="bool Formula.operator =!(Formula f1, Formula f2)"/> works
+    /// Checks that not equals sign overload works
     /// as expected when comparing two formulas with no varibles.
     /// </summary>
     [TestMethod]
@@ -449,7 +449,7 @@ public class FormulaEvaluateTests
     }
 
     /// <summary>
-    /// Checks that <see cref="bool Formula.operator =!(Formula f1, Formula f2)"/> works
+    /// Checks that not equals sign overload works
     /// as expected when comparing two formulas with varibles.
     /// </summary>
     [TestMethod]

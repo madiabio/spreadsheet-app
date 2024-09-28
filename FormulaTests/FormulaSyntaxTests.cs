@@ -2,29 +2,29 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-/// <copyright file="FormulaSyntaxTests.cs" company="UofU-CS3500">
-///   Copyright © 2024 UofU-CS3500. All rights reserved.
-/// </copyright>
-/// <authors> Madeline Abio </authors>
-/// <date> 08/21/2024 </date>
+// <copyright file="FormulaSyntaxTests.cs" company="UofU-CS3500">
+//   Copyright © 2024 UofU-CS3500. All rights reserved.
+// </copyright>
+// <authors> Madeline Abio </authors>
+// <date> 08/21/2024 </date>
 
-/// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      08/21/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All
-/// references used in the completion of the assignments are cited
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains syntax tests for the Formula class.
-/// </summary>
+// <summary>
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      08/21/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+//
+// File Contents
+//
+//    This file contains syntax tests for the Formula class.
+// </summary>
 namespace FormulaTests;
 
 using CS3500.Formula;
@@ -224,7 +224,7 @@ public class FormulaSyntaxTests
     ///         This test checks that the correct kind of exception is thrown when reading
     ///         tokens from left to right, the number of closing parenthesis seen so far is
     ///         NOT less than than the number of opening parenthesis seen so far, when the
-    ///         parenthesis are unbalanced (there's an unequal number of open & closed parenthesis).
+    ///         parenthesis are unbalanced (there's an unequal number of open and closed parenthesis).
     ///     </para>
     /// </summary>
     [TestMethod]

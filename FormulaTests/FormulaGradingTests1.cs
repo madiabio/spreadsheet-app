@@ -2,6 +2,11 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+namespace FormulaTests;
+
+using CS3500.Formula;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 /// <summary>
 /// Authors:   Joe Zachary
 ///            Daniel Kopta
@@ -19,16 +24,9 @@
 ///   can result in removal from the course and an academic misconduct sanction.
 ///
 ///   These tests are for your private use only to improve the quality of the
-///   rest of your assignments
+///   rest of your assignments.
 /// </summary>
 /// <date> Updated Fall 2024 </date>
-namespace FormulaTests;
-
-using CS3500.Formula;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-#pragma warning disable
-
 [TestClass]
 public class GradingTests
 {

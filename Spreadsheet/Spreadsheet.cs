@@ -163,7 +163,8 @@ public class Cell
 
         set // Only allow set for string, double or Formula data types. Otherwise, throw exception.
         {
-            if (value is string str && string.IsNullOrWhiteSpace(str)) // handle if string  is empty
+            // handle if string  is empty
+            if (value is string str && string.IsNullOrWhiteSpace(str))
             {
                 throw new InvalidContentsException("Contents may not be null or whitespace.");
             }
@@ -344,16 +345,21 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, double number)
     {
-        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        // If valid name, check if cell exists in cells dictionary.
+        if (SpreadsheetUtils.IsValidCellName(name))
         {
             name = name.ToUpper(); // Normalize the name to uppercase
-            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+
+            // If the cell has contents, check its dependencies and update.
+            if (cells.ContainsKey(name))
             {
                 cells[name].Contents = number; // update the contents of the cell
 
                 dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
-            else // If empty cell, create new cell, add it to cells dictionary and update its contents.
+
+            // If empty cell, create new cell, add it to cells dictionary and update its contents.
+            else
             {
                 Cell newCell = new();
                 newCell.Name = name;
@@ -363,7 +369,9 @@ public class Spreadsheet
 
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
         }
-        else // if Invalid name, throw exception.
+
+        // if Invalid name, throw exception.
+        else
         {
             throw new InvalidNameException($"{name} is not a valid cell name.");
         }
@@ -383,10 +391,13 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, string text)
     {
-        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        // If valid name, check if cell exists in cells dictionary.
+        if (SpreadsheetUtils.IsValidCellName(name))
         {
             name = name.ToUpper(); // Normalize the name to uppercase
-            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+
+            // If the cell has contents, check its dependencies and update.
+            if (cells.ContainsKey(name))
             {
                 if (text == string.Empty)
                 {
@@ -399,9 +410,12 @@ public class Spreadsheet
 
                 dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
-            else // If empty cell, create new, add it to cells dictionary and update its contents.
+
+            // If empty cell, create new, add it to cells dictionary and update its contents.
+            else
             {
-                if (text != string.Empty) // only update if the string isn't empty.
+                // only update if the string isn't empty.
+                if (text != string.Empty)
                 {
                     Cell newCell = new();
                     newCell.Name = name;
@@ -412,7 +426,9 @@ public class Spreadsheet
 
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
         }
-        else // if Invalid name, throw exception.
+
+        // if Invalid name, throw exception.
+        else
         {
             throw new InvalidNameException($"{name} is not a valid cell name.");
         }
@@ -440,21 +456,27 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, Formula formula)
     {
-        if (SpreadsheetUtils.IsValidCellName(name)) // If valid name, check if cell exists in cells dictionary.
+        // If valid name, check if cell exists in cells dictionary.
+        if (SpreadsheetUtils.IsValidCellName(name))
         {
             name = name.ToUpper(); // Normalize the name to uppercase
 
             ISet<string> vars = formula.GetVariables(); // get formula variables
-            if (vars.Contains(name)) // If the formula contains the cell name, throw a circular exception.
+
+            // If the formula contains the cell name, throw a circular exception.
+            if (vars.Contains(name))
             {
                 throw new CircularException();
             }
 
-            if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
+            // If the cell has contents, check its dependencies and update.
+            if (cells.ContainsKey(name))
             {
                 cells[name].Contents = formula; // update the contents of the cell
             }
-            else // If empty cell, create new, add it to cells dictionary and update its contents.
+
+            // If empty cell, create new, add it to cells dictionary and update its contents.
+            else
             {
                 Cell newCell = new();
                 newCell.Name = name;
@@ -465,7 +487,9 @@ public class Spreadsheet
             dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
         }
-        else // if invalid name, throw exception.
+
+        // if invalid name, throw exception.
+        else
         {
             throw new InvalidNameException($"{name} is not a valid cell name.");
         }

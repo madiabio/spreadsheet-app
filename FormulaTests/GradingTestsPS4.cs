@@ -1,37 +1,32 @@
 ﻿// <copyright file="GradingTestsPS4.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
-/// <copyright file="GradingTestsPS4.cs" company="UofU-CS3500">
-/// Copyright (c) 2024 UofU-CS3500. All rights reserved.
-/// </copyright>
-
 namespace CS3500.FormulaEvaluationGradingTests;
 
 using CS3500.Formula;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 
-/// <summary>
-/// Authors:   Joe Zachary
-///            Daniel Kopta
-///            Jim de St. Germain
-/// Date:      Updated Spring 2022
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 - This work may not be copied for use
-///                      in Academic Coursework.  See below.
-///
-/// File Contents
-///
-///   This file contains proprietary grading tests for CS 3500.  These tests cases
-///   are for individual student use only and MAY NOT BE SHARED.  Do not back them up
-///   nor place them in any online repository.  Improper use of these test cases
-///   can result in removal from the course and an academic misconduct sanction.
-///
-///   These tests are for your private use only to improve the quality of the
-///   rest of your assignments.
-/// </summary>
-/// <date> Updated Fall 2024. </date>
+// <summary>
+// Authors:   Joe Zachary
+//            Daniel Kopta
+//            Jim de St. Germain
+// Date:      Updated Spring 2022
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 - This work may not be copied for use
+//                      in Academic Coursework.  See below.
+//
+// File Contents
+//
+//   This file contains proprietary grading tests for CS 3500.  These tests cases
+//   are for individual student use only and MAY NOT BE SHARED.  Do not back them up
+//   nor place them in any online repository.  Improper use of these test cases
+//   can result in removal from the course and an academic misconduct sanction.
+//
+//   These tests are for your private use only to improve the quality of the
+//   rest of your assignments.
+// </summary>
+// <date> Updated Fall 2024. </date>
 [TestClass]
 public class GradingTestsPS4
 {

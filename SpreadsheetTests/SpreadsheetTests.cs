@@ -1,29 +1,30 @@
 // <copyright file="SpreadsheetTests.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
-/// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      20/09/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All
-/// references used in the completion of the assignments are cited
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains the tests for the Spreadsheet, Cell and SpreadsheetUtils classes.
-/// </summary>
+
+// <summary>
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      20/09/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+//
+// File Contents
+//
+//    This file contains the tests for the Spreadsheet, Cell and SpreadsheetUtils classes.
+// </summary>
 namespace CS3500.SpreadsheetTests;
 using CS3500.Formula;
 using CS3500.Spreadsheet;
 
 /// <summary>
-/// This <see cref="TestClass"/> contains the tests for the <see cref="Spreadsheet"/> class.
+/// This test class contains the tests for the <see cref="Spreadsheet"/> class.
 /// </summary>
 [TestClass]
 public class SpreadsheetTests
@@ -147,6 +148,7 @@ public class SpreadsheetTests
     /// <summary>
     /// Checks a <see cref="CircularException"/> is thrown when an indirect circular dependency is attempted
     /// to be put into the graph.
+    /// </summary>
     [TestMethod]
     [ExpectedException(typeof(CircularException))]
     public void SpreadsheetConstructor_TestCircularDependencyIndirect_Invalid()
@@ -161,6 +163,7 @@ public class SpreadsheetTests
     /// <summary>
     /// Checks a <see cref="CircularException"/> is thrown when a direct circular dependency is attempted
     /// to be put into the graph.
+    /// </summary>
     [TestMethod]
     [ExpectedException(typeof(CircularException))]
     public void SpreadsheetConstructor_TestCircularDependencyDirect_Invalid()
@@ -321,7 +324,7 @@ public class SpreadsheetTests
 }
 
 /// <summary>
-/// This <see cref="TestClass"/> contains the tests for the <see cref="Cell"/> class.
+/// This test class contains the tests for the <see cref="Cell"/> class.
 /// </summary>
 [TestClass]
 public class CellTests
@@ -464,7 +467,7 @@ public class CellTests
 }
 
 /// <summary>
-/// This <see cref="TestClass"/> contains the tests for the <see cref="SpreadsheetUtils"/>
+/// This test class contains the tests for the <see cref="SpreadsheetUtils"/>
 /// which is a helper class for <see cref="Spreadsheet"/> and <see cref="Cell"/>.
 /// </summary>
 [TestClass]

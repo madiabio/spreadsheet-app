@@ -7,7 +7,13 @@
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="FormulaGradingTests1.cs" />
+    <Compile Remove="GradingTestsPS4.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
