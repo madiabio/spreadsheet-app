@@ -1,31 +1,27 @@
-﻿// Skeleton implementation written by Joe Zachary for CS 3500, September 2013.
+﻿// <copyright file="DependencyGraph.cs" company="UofU-CS3500">
+// Copyright (c) 2024 UofU-CS3500. All rights reserved.
+// </copyright>
+
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      12/09/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+// File Contents
+//    This file contains the code for the Dependency Graph class.
+
+// Skeleton implementation written by Joe Zachary for CS 3500, September 2013.
 // Version 1.1 (Fixed error in comment for RemoveDependency.)
 // Version 1.2 - Daniel Kopta
 // Version 1.3 - H. James de St. Germain Fall 2024
 // (Clarified meaning of dependent and dependee.)
 // (Clarified names in solution/project structure.)
-
-
-/// <copyright file="DependencyGraph.cs" company="UofU-CS3500">
-///   Copyright © 2024 UofU-CS3500. All rights reserved.
-/// </copyright>
-/// /// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      12/09/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not 
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All 
-/// references used in the completion of the assignments are cited 
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains the code for the Dependency Graph class.
-/// </summary>
 namespace CS3500.DependencyGraph;
 
 /// <summary>
@@ -72,10 +68,8 @@ namespace CS3500.DependencyGraph;
 /// </summary>
 public class DependencyGraph
 {
-
-    private Dictionary<string, HashSet<string>> dependees; // dependent[dependee] -> set of all dependents of dependee 
+    private Dictionary<string, HashSet<string>> dependees; // dependent[dependee] -> set of all dependents of dependee
     private Dictionary<string, HashSet<string>> dependents; // dependee[dependent] -> set of all dependees of dependent
-
 
     /// <summary>
     ///   Initializes a new instance of the <see cref="DependencyGraph"/> class.
@@ -85,11 +79,10 @@ public class DependencyGraph
     {
         dependents = new Dictionary<string, HashSet<string>>();
         dependees = new Dictionary<string, HashSet<string>>();
-
     }
 
     /// <summary>
-    /// The number of ordered pairs in the DependencyGraph.
+    /// Gets number of ordered pairs in the DependencyGraph.
     /// </summary>
     public int Size
     {
@@ -141,7 +134,7 @@ public class DependencyGraph
     }
 
     /// <summary>
-    /// <para> 
+    /// <para>
     ///   Adds the ordered pair (dependee, dependent), if it doesn't already exist (otherwise nothing happens).
     /// </para>
     /// <para>
@@ -158,7 +151,6 @@ public class DependencyGraph
             dependents[dependee] = new HashSet<string>();
         }
 
-
         // If the dependee isnt in the graph at all, add it.
         if (!dependees.ContainsKey(dependent))
         {
@@ -170,9 +162,7 @@ public class DependencyGraph
 
         // Add the dependee to the dependent's dependees
         dependents[dependee].Add(dependent);
-
     }
-
 
     /// <summary>
     ///   <para>
@@ -192,7 +182,6 @@ public class DependencyGraph
         {
             dependees[dependent].Remove(dependee);
         }
-
     }
 
     /// <summary>
@@ -203,7 +192,6 @@ public class DependencyGraph
     /// <param name="newDependents"> The new dependents for nodeName. </param>
     public void ReplaceDependents(string nodeName, IEnumerable<string> newDependents)
     {
-
         IEnumerable<string> oldDependents = GetDependents(nodeName); // get the set of dependents from the node.
 
         // REMOVE OPERATIONS:
@@ -213,14 +201,12 @@ public class DependencyGraph
         }
 
         // ADD OPERATIONS:
-        foreach (string newDependent in newDependents) // add the new dependencies
+        foreach (string newDependent in newDependents)
         {
+            // add the new dependencies
             AddDependency(nodeName, newDependent);
         }
-
-
     }
-
 
     /// <summary>
     ///   <para>

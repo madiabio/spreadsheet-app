@@ -6,12 +6,12 @@
 /// Partner:   N/A
 /// Date:      20/09/2024
 /// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not 
+/// Copyright: CS 3500 and Madeline Abio - This work may not
 ///            be copied for use in Academic Coursework.
 ///
 /// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All 
-/// references used in the completion of the assignments are cited 
+/// did not copy it in part or whole from another source.  All
+/// references used in the completion of the assignments are cited
 /// in my README file.
 ///
 /// File Contents
@@ -19,10 +19,8 @@
 ///    This file contains the tests for the Spreadsheet, Cell and SpreadsheetUtils classes.
 /// </summary>
 namespace CS3500.SpreadsheetTests;
-using CS3500.Spreadsheet;
 using CS3500.Formula;
-
-
+using CS3500.Spreadsheet;
 
 /// <summary>
 /// This <see cref="TestClass"/> contains the tests for the <see cref="Spreadsheet"/> class.
@@ -30,7 +28,6 @@ using CS3500.Formula;
 [TestClass]
 public class SpreadsheetTests
 {
-
     /// <summary>
     /// Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
     /// into <see cref="Spreadsheet.GetCellContents(string)"/>.
@@ -42,7 +39,6 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         ss.GetCellContents("1A1A");
     }
-
 
     /// <summary>
     /// Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
@@ -68,7 +64,6 @@ public class SpreadsheetTests
         Formula f1 = new("B1+1");
         ss.SetCellContents("1A1A", f1);
     }
-
 
     /// <summary>
     /// Tests <see cref="Spreadsheet.SetCellContents(string, string)"/> when the cell being set had dependees before this
@@ -99,14 +94,13 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", "test");
 
         List<string> results = ss.SetCellContents("A1", 1.1).ToList(); // update A to no longer be dependent on B.
-        List<string> expected = new()  { "A1" };
+        List<string> expected = new() { "A1" };
 
         CollectionAssert.AreEqual(expected, results);
     }
 
-    /// </returns>
     /// <summary>
-    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>.
     /// </summary>
     [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsDoubleReturn_ExpectedBehaviour()
@@ -114,14 +108,12 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         List<string> results = ss.SetCellContents("A1", 1.1).ToList();
 
-        List<string> expected = new()  { "A1" };  
+        List<string> expected = new() { "A1" };
         CollectionAssert.AreEqual(expected, results);
-
     }
 
-    /// </returns>
     /// <summary>
-    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>.
     /// </summary>
     [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsStringReturn_ExpectedBehaviour()
@@ -129,15 +121,12 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         List<string> results = ss.SetCellContents("A1", "test").ToList();
 
-        List<string> expected = new()  { "A1" };
+        List<string> expected = new() { "A1" };
         CollectionAssert.AreEqual(expected, results);
-
     }
 
-
-    /// </returns>
     /// <summary>
-    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>
+    /// Checks the ordering of dependencies for the return value of <see cref="Spreadsheet.SetCellContents(string, Formula)"/>.
     /// </summary>
     [TestMethod]
     public void SpreadsheetConstructor_TestSetCellContentsFormulaReturn_ExpectedBehaviour()
@@ -153,10 +142,7 @@ public class SpreadsheetTests
 
         List<string> expected = new() { "A1", "B1", "C1" };
         CollectionAssert.AreEqual(expected, results);
-
     }
-
-
 
     /// <summary>
     /// Checks a <see cref="CircularException"/> is thrown when an indirect circular dependency is attempted
@@ -184,10 +170,9 @@ public class SpreadsheetTests
         ss.SetCellContents("A1", new Formula("A1*2"));
     }
 
-
     /// <summary>
     /// Checks that <see cref="Spreadsheet.GetNamesOfAllNonemptyCells()"/> works as expected
-    /// when there ARE cells in the graph
+    /// when there ARE cells in the graph.
     /// </summary>
     [TestMethod]
     public void SpreadsheetConstructor_TestGetNamesOfAllNonemptyCellsCellsInGraph_ExpectedBehaviour()
@@ -216,7 +201,6 @@ public class SpreadsheetTests
         ss.SetCellContents("B1", trueContents);
         ss.SetCellContents("C1", trueContents);
 
-
         ss.SetCellContents("A1", string.Empty);
         ss.SetCellContents("B1", string.Empty);
         ss.SetCellContents("C1", string.Empty);
@@ -224,10 +208,9 @@ public class SpreadsheetTests
         Assert.IsTrue(ss.GetNamesOfAllNonemptyCells().Count == 0);
     }
 
-
     /// <summary>
     /// This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
-    /// return an empty string if the cell is not in the graph (the cell is an empty cell)
+    /// return an empty string if the cell is not in the graph (the cell is an empty cell).
     /// </summary>
     [TestMethod]
     public void SpreadsheetConstructor_TestGetCellContentsNoContents_Valid()
@@ -236,9 +219,8 @@ public class SpreadsheetTests
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
 
-
     /// <summary>
-    /// This test checks  <see cref="Spreadsheet.SetCellContents(string, double)"/> will not work when an incorrect 
+    /// This test checks  <see cref="Spreadsheet.SetCellContents(string, double)"/> will not work when an incorrect
     /// cell name is passed in.
     /// </summary>
     [TestMethod]
@@ -249,7 +231,6 @@ public class SpreadsheetTests
         double trueContents = 1.1;
 
         ss.SetCellContents("1A1A", trueContents);
-
     }
 
     /// <summary>
@@ -267,7 +248,6 @@ public class SpreadsheetTests
         ss.SetCellContents("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-
     }
 
     /// <summary>
@@ -302,7 +282,6 @@ public class SpreadsheetTests
         ss.SetCellContents("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-
     }
 
     /// <summary>
@@ -320,7 +299,6 @@ public class SpreadsheetTests
         ss.SetCellContents("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-
     }
 
     /// <summary>
@@ -340,11 +318,7 @@ public class SpreadsheetTests
         bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
         Assert.IsFalse(condition);
     }
-
-
-
 }
-
 
 /// <summary>
 /// This <see cref="TestClass"/> contains the tests for the <see cref="Cell"/> class.
@@ -378,9 +352,8 @@ public class CellTests
     public void CellConstructor_CellNameWhitespace_Invalid()
     {
         Cell cell = new();
-        cell.Name = "";
+        cell.Name = " ";
     }
-
 
     /// <summary>
     /// This checks that <see cref="Cell.Contents"/> will not allow null or whitespace contents
@@ -391,9 +364,8 @@ public class CellTests
     public void CellConstructor_CellContentsWhitespace_Invalid()
     {
         Cell cell = new();
-        cell.Contents = "";
+        cell.Contents = " ";
     }
-
 
     /// <summary>
     /// This test checks get works correctly for the value portion of a cell.
@@ -404,7 +376,7 @@ public class CellTests
         Cell cell = new();
 
         // set the cell contents, which should update the _value field
-        cell.Contents = 1.1; 
+        cell.Contents = 1.1;
 
         // retrieve the value using the get accessor
         object trueValue = cell.Value;
@@ -413,7 +385,6 @@ public class CellTests
         object expected = 1.1;  //  expected value should match the input to Contents
         Assert.AreEqual(expected, trueValue);
     }
-
 
     /// <summary>
     /// This test checks <see cref="Cell.Contents"/> will not allow invalid contents to be set
@@ -443,8 +414,6 @@ public class CellTests
         cell.Contents = trueContents;
     }
 
-
-
     /// <summary>
     /// This test checks <see cref="Cell"/> will allow an valid name to be set
     /// when the name uses lowercase characters.
@@ -454,7 +423,6 @@ public class CellTests
     {
         Cell cell = new();
         cell.Name = "abc1";
-
     }
 
     /// <summary>
@@ -466,7 +434,6 @@ public class CellTests
     {
         Cell cell = new();
         cell.Name = "ABC1";
-
     }
 
     /// <summary>
@@ -480,7 +447,6 @@ public class CellTests
     {
         Cell cell = new();
         cell.Name = "1ABC";
-
     }
 
     /// <summary>
@@ -494,23 +460,19 @@ public class CellTests
     {
         Cell cell = new();
         cell.Name = "A1BC";
-
     }
-
-
 }
-
 
 /// <summary>
 /// This <see cref="TestClass"/> contains the tests for the <see cref="SpreadsheetUtils"/>
-/// which is a helper class for <see cref="Spreadsheet"/> and <see cref="Cell"/>
+/// which is a helper class for <see cref="Spreadsheet"/> and <see cref="Cell"/>.
 /// </summary>
 [TestClass]
 public class SpreadsheetUtilsTests
 {
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is true when
-    /// a valid cell name with mixed case is passed through
+    /// a valid cell name with mixed case is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameMixedCase_Valid()
@@ -520,7 +482,7 @@ public class SpreadsheetUtilsTests
 
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that starts with a number is passed through
+    /// an invalid cell name that starts with a number is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameNumberFirst_Invalid()
@@ -531,7 +493,7 @@ public class SpreadsheetUtilsTests
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
     /// an invalid cell name that contains numbers and letters in a mixed order is
-    /// passed through
+    /// passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameNumbersLettersMixed_Invalid()
@@ -541,7 +503,7 @@ public class SpreadsheetUtilsTests
 
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that contains an invalid character is passed through
+    /// an invalid cell name that contains an invalid character is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameInvalidCharacter_Invalid()
@@ -549,10 +511,9 @@ public class SpreadsheetUtilsTests
         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A!"));
     }
 
-
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is an empty string is passed through
+    /// an invalid cell name that is an empty string is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameEmptyString_Invalid()
@@ -562,7 +523,7 @@ public class SpreadsheetUtilsTests
 
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is whitespace is passed through
+    /// an invalid cell name that is whitespace is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameWhitespace_Invalid()
@@ -573,7 +534,7 @@ public class SpreadsheetUtilsTests
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
     /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// in the middle is passed through
+    /// in the middle is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceInMiddle_Invalid()
@@ -584,7 +545,7 @@ public class SpreadsheetUtilsTests
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
     /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// at the front is passed through
+    /// at the front is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtStart_Invalid()
@@ -595,12 +556,11 @@ public class SpreadsheetUtilsTests
     /// <summary>
     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
     /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// at the end is passed through
+    /// at the end is passed through.
     /// </summary>
     [TestMethod]
     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtEnd_Invalid()
     {
         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A1 "));
     }
-
 }

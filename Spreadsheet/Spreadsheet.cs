@@ -1,36 +1,34 @@
-﻿// <copyright file="Spreadsheet.cs" company="UofU-CS3500">
-// Copyright (c) 2024 UofU-CS3500. All rights reserved.
+﻿// <copyright file="Spreadsheet.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
 // Written by Joe Zachary for CS 3500, September 2013
 // Update by Profs Kopta and de St. Germain
-//     - Updated return types
-//     - Updated documentation
+// - Updated return types
+// - Updated documentation
 
-/// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      20/09/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not 
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All 
-/// references used in the completion of the assignments are cited 
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains the Spreadsheet class, which is used to store cells and their information.
-/// </summary>
+// <summary>
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      20/09/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+//
+// File Contents
+//
+//    This file contains the Spreadsheet class, which is used to store cells and their information.
+// </summary>
 namespace CS3500.Spreadsheet;
 
-using CS3500.Formula;
 using CS3500.DependencyGraph;
+using CS3500.Formula;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Net.Mime.MediaTypeNames;
 
 /// <summary>
 ///   <para>
@@ -39,7 +37,6 @@ using static System.Net.Mime.MediaTypeNames;
 /// </summary>
 public class CircularException : Exception
 {
-
 }
 
 /// <summary>
@@ -49,7 +46,13 @@ public class CircularException : Exception
 /// </summary>
 public class InvalidNameException : Exception
 {
-    public InvalidNameException(string? message) : base(message)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InvalidNameException"/> class.
+    /// Allows a message to be added to the exception.
+    /// </summary>
+    /// <param name="message"> is a message containing information about the warning. </param>
+    public InvalidNameException(string? message)
+        : base(message)
     {
     }
 }
@@ -61,11 +64,15 @@ public class InvalidNameException : Exception
 /// </summary>
 public class InvalidContentsException : Exception
 {
-    public InvalidContentsException(string message) // allow a message to be thrown with the exception
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InvalidContentsException"/> class.
+    /// Allows a message to be added to the exception.
+    /// </summary>
+    /// <param name="message"> is the message to be thrown. </param>
+    public InvalidContentsException(string message)
     : base(message)
     {
     }
-
 }
 
 /// <summary>
@@ -73,11 +80,13 @@ public class InvalidContentsException : Exception
 /// </summary>
 public static class SpreadsheetUtils
 {
+    /// <returns>
+    /// Returns false if the name is invalid, true otherwise.
+    /// </returns>
     /// <summary>
     /// This method validates if a given cell name is valid.
-    /// Returns false if the name is invalid, true otherwise.
     /// </summary>
-    /// <param name="name">The name of the cell to validate</param>
+    /// <param name="name">The name of the cell to validate.</param>
     public static bool IsValidCellName(string name)
     {
         const string VariableRegExPattern = @"^[a-zA-Z]+\d+$";
@@ -86,11 +95,10 @@ public static class SpreadsheetUtils
         {
             return false;
         }
+
         return true;
     }
 }
-
-
 
 /// <summary>
 ///   All variables are letters followed by numbers.  This pattern
@@ -115,18 +123,21 @@ public class Cell
     private object _value;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-
     /// <summary>
-    ///   All variables are letters followed by numbers.  This pattern
+    ///   Gets or sets all variables are letters followed by numbers.  This pattern
     ///   represents valid variable name strings.
     /// </summary>
 
     /// <summary>
-    /// Public property for the Name of the cell
+    /// Gets and sets public property for the Name of the cell
     /// </summary>
     public string Name
     {
-        get { return _name; }
+        get
+        {
+            return _name;
+        }
+
         set
         {
             if (SpreadsheetUtils.IsValidCellName(value))
@@ -141,11 +152,15 @@ public class Cell
     }
 
     /// <summary>
-    /// Public property for the Contents of the cell
+    /// Gets or sets public property for the Contents of the cell.
     /// </summary>
     public object Contents
     {
-        get { return _contents; }
+        get
+        {
+            return _contents;
+        }
+
         set // Only allow set for string, double or Formula data types. Otherwise, throw exception.
         {
             if (value is string str && string.IsNullOrWhiteSpace(str)) // handle if string  is empty
@@ -157,7 +172,6 @@ public class Cell
                 _contents = value;
 
                 UpdateValue();
-
             }
             else
             {
@@ -166,16 +180,19 @@ public class Cell
         }
     }
 
+    /// <summary>
+    /// Gets the <see cref="Value"/> parameter of a cell.
+    /// </summary>
     public object Value
     {
         get { return _value; }
     }
 
     /// <summary>
-    /// Update the value based on the contents
+    /// Update the value based on the contents.
     /// </summary>
     private void UpdateValue()
-    { //FIXME: Likely will need to be changed in future assignments once value handling is added
+    { // FIXME: Likely will need to be changed in future assignments once value handling is added
         if (_contents is string str)
         {
             _value = str; // If contents is a string, the value is the same string
@@ -187,12 +204,11 @@ public class Cell
         else if (_contents is Formula formula)
         {
             // FIXME: for when value handling is implemented
-            //_value = formula.Evaluate(); // Evaluate the formula and set the value
+            // _value = formula.Evaluate(); // Evaluate the formula and set the value
             _value = formula;
         }
     }
 }
-
 
 /// <summary>
 ///   <para>
@@ -248,10 +264,8 @@ public class Cell
 ///     dependency.
 /// </para>
 /// </summary>
-
 public class Spreadsheet
 {
-
     private readonly DependencyGraph dg = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
     private Dictionary<string, Cell> cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
@@ -282,7 +296,6 @@ public class Spreadsheet
     /// </returns>
     public object GetCellContents(string name)
     {
-
         // if a valid name is given, return either the contents of the cell,
         // or an empty string (if the cell has no contents)
         if (SpreadsheetUtils.IsValidCellName(name))
@@ -347,8 +360,8 @@ public class Spreadsheet
                 newCell.Contents = number;
                 cells.Add(name, newCell);
             }
-            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
 
+            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
         }
         else // if Invalid name, throw exception.
         {
@@ -396,8 +409,8 @@ public class Spreadsheet
                     cells.Add(name, newCell);
                 }
             }
-            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
 
+            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
         }
         else // if Invalid name, throw exception.
         {
@@ -437,10 +450,8 @@ public class Spreadsheet
                 throw new CircularException();
             }
 
-
             if (cells.ContainsKey(name)) // If the cell has contents, check its dependencies and update.
             {
-
                 cells[name].Contents = formula; // update the contents of the cell
             }
             else // If empty cell, create new, add it to cells dictionary and update its contents.
@@ -453,13 +464,11 @@ public class Spreadsheet
 
             dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
-
         }
         else // if invalid name, throw exception.
         {
             throw new InvalidNameException($"{name} is not a valid cell name.");
         }
-
     }
 
     /// <summary>
@@ -546,11 +555,10 @@ public class Spreadsheet
 
     /// <summary>
     ///   A helper for the GetCellsToRecalculate method.
-    /// Adds the node to the ordered list of visited nodes, 
+    /// Adds the node to the ordered list of visited nodes,
     /// iterates through each direct dependent of the node.
     /// if the dependent is equal to the start node, throw a CircularException (this is a circular dependency)
     /// otherwise, if the dependent has not been visited, visit it.
-    /// 
     /// Put the changed node at the beginning of ordered list.
     /// </summary>
     private void Visit(string start, string name, ISet<string> visited, LinkedList<string> changed)
@@ -571,4 +579,3 @@ public class Spreadsheet
         changed.AddFirst(name);
     }
 }
-

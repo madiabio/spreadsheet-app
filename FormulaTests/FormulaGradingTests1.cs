@@ -1,8 +1,6 @@
-﻿// <copyright file="GradingTests.cs" company="UofU-CS3500">
-// Copyright (c) 2024 UofU-CS3500. All rights reserved.
+﻿// <copyright file="FormulaGradingTests1.cs" company="UofU">
+// Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-
-
 
 /// <summary>
 /// Authors:   Joe Zachary
@@ -26,8 +24,8 @@
 /// <date> Updated Fall 2024 </date>
 namespace FormulaTests;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CS3500.Formula;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 #pragma warning disable
 

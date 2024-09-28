@@ -1,20 +1,24 @@
-// <copyright file="FormulaSyntaxTests.cs" company="UofU-CS3500">
-//   Copyright © 2024 UofU-CS3500. All rights reserved.
+// <copyright file="FormulaSyntaxTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
-// <authors> Madeline Abio </authors>
-// <date> 08/21/2024 </date>
+
+/// <copyright file="FormulaSyntaxTests.cs" company="UofU-CS3500">
+///   Copyright © 2024 UofU-CS3500. All rights reserved.
+/// </copyright>
+/// <authors> Madeline Abio </authors>
+/// <date> 08/21/2024 </date>
 
 /// <summary>
 /// Author:    Madeline Abio
 /// Partner:   N/A
 /// Date:      08/21/2024
 /// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not 
+/// Copyright: CS 3500 and Madeline Abio - This work may not
 ///            be copied for use in Academic Coursework.
 ///
 /// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All 
-/// references used in the completion of the assignments are cited 
+/// did not copy it in part or whole from another source.  All
+/// references used in the completion of the assignments are cited
 /// in my README file.
 ///
 /// File Contents
@@ -48,9 +52,9 @@ public class FormulaSyntaxTests
     ///   <remarks>
     ///     <list type="bullet">
     ///       <item>
-    ///         We use the _ (discard) notation because the formula object
+    ///         We use the f (discard) notation because the formula object
     ///         is not used after that point in the method.  Note: you can also
-    ///         use _ when a method must match an interface but does not use
+    ///         use f when a method must match an interface but does not use
     ///         some of the required arguments to that method.
     ///       </item>
     ///       <item>
@@ -78,7 +82,7 @@ public class FormulaSyntaxTests
     ///   <example>
     ///     <code>
     ///        // here is how we call the formula constructor with a string representing the formula
-    ///        _ = new Formula( "5+5" );
+    ///        f = new Formula( "5+5" );
     ///     </code>
     ///   </example>
     /// </summary>
@@ -94,7 +98,7 @@ public class FormulaSyntaxTests
     /// <summary>
     ///     <para>
     ///         This test checks that the correct kind of exception is thrown when
-    ///         an invalid token is used. 
+    ///         an invalid token is used.
     ///     </para>
     ///     <remarks>
     ///         Only (, ), +, -, * /, variables, and numbers
@@ -120,7 +124,6 @@ public class FormulaSyntaxTests
         _ = new Formula("1e1");
     }
 
-
     /// <summary>
     /// <para>
     ///     This test checks that scientific notation will be accepted as valid with a capital E.
@@ -136,7 +139,7 @@ public class FormulaSyntaxTests
     /// <para>
     ///     This test checks to see if the correct kind of exception is thrown for
     ///     an incorrectly defined variable (just the letter 'e' out of context has
-    ///     no meaning)
+    ///     no meaning).
     /// </para>
     /// </summary>
     [TestMethod]
@@ -150,7 +153,7 @@ public class FormulaSyntaxTests
     /// <para>
     ///     This test checks to see if the correct kind of exception is thrown for
     ///     an incorrectly defined variable (just the letter 'E' out of context has
-    ///     no meaning)
+    ///     no meaning).
     /// </para>
     /// </summary>
     [TestMethod]
@@ -163,7 +166,7 @@ public class FormulaSyntaxTests
     /// <summary>
     /// <para>
     ///     This test checks to see if the correct exception will be thrown
-    ///     for a lowercase character that wouldn't be related to issues with 
+    ///     for a lowercase character that wouldn't be related to issues with
     ///     scientific notation (ie,it checks the character 'a').
     /// </para>
     /// </summary>
@@ -188,12 +191,11 @@ public class FormulaSyntaxTests
         _ = new Formula("A");
     }
 
-
     /// <summary>
     /// <para>
-    ///     This test checks that if correctly defined variables are used, no exceptions are thrown
+    ///     This test checks that if correctly defined variables are used, no exceptions are thrown.
     /// </para>
-    /// 
+    ///
     /// <remarks>
     ///     This test also makes sure that both upper and lowercase variables work.
     /// </remarks>
@@ -215,8 +217,6 @@ public class FormulaSyntaxTests
         _ = new Formula("1.1");
     }
 
-
-
     // --- Tests for Closing Parenthesis Rule
 
     /// <summary>
@@ -224,7 +224,7 @@ public class FormulaSyntaxTests
     ///         This test checks that the correct kind of exception is thrown when reading
     ///         tokens from left to right, the number of closing parenthesis seen so far is
     ///         NOT less than than the number of opening parenthesis seen so far, when the
-    ///         parenthesis are unbalanced (there's an unequal number of open & closed parenthesis)
+    ///         parenthesis are unbalanced (there's an unequal number of open & closed parenthesis).
     ///     </para>
     /// </summary>
     [TestMethod]
@@ -237,7 +237,7 @@ public class FormulaSyntaxTests
     /// <summary>
     ///     <para>
     ///        This checks that even if there are balanced parenthesis, if the number of
-    ///        closing parentesis seen so far is not <= num opening parenthesis seen so far,
+    ///        closing parentesis seen so far is not less than or equal to num opening parenthesis seen so far,
     ///        that the correct kind of exception is thrown.
     ///     </para>
     /// </summary>
@@ -247,8 +247,6 @@ public class FormulaSyntaxTests
     {
         _ = new Formula(")1+1(");
     }
-
-
 
     // --- Tests for Balanced Parentheses Rule
 
@@ -281,7 +279,6 @@ public class FormulaSyntaxTests
         _ = new Formula("(1+1");
     }
 
-
     // --- Tests for  Last Token Rule ---
 
     /// <summary>
@@ -312,7 +309,6 @@ public class FormulaSyntaxTests
     {
         _ = new Formula("1+x");
     }
-
 
     // --- Tests for First Token Rule
 
@@ -345,7 +341,6 @@ public class FormulaSyntaxTests
         _ = new Formula("+1");
     }
 
-
     /// <summary>
     /// <para>
     ///     This tests checks that scientific notation 1e-1 works, even though
@@ -358,8 +353,8 @@ public class FormulaSyntaxTests
         _ = new Formula("1e-1+1");
     }
 
-
     // --- Tests for Parentheses/Operator Following Rule ---
+
     /// <summary>
     ///     <para>
     ///         This test validates the rule that ONLY numbers, variables, or an open
@@ -417,7 +412,7 @@ public class FormulaSyntaxTests
     /// <summary>
     ///     <para>
     ///         This test checks that the expected exception is given when a
-    ///         number follows a number (seperated by a space)
+    ///         number follows a number (seperated by a space).
     ///     </para>
     /// </summary>
     [TestMethod]
@@ -427,12 +422,11 @@ public class FormulaSyntaxTests
         _ = new Formula("1 1");
     }
 
-
     /// <summary>
     /// <para>
     ///     This test checks to see if the correct kind of exception is thrown for
-    ///     a number following a variable, also has added benefit of checking that 
-    ///     scientific notation isn't working because of incorrect variable definition 
+    ///     a number following a variable, also has added benefit of checking that
+    ///     scientific notation isn't working because of incorrect variable definition
     ///     (ie, 1e1 works, but 1a1 should not also work).
     /// </para>
     /// </summary>
@@ -444,29 +438,27 @@ public class FormulaSyntaxTests
     }
 
     /// <summary>
-    ///  This checks to see that GetVariables returns the proper form. (variables should be normalised to upppercase)
+    ///  This checks to see that GetVariables returns the proper form. (variables should be normalised to upppercase).
     /// </summary>
     [TestMethod]
     public void GetVariables_TestVariablesAreReturned_Valid()
     {
-        Formula _ = new Formula("a1+b1+xYz1");
-        ISet<string> variables = _.GetVariables();
-        List<string> variablesList = new List<string>(variables); // convert to list bc it doesn't work otherwise.
+        Formula f = new("a1+b1+xYz1");
+        ISet<string> variables = f.GetVariables();
+        List<string> variablesList = new(variables); // convert to list bc it doesn't work otherwise.
 
-        List<string> expectedVariables = new List<string> { "A1", "B1", "XYZ1" };
+        List<string> expectedVariables = new() { "A1", "B1", "XYZ1" };
         CollectionAssert.AreEquivalent(expectedVariables, variablesList);
-
     }
 
     /// <summary>
-    /// This checks that ToString returns strings correctly normalised (trailing zeros removed, spaces removed, variables capitolised)
+    /// This checks that ToString returns strings correctly normalised (trailing zeros removed, spaces removed, variables capitolised).
     /// </summary>
     [TestMethod]
     public void ToString_TestVariablesAreFormatted_Valid()
     {
-        Formula _ = new Formula("a1 + 5.00");
-        string formulaString = _.ToString();
+        Formula f = new("a1 + 5.00");
+        string formulaString = f.ToString();
         Assert.AreEqual("A1+5", formulaString);
     }
-
 }

@@ -1,6 +1,7 @@
 ﻿// <copyright file="Formula.cs" company="UofU-CS3500">
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
+
 // <summary>
 //   <para>
 //     This code is provides to start your assignment.  It was written
@@ -13,30 +14,25 @@
 //     to represent your work and any changes you make.
 //   </para>
 // </summary>
-/// <summary>
-/// Author:    Madeline Abio
-/// Partner:   N/A
-/// Date:      07/09/2024
-/// Course:    CS 3500, University of Utah, School of Computing
-/// Copyright: CS 3500 and Madeline Abio - This work may not
-///            be copied for use in Academic Coursework.
-///
-/// I, Madeline Abio, certify that I wrote this code from scratch and
-/// did not copy it in part or whole from another source.  All
-/// references used in the completion of the assignments are cited
-/// in my README file.
-///
-/// File Contents
-///
-///    This file contains the Formula class which is used to construct formulas.
-/// </summary>
 
+// <summary>
+// Author:    Madeline Abio
+// Partner:   N/A
+// Date:      07/09/2024
+// Course:    CS 3500, University of Utah, School of Computing
+// Copyright: CS 3500 and Madeline Abio - This work may not
+//            be copied for use in Academic Coursework.
+//
+// I, Madeline Abio, certify that I wrote this code from scratch and
+// did not copy it in part or whole from another source.  All
+// references used in the completion of the assignments are cited
+// in my README file.
+//
+// File Contents
+//
+//    This file contains the Formula class which is used to construct formulas.
+// </summary>
 namespace CS3500.Formula;
-
-using System.ComponentModel.Design;
-using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
-using System.Runtime.Intrinsics;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -236,12 +232,14 @@ public class Formula
                     double v1 = double.Parse(vstack.Pop()); // pop the value stack and make it a double
                     string op = ostack.Pop(); // pop the operator stack
                     double v2 = double.Parse(t); // make t a double
-                    if (op == "*") // do multiplication on the two values (and change it back to a string), then push it on the value stack.
+                    if (op == "*")
                     {
+                        // do multiplication on the two values (and change it back to a string), then push it on the value stack.
                         vstack.Push((v1 * v2).ToString());
                     }
-                    else if (op == "/") // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
+                    else if (op == "/")
                     {
+                        // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
                         if (v2 == 0)
                         {
                             return new FormulaError("Division by zero");
@@ -250,8 +248,9 @@ public class Formula
                         vstack.Push((v1 / v2).ToString());
                     }
                 }
-                else // if not * or /, push t on the value stack.
+                else
                 {
+                    // if not * or /, push t on the value stack.
                     vstack.Push(t);
                 }
             }
@@ -265,12 +264,14 @@ public class Formula
                         double v1 = double.Parse(vstack.Pop()); // pop the value stack and make it a double
                         string op = ostack.Pop(); // pop the operator stack
                         double v2 = double.Parse(t_val); // make t_val a double
-                        if (op == "*") // do multiplication on the two values (and change it back to a string), then push it on the value stack.
+                        if (op == "*")
                         {
+                            // do multiplication on the two values (and change it back to a string), then push it on the value stack.
                             vstack.Push((v1 * v2).ToString());
                         }
-                        else if (op == "/") // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
+                        else if (op == "/")
                         {
+                            // do division on the two values, checking for div by zero. then push result on value stack (if result is possible)
                             if (v2 == 0)
                             {
                                 return new FormulaError("Division by zero");
@@ -279,19 +280,22 @@ public class Formula
                             vstack.Push((v1 / v2).ToString());
                         }
                     }
-                    else // if not * or /, push t_val on the value stack.
+                    else
                     {
+                        // if not * or /, push t_val on the value stack.
                         vstack.Push(t_val);
                     }
                 }
-                catch (ArgumentException) // if the variable is not found, return a FormulaError
+                catch (ArgumentException)
                 {
+                    // if the variable is not found, return a FormulaError
                     return new FormulaError($"Unknown variable: {t}");
                 }
             }
             else if ((t == "+") || (t == "-"))
             {
-                if (ostack.Count > 0 && (ostack.Peek() == "+" || ostack.Peek() == "-")) // if + or - is at top of operator stack,
+                // if + or - is at top of operator stack,
+                if (ostack.Count > 0 && (ostack.Peek() == "+" || ostack.Peek() == "-"))
                 {
                     double v1 = double.Parse(vstack.Pop()); // pop the value stack twice (& make them doubles)
                     double v2 = double.Parse(vstack.Pop());
@@ -310,17 +314,22 @@ public class Formula
 
                 ostack.Push(t); // push t on to the operator stack
             }
-            else if ((t == "*") || (t == "/")) // if t is * or /, push it on the operator stack.
+
+            // if t is * or /, push it on the operator stack.
+            else if ((t == "*") || (t == "/"))
             {
                 ostack.Push(t);
             }
-            else if (t == "(") // if t is left parenthesis, push it on the operator stack.
+
+            // if t is left parenthesis, push it on the operator stack.
+            else if (t == "(")
             {
                 ostack.Push(t);
             }
             else if (t == ")")
             {
-                if (ostack.Count > 0 && ((ostack.Peek() == "+") || (ostack.Peek() == "-")))// if + or - is at top of ostack,
+                // if + or - is at top of ostack,
+                if (ostack.Count > 0 && ((ostack.Peek() == "+") || (ostack.Peek() == "-")))
                 {
                     // pop val stack twice and op stack once.
                     double v1 = double.Parse(vstack.Pop());
@@ -339,7 +348,9 @@ public class Formula
 
                     ostack.Pop(); // pop the operator stack. top should be "(".
                 }
-                else // otherwise, the top of the stack is "("
+
+                // otherwise, the top of the stack is "("
+                else
                 {
                     ostack.Pop();
                 }
@@ -370,11 +381,13 @@ public class Formula
         }
 
         // when the last token has been processed, two conditions:
-        if (ostack.Count == 0) // if operator stack is empty, then the value stack should have only one value, which is the result.
+
+        // if operator stack is empty, then the value stack should have only one value, which is the result.
+        if (ostack.Count == 0)
         {
             return double.Parse(vstack.Pop());
         }
-
+        else
         { // the operator will always either be + or -.
             double v1 = double.Parse(vstack.Pop());
             double v2 = double.Parse(vstack.Pop());
@@ -427,9 +440,7 @@ public class Formula
     {
         ISet<string> vars = new HashSet<string>();
 
-        /// <summary>
-        /// Uses isvar function to check if a token is a variable, if so, adds it to the set of variables.
-        /// </summary>
+        // Uses isvar function to check if a token is a variable, if so, adds it to the set of variables.
         foreach (string token in tokens)
         {
             if (IsVar(token))
@@ -445,7 +456,8 @@ public class Formula
     /// <returns>
     ///  A canonical version (string) of the formula. All "equal" formulas
     ///   should have the same value here.
-    /// </returns><summary>
+    /// </returns>
+    /// <summary>
     ///   <para>
     ///     Returns a string representation of a canonical form of the formula.
     ///   </para>
@@ -469,7 +481,7 @@ public class Formula
     ///   </code>
     ///   <para>
     ///     This code should execute in O(1) time.
-    ///   <para>
+    ///   </para>
     /// </summary>
     public override string ToString()
     {
@@ -494,23 +506,29 @@ public class Formula
             // FORMATTING:
             tokens[i] = tokens[i].ToUpper(); // Normalise token
 
-            if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count == 1) // Normalise implicitely defined scientfic notation
+            // Normalise implicitely defined scientfic notation
+            if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count == 1)
             {
                 Match scientficMatch = scientificNotationPattern.Match(tokens[i]);
                 string basePart = scientficMatch.Groups[1].Value; // Capture base (eg 1.1)
                 string exponentPart = scientficMatch.Groups[3].Value; // Capture exponent (eg +10)
 
-                if (!exponentPart.StartsWith("-") && !exponentPart.StartsWith("+")) // Add the missing + sign
+                // Add the missing + sign
+                if (!exponentPart.StartsWith("-") && !exponentPart.StartsWith("+"))
                 {
                     exponentPart = "+" + exponentPart; // append + sign to exponent part
                     tokens[i] = basePart + "E" + exponentPart; // re-assign tokens[i] with fixed part.
                 }
             }
-            else if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count > 1) // Convert scientific notation to double form if other tokens in expression
+
+            // Convert scientific notation to double form if other tokens in expression
+            else if (scientificNotationPattern.IsMatch(tokens[i]) && tokens.Count > 1)
             {
                 tokens[i] = $"{double.Parse(tokens[i])}";
             }
-            else if (IsNumber(tokens[i])) // Remove trailing zeros from token if its a number
+
+            // Remove trailing zeros from token if its a number
+            else if (IsNumber(tokens[i]))
             {
                 // tokens[i] = TrailingZerosPattern.Replace(tokens[i], string.Empty);
                 tokens[i] = double.Parse(tokens[i]).ToString("G");
@@ -527,37 +545,46 @@ public class Formula
             }
 
             // SYNTAX CHECKING:
-            if (closeCount > openCount) // CLOSED PARENTHESIS RULE: when reading tokens left to right, there should never be more closed parentehsis than open parenthesis.
+
+            // CLOSED PARENTHESIS RULE: when reading tokens left to right, there should never be more closed parentehsis than open parenthesis.
+            if (closeCount > openCount)
             {
                 throw new FormulaFormatException($"Number of closed parenthesis seen so far exceeds number of open parenthesis seen so far.");
             }
 
-            if (!Regex.IsMatch(tokens[i], ValidCharactersPattern)) // VALID TOKENS: if there are invalid characters in the token, raise error
+            // VALID TOKENS: if there are invalid characters in the token, raise errors
+            if (!Regex.IsMatch(tokens[i], ValidCharactersPattern))
             {
                 throw new FormulaFormatException($"Invalid character in token {tokens[i]}.");
             }
 
-            if (i == 0 && !(IsVar(tokens[i]) || tokens[i] == "(" || IsNumber(tokens[i]))) // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
+            // FIRST TOKEN RULE: the token must be variable, open parenthesis, or number.
+            if (i == 0 && !(IsVar(tokens[i]) || tokens[i] == "(" || IsNumber(tokens[i])))
             {
                 throw new FormulaFormatException($"First token in formula must be either a variable, number, or (. Token was {tokens[i]}");
             }
-            else if (i == tokens.Count - 1 && !(IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i]))) // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
+
+            // LAST TOKEN RULE: Last token of expression must be a number, variable, or closing parenthesis
+            else if (i == tokens.Count - 1 && !(IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i])))
             {
                 throw new FormulaFormatException($"Last token in formula must be either a variable, number, or ). Token was {tokens[i]}");
             }
 
-            if (i < tokens.Count - 1 && openParenthesisOrOperatorPattern.IsMatch(tokens[i]) && !(IsVar(tokens[i + 1]) || tokens[i + 1] == "(" || IsNumber(tokens[i + 1]))) // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
+            // PARENTHESIS/OPERATOR FOLLOWING RULE: Only a number, variable, or open parenthesis may immediately follow an open parentehsis or operator
+            if (i < tokens.Count - 1 && openParenthesisOrOperatorPattern.IsMatch(tokens[i]) && !(IsVar(tokens[i + 1]) || tokens[i + 1] == "(" || IsNumber(tokens[i + 1])))
             {
                 throw new FormulaFormatException($"Only a variable, number or open parenthesis may immediately follow an open parenthesis or operator. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
 
-            if (i < tokens.Count - 1 && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i])) && !closingParenthesisOrOperatorPattern.IsMatch(tokens[i + 1])) // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
+            // EXTRA FOLLOWING RULE: Only an opeartor or closing parenthesis can immediately  follow a number, variable, or closing parenthesis
+            if (i < tokens.Count - 1 && (IsVar(tokens[i]) || tokens[i] == ")" || IsNumber(tokens[i])) && !closingParenthesisOrOperatorPattern.IsMatch(tokens[i + 1]))
             {
                 throw new FormulaFormatException($"Only an operator or closing parenthesis may immediately follow a number, variable, or closing parenthesis. Token = {tokens[i]}, following token = {tokens[i + 1]}.");
             }
         }
 
-        if (openCount != closeCount) // BALANCED PARENTEHSIS RULE: Total num opening parenthesis must equal total num closing parenthesis.
+        // BALANCED PARENTEHSIS RULE: Total num opening parenthesis must equal total num closing parenthesis.
+        if (openCount != closeCount)
         {
             throw new FormulaFormatException($"Parenthesis are not balanced. Num open = {openCount}, num close = {closeCount}");
         }
