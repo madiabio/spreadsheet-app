@@ -1,13 +1,13 @@
 ```
 Author:	Madeline Abio
-Partner: None
-Start Date: 21/08/2024
+Partner: Sadie Bowen
+Start Date: 16/10/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
-Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
-Date: 13/09/2024 2:10pm (when submission was completed)
+Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheetpair-sadie-madi
+Date: date time (when submission was completed)
 Project: Spreadsheet
-Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
+Copyright: CS 3500 and Madeline Abio and Sadie Bowen - This work may not be copied for use in Academic Coursework
 ```
 
 # Comments to Evaluators:
@@ -15,6 +15,10 @@ At this stage, the Spreadsheet functionality has been implemented, though no GUI
 
 # Assignment Specific Topics:
 
+## Time Management Skill Paragraph:
+DONT FORGET TO DO THIS FOR A6!!
+
+## Time Estimation/Log:
 Hours
 Estimated/Worked,   Assignment,        Note
 
@@ -30,6 +34,8 @@ Estimated/Worked,   Assignment,        Note
 	1. C# Documentation - https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/
 	2. ChatGPT - https://chatgpt.com/
 	2. Dot Net Pearls - https://www.dotnetperls.com/
+
+# NEW Examples of Good Software Practice (GSP) ** CHECK TO SEE IF THIS IS NECESSARY IF THE PARAGRAPH ALREADY EXISTS?
 
 # Examples of Good Software Practice (GSP)
     1. DRY - Wrote a helper class inside of Spreadsheet.cs titled SpreadsheetUtils which contains a method that returns 
