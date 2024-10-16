@@ -1,47 +1,33 @@
-```
+﻿```
 Author:	Madeline Abio
 Partner: None
-Start Date: 21/08/2024
+Start Date: 04/09/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
 GitHub ID: madiabio
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheet-madiabio
-Date: 13/09/2024 2:10pm (when submission was completed)
-Project: Spreadsheet
+Date: 07/09/2024 12:56pm (when submission was completed)
+Project: Formula
 Copyright: CS 3500 and Madeline Abio - This work may not be copied for use in Academic Coursework
 ```
 
 # Comments to Evaluators:
-At this stage, the Spreadsheet functionality has been implemented, though no GUI exists and also no methods for handling values of cells exist when the value relies on formulas.
+I accidentally started Assignment 5 on Friday instead of Assignment 4 and didn't finish it then because I read
+that there was no penalty for late submissions, then I was unable to work on the assignment again
+until Sunday night where I realised that A4 had late penalties (A5 does not for the weekend). I completed 
+half of A5 accidentally and I am hoping this is considered for my late penalty with A4. This can be verified with my git
+commits, where I was committing A5 work as A4.
+
 
 # Assignment Specific Topics:
-
-Hours
-Estimated/Worked,   Assignment,        Note
-
-    3/4,            Assignment 2,      N/A
-    3/5,            Assignment 3,      Spent about an hour extra debugging A2.
-    3/6 ,           Assignment 4,      Was tired and a little defeated so took longer than usual
-    4/9,            Assignment 5,      Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired.
 
 # Consulted Peers:
 	1. Sadie Bowen
 
+
 # References:
 	1. C# Documentation - https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/
-	2. ChatGPT - https://chatgpt.com/
-	2. Dot Net Pearls - https://www.dotnetperls.com/
+    2. ChatGPT - https://chatgpt.com/
 
-# Examples of Good Software Practice (GSP)
-    1. DRY - Wrote a helper class inside of Spreadsheet.cs titled SpreadsheetUtils which contains a method that returns 
-    true if a cell name is valid and false otherwise. This avoids repetition as a valid name check is needed
-    many times in the Spreadsheet and Cell classes.
-    
-    2. Test methods - Wrote extensive testing for the name syntax test mentioned above in SpreadsheetTests. This ensure that
-    InvalidNameExceptions are thrown when they should be.
-    
-    3. Encapsulation - Developers can interface with the software through well documented public methods without needing a 
-    full understanding of what is occuring 'underneath the hood'.
-  
 # ChatGPT:
 
 __Query 1:__
