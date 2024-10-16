@@ -3,7 +3,7 @@ Author:	Madeline Abio
 Partner: Sadie Bowen
 Start Date: 16/10/2024
 Course: CS 3500 Software Practice, University of Utah, School of Computing
-GitHub ID: madiabio
+GitHub ID: madiabio [SADIE TO ADD GITHUB ID]
 Repo: https://github.com/uofu-cs3500-20-fall2024/spreadsheetpair-sadie-madi
 Date: date time (when submission was completed)
 Project: Spreadsheet
