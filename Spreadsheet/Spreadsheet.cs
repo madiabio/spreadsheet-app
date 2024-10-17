@@ -355,7 +355,6 @@ public class Spreadsheet
             if (cells.ContainsKey(name))
             {
                 cells[name].Contents = number; // update the contents of the cell
-
                 dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
 
@@ -366,6 +365,8 @@ public class Spreadsheet
                 newCell.Name = name;
                 newCell.Contents = number;
                 cells.Add(name, newCell);
+                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+
             }
 
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
