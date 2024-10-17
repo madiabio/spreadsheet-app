@@ -28,6 +28,7 @@ namespace CS3500.Spreadsheet;
 
 using CS3500.DependencyGraph;
 using CS3500.Formula;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -399,7 +400,7 @@ public class Spreadsheet
             // If the cell has contents, check its dependencies and update.
             if (cells.ContainsKey(name))
             {
-                if (text == string.Empty)
+                if (string.IsNullOrEmpty(text))
                 {
                     cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
                 }
@@ -415,7 +416,7 @@ public class Spreadsheet
             else
             {
                 // only update if the string isn't empty.
-                if (text != string.Empty)
+                if ( !string.IsNullOrEmpty(text) )
                 {
                     Cell newCell = new();
                     newCell.Name = name;
@@ -463,16 +464,29 @@ public class Spreadsheet
 
             ISet<string> vars = formula.GetVariables(); // get formula variables
 
-            // If the formula contains the cell name, throw a circular exception.
-            if (vars.Contains(name))
+            IEnumerable<string> dependentsOfCell = dg.GetDependents(name); // get the dependees of the cell. these are all the cells that the cell is dependent on.
+            foreach (string var in vars)
             {
-                throw new CircularException();
+                if ( (var == name) || dependentsOfCell.Contains(var))
+                {
+                    throw new CircularException();
+                }
             }
 
             // If the cell has contents, check its dependencies and update.
             if (cells.ContainsKey(name))
             {
+                object oldContents = cells[name].Contents;
                 cells[name].Contents = formula; // update the contents of the cell
+                try
+                {
+                    GetCellsToRecalculate(name);
+                }
+                catch
+                {
+                    cells[name].Contents = oldContents; // change the contents back to the original and don't update.
+
+                }
             }
 
             // If empty cell, create new, add it to cells dictionary and update its contents.
