@@ -2,7 +2,10 @@
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
 
+// ReSharper disable once CheckNamespace
 namespace CS3500.SpreadsheetTests;
+
+// ReSharper disable RedundantNameQualifier
 using CS3500.Formula;
 using CS3500.Spreadsheet;
 
@@ -35,6 +38,8 @@ using CS3500.Spreadsheet;
 [TestClass]
 public class SpreadsheetTests
 {
+    // ----------- TEST GetCellContents function-----------
+
     /// <summary>
     /// Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
     /// into <see cref="Spreadsheet.GetCellContents(string)"/>.
@@ -46,6 +51,13 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         ss.GetCellContents("1A1A");
     }
+
+    // ----------- TEST this[string cellName] accessor -----------
+    // ----------- TEST Save function -----------
+    // ----------- TEST Load function -----------
+    // ----------- TEST GetCellValue function -----------
+
+    // ----------- TEST SetContentsOfCell -----------
 
     /// <summary>
     /// Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
@@ -68,8 +80,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsFormula_InvalidName()
     {
         Spreadsheet ss = new();
-        Formula f1 = new("B1+1");
-        ss.SetContentsOfCell("1A1A", "f1");
+        ss.SetContentsOfCell("1A1A", "B1+1");
     }
 
     /// <summary>
@@ -140,8 +151,6 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
         ss.SetContentsOfCell("A1", "1.1");
-        Formula f1 = new("A1*2");
-        Formula f2 = new("B1*2");
         ss.SetContentsOfCell("B1", "f1");
         ss.SetContentsOfCell("C1", "f2");
 
@@ -178,6 +187,108 @@ public class SpreadsheetTests
 
         ss.SetContentsOfCell("A1", "A1*2");
     }
+
+    /// <summary>
+    /// This test checks  <see cref="Spreadsheet.SetCellContents(string, double)"/> will not work when an incorrect
+    /// cell name is passed in.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(InvalidNameException))]
+    public void SpreadsheetConstructor_TestSetCellContentsDouble_InvalidCellName()
+    {
+        Spreadsheet ss = new();
+        string trueContents = "1.1";
+
+        ss.SetContentsOfCell("1A1A", trueContents);
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell when the contents is a string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsString_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new();
+        string trueContents = "test";
+
+        ss.SetContentsOfCell("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, double)"/> method works as expected
+    /// by setting the contents of a cell with a double, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsDouble_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new();
+        string trueContents = "1.1";
+
+        ss.SetContentsOfCell("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, Formula)"/> method works as expected
+    /// by setting the contents of a cell with a <see cref="Formula"/>, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsFormula_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new();
+        string trueContents = "1+1";
+
+        ss.SetContentsOfCell("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringReturnsEmptyString_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new();
+        string trueContents = string.Empty;
+
+        ss.SetContentsOfCell("A1", trueContents);
+
+        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
+    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringNotInGraph_ExpectedBehaviour()
+    {
+        Spreadsheet ss = new();
+        string trueContents = string.Empty;
+
+        ss.SetContentsOfCell("A1", trueContents);
+
+        bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
+        Assert.IsFalse(condition);
+    }
+
+    // ----------- TEST GetNamesOfAllNonEmptyCells -----------
 
     /// <summary>
     /// Checks that <see cref="Spreadsheet.GetNamesOfAllNonemptyCells()"/> works as expected
@@ -217,6 +328,8 @@ public class SpreadsheetTests
         Assert.IsTrue(ss.GetNamesOfAllNonemptyCells().Count == 0);
     }
 
+    // ----------- TEST GetCellContents function -----------
+
     /// <summary>
     /// This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
     /// return an empty string if the cell is not in the graph (the cell is an empty cell).
@@ -228,249 +341,155 @@ public class SpreadsheetTests
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
 
-    /// <summary>
-    /// This test checks  <see cref="Spreadsheet.SetCellContents(string, double)"/> will not work when an incorrect
-    /// cell name is passed in.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidNameException))]
-    public void SpreadsheetConstructor_TestSetCellContentsDouble_InvalidCellName()
-    {
-        Spreadsheet ss = new();
-        string trueContents = "1.1";
-
-        ss.SetContentsOfCell("1A1A", trueContents);
-    }
-
-    /// <summary>
-    /// <para>
-    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
-    /// by setting the contents of a cell when the contents is a string, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetConstructor_TestSetCellContentsString_ExpectedBehvaiour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = "test";
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-    }
-
-    /// <summary>
-    /// <para>
-    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, double)"/> method works as expected
-    /// by setting the contents of a cell with a double, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetConstructor_TestSetCellContentsDouble_ExpectedBehvaiour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = "1.1";
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-    }
-
-    /// <summary>
-    /// <para>
-    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, Formula)"/> method works as expected
-    /// by setting the contents of a cell with a <see cref="Formula"/>, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetConstructor_TestSetCellContentsFormula_ExpectedBehvaiour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = "1+1";
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-    }
-
-    /// <summary>
-    /// <para>
-    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
-    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringReturnsEmptyString_ExpectedBehvaiour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = string.Empty;
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-    }
-
-    /// <summary>
-    /// <para>
-    /// This test checks the <see cref="Spreadsheet.SetCellContents(string, string)"/> method works as expected
-    /// by setting the contents of a cell to an empty string, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetConstructor_TestSetCellContentsEmptyStringNotInGraph_ExpectedBehvaiour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = string.Empty;
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
-        Assert.IsFalse(condition);
-    }
+    // ----------- TEST GetCellValue function -----------
 }
 
-/// <summary>
-/// This test class contains the tests for the <see cref="Cell"/> class.
-/// </summary>
-[TestClass]
-public class CellTests
-{
-    /// <summary>
-    /// Checks that the get function for <see cref="Cell.Name"/> returns the correct value.
-    /// </summary>
-    [TestMethod]
-    public void CellConstructor_CellNameGet_ExpectedBehaviour()
-    {
-        Cell cell = new();
+// #FIXME I'm pretty sure the cell class is supposed to be internal and tested through public methods in spreadsheet.
 
-        // set the name and retrieve it using the get accessor
-        cell.Name = "a1";  // set the name (it will be converted to uppercase in the set accessor)
-        string actualName = cell.Name; // get the name
+// /// <summary>
+// /// This test class contains the tests for the <see cref="Cell"/> class.
+// /// </summary>
+// [TestClass]
+// public class CellTests
+// {
+//     /// <summary>
+//     /// Checks that the get function for <see cref="Cell.Name"/> returns the correct value.
+//     /// </summary>
+//     [TestMethod]
+//     public void CellConstructor_CellNameGet_ExpectedBehaviour()
+//     {
+//         Cell cell = new();
+//
+//         // set the name and retrieve it using the get accessor
+//         cell.Name = "a1";  // set the name (it will be converted to uppercase in the set accessor)
+//         string actualName = cell.Name; // get the name
+//
+//         // check that the name has been set and retrieved correctly in uppercase
+//         string expectedName = "A1"; // since the name is normalised to uppercase
+//         Assert.AreEqual(expectedName, actualName);
+//     }
+//
+//     /// <summary>
+//     /// This checks that <see cref="Cell.Name"/> will not allow null or whitespace contents
+//     /// to be set by ensuring it throws a <see cref="InvalidContentsException"/>.
+//     /// </summary>
+//     [TestMethod]
+//     [ExpectedException(typeof(InvalidNameException))]
+//     public void CellConstructor_CellNameWhitespace_Invalid()
+//     {
+//         Cell cell = new();
+//         cell.Name = " ";
+//     }
+//
+//     /// <summary>
+//     /// This checks that <see cref="Cell.Contents"/> will not allow null or whitespace contents
+//     /// to be set by ensuring it throws a <see cref="InvalidContentsException"/>.
+//     /// </summary>
+//     [TestMethod]
+//     [ExpectedException(typeof(InvalidContentsException))]
+//     public void CellConstructor_CellContentsWhitespace_Invalid()
+//     {
+//         Cell cell = new();
+//         cell.Contents = " ";
+//     }
+//
+//     /// <summary>
+//     /// This test checks get works correctly for the value portion of a cell.
+//     /// </summary>
+//     [TestMethod]
+//     public void CellValue_Get_ReturnsCorrectValue()
+//     {
+//         Cell cell = new();
+//
+//         // set the cell contents, which should update the _value field
+//         cell.Contents = 1.1;
+//
+//         // retrieve the value using the get accessor
+//         object trueValue = cell.Value;
+//
+//         // check if the value is set correctly
+//         object expected = 1.1;  //  expected value should match the input to Contents
+//         Assert.AreEqual(expected, trueValue);
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell.Contents"/> will not allow invalid contents to be set
+//     /// by ensuring it throws a <see cref="InvalidContentsException"/> when a HashSet is attempted
+//     /// to be used as the contents.
+//     /// </summary>
+//     [TestMethod]
+//     [ExpectedException(typeof(InvalidContentsException))]
+//     public void CellConstructor_TestContents_Invalid()
+//     {
+//         Cell cell = new();
+//         HashSet<string> trueContents = new() { "a", "b", "c" };
+//
+//         cell.Contents = trueContents;
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell.Contents"/> will allow valid contents to be set
+//     /// when the contents are a string.
+//     /// </summary>
+//     [TestMethod]
+//     public void CellConstructor_TestContentsString_Valid()
+//     {
+//         Cell cell = new();
+//         string trueContents = "a";
+//
+//         cell.Contents = trueContents;
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell"/> will allow an valid name to be set
+//     /// when the name uses lowercase characters.
+//     /// </summary>
+//     [TestMethod]
+//     public void CellConstructor_TestNameLowercase_Valid()
+//     {
+//         Cell cell = new();
+//         cell.Name = "abc1";
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell"/> will allow an valid name to be set
+//     /// when the name uses uppercase characters.
+//     /// </summary>
+//     [TestMethod]
+//     public void CellConstructor_TestNameUppercase_Valid()
+//     {
+//         Cell cell = new();
+//         cell.Name = "ABC1";
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell"/> will not allow an invalid name to be set
+//     /// by ensuring it throws a <see cref="InvalidNameException"/> when a number
+//     /// is the prefix of the name.
+//     /// </summary>
+//     [TestMethod]
+//     [ExpectedException(typeof(InvalidNameException))]
+//     public void CellConstructor_TestNameNumberFirst_Invalid()
+//     {
+//         Cell cell = new();
+//         cell.Name = "1ABC";
+//     }
+//
+//     /// <summary>
+//     /// This test checks <see cref="Cell"/> will not allow an invalid name to be set
+//     /// by ensuring it throws a <see cref="InvalidNameException"/> when a number is
+//     /// in between some characters in the name.
+//     /// </summary>
+//     [TestMethod]
+//     [ExpectedException(typeof(InvalidNameException))]
+//     public void CellConstructor_TestNameNumberInMiddle_Invalid()
+//     {
+//         Cell cell = new();
+//         cell.Name = "A1BC";
+//     }
+// }
 
-        // check that the name has been set and retrieved correctly in uppercase
-        string expectedName = "A1"; // since the name is normalised to uppercase
-        Assert.AreEqual(expectedName, actualName);
-    }
-
-    /// <summary>
-    /// This checks that <see cref="Cell.Name"/> will not allow null or whitespace contents
-    /// to be set by ensuring it throws a <see cref="InvalidContentsException"/>.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidNameException))]
-    public void CellConstructor_CellNameWhitespace_Invalid()
-    {
-        Cell cell = new();
-        cell.Name = " ";
-    }
-
-    /// <summary>
-    /// This checks that <see cref="Cell.Contents"/> will not allow null or whitespace contents
-    /// to be set by ensuring it throws a <see cref="InvalidContentsException"/>.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidContentsException))]
-    public void CellConstructor_CellContentsWhitespace_Invalid()
-    {
-        Cell cell = new();
-        cell.Contents = " ";
-    }
-
-    /// <summary>
-    /// This test checks get works correctly for the value portion of a cell.
-    /// </summary>
-    [TestMethod]
-    public void CellValue_Get_ReturnsCorrectValue()
-    {
-        Cell cell = new();
-
-        // set the cell contents, which should update the _value field
-        cell.Contents = 1.1;
-
-        // retrieve the value using the get accessor
-        object trueValue = cell.Value;
-
-        // check if the value is set correctly
-        object expected = 1.1;  //  expected value should match the input to Contents
-        Assert.AreEqual(expected, trueValue);
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell.Contents"/> will not allow invalid contents to be set
-    /// by ensuring it throws a <see cref="InvalidContentsException"/> when a HashSet is attempted
-    /// to be used as the contents.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidContentsException))]
-    public void CellConstructor_TestContents_Invalid()
-    {
-        Cell cell = new();
-        HashSet<string> trueContents = new() { "a", "b", "c" };
-
-        cell.Contents = trueContents;
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell.Contents"/> will allow valid contents to be set
-    /// when the contents are a string.
-    /// </summary>
-    [TestMethod]
-    public void CellConstructor_TestContentsString_Valid()
-    {
-        Cell cell = new();
-        string trueContents = "a";
-
-        cell.Contents = trueContents;
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell"/> will allow an valid name to be set
-    /// when the name uses lowercase characters.
-    /// </summary>
-    [TestMethod]
-    public void CellConstructor_TestNameLowercase_Valid()
-    {
-        Cell cell = new();
-        cell.Name = "abc1";
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell"/> will allow an valid name to be set
-    /// when the name uses uppercase characters.
-    /// </summary>
-    [TestMethod]
-    public void CellConstructor_TestNameUppercase_Valid()
-    {
-        Cell cell = new();
-        cell.Name = "ABC1";
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell"/> will not allow an invalid name to be set
-    /// by ensuring it throws a <see cref="InvalidNameException"/> when a number
-    /// is the prefix of the name.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidNameException))]
-    public void CellConstructor_TestNameNumberFirst_Invalid()
-    {
-        Cell cell = new();
-        cell.Name = "1ABC";
-    }
-
-    /// <summary>
-    /// This test checks <see cref="Cell"/> will not allow an invalid name to be set
-    /// by ensuring it throws a <see cref="InvalidNameException"/> when a number is
-    /// in between some characters in the name.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(InvalidNameException))]
-    public void CellConstructor_TestNameNumberInMiddle_Invalid()
-    {
-        Cell cell = new();
-        cell.Name = "A1BC";
-    }
-}
+// #FIXME I am pretty sure the utils class should be internal? And tested through the public methods... not sure though.
 
 /// <summary>
 /// This test class contains the tests for the <see cref="SpreadsheetUtils"/>
