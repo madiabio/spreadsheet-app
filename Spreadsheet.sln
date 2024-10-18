@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spreadsheet", "Spreadsheet\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{E7007F3B-C06B-4002-BB8D-A5E54A40E36C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Whiteboard", "Whiteboard", "{2D3C61D2-3D11-4D25-A140-0A5E83C48E8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {51AC6900-1F23-4553-ABF0-6D19DFA99483}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2D3C61D2-3D11-4D25-A140-0A5E83C48E8C} = {FC08C755-5B74-4D29-9013-8C7F1C4AA78B}
 	EndGlobalSection
 EndGlobal
