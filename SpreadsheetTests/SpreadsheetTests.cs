@@ -2,29 +2,35 @@
 // Copyright (c) 2024 UofU-CS3500. All rights reserved.
 // </copyright>
 
-// <summary>
-// Author:    Madeline Abio
-// Partner:   N/A
-// Date:      20/09/2024
-// Course:    CS 3500, University of Utah, School of Computing
-// Copyright: CS 3500 and Madeline Abio - This work may not
-//            be copied for use in Academic Coursework.
-//
-// I, Madeline Abio, certify that I wrote this code from scratch and
-// did not copy it in part or whole from another source.  All
-// references used in the completion of the assignments are cited
-// in my README file.
-//
-// File Contents
-//
-//    This file contains the tests for the Spreadsheet, Cell and SpreadsheetUtils classes.
-// </summary>
 namespace CS3500.SpreadsheetTests;
 using CS3500.Formula;
 using CS3500.Spreadsheet;
 
 /// <summary>
-/// This test class contains the tests for the <see cref="Spreadsheet"/> class.
+/// <para>
+///     Authors/Partnership:    Madeline Abio & Sadie Bowen
+///     Date:      20/09/2024
+///     Course:    CS 3500, University of Utah, School of Computing
+///     Copyright: CS 3500 and Madeline Abio - This work may not
+///            be copied for use in Academic Coursework.
+/// </para>
+///
+/// <para>
+///     We, Madeline Abio & Sadie Bowen, certify that I wrote this code from scratch and
+///     did not copy it in part or whole from another source.  All
+///     references used in the completion of the assignments are cited
+///     in my README file.
+///
+///     The starter code for this file was written by profs Joe, Danny and Jim.
+///     The code for this file was updated in partnership of Madi Abio and Sadie Bowen,
+///         however, the original code was written by Madi Abio for Assignment 05.
+/// </para>
+///
+/// <para>
+///     This class represents unit tests used to determine the accuracy of the Spreadsheet project implementation.
+///     These tests cannot prove whether the project is correct, however it seeks to expose errors in the project.
+///     This class represents complete testing coverage of the Spreadsheet project.
+/// </para>
 /// </summary>
 [TestClass]
 public class SpreadsheetTests
@@ -50,7 +56,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsString_InvalidName()
     {
         Spreadsheet ss = new();
-        ss.SetCellContents("1A1A", "test");
+        ss.SetContentsOfCell("1A1A", "test");
     }
 
     /// <summary>
@@ -63,7 +69,7 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
         Formula f1 = new("B1+1");
-        ss.SetCellContents("1A1A", f1);
+        ss.SetContentsOfCell("1A1A", "f1");
     }
 
     /// <summary>
@@ -74,10 +80,10 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsStringWithDependees_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        ss.SetCellContents("A1", "B1*2"); // A is dependent on B, meaning A has a dependee (B)
-        ss.SetCellContents("B1", "test");
+        ss.SetContentsOfCell("A1", "B1*2"); // A is dependent on B, meaning A has a dependee (B)
+        ss.SetContentsOfCell("B1", "test");
 
-        List<string> results = ss.SetCellContents("A1", "test").ToList(); // update A to no longer be dependent on B.
+        List<string> results = ss.SetContentsOfCell("A1", "test").ToList(); // update A to no longer be dependent on B.
         List<string> expected = new() { "A1" };
 
         CollectionAssert.AreEqual(expected, results);
@@ -91,10 +97,10 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsDoubleWithDependees_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        ss.SetCellContents("A1", "B1*2"); // A is dependent on B, meaning A has a dependee (B)
-        ss.SetCellContents("B1", "test");
+        ss.SetContentsOfCell("A1", "B1*2"); // A is dependent on B, meaning A has a dependee (B)
+        ss.SetContentsOfCell("B1", "test");
 
-        List<string> results = ss.SetCellContents("A1", 1.1).ToList(); // update A to no longer be dependent on B.
+        List<string> results = ss.SetContentsOfCell("A1", "1.1").ToList(); // update A to no longer be dependent on B.
         List<string> expected = new() { "A1" };
 
         CollectionAssert.AreEqual(expected, results);
@@ -107,7 +113,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsDoubleReturn_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        List<string> results = ss.SetCellContents("A1", 1.1).ToList();
+        List<string> results = ss.SetContentsOfCell("A1", "1.1").ToList();
 
         List<string> expected = new() { "A1" };
         CollectionAssert.AreEqual(expected, results);
@@ -120,7 +126,7 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsStringReturn_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        List<string> results = ss.SetCellContents("A1", "test").ToList();
+        List<string> results = ss.SetContentsOfCell("A1", "test").ToList();
 
         List<string> expected = new() { "A1" };
         CollectionAssert.AreEqual(expected, results);
@@ -133,13 +139,13 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsFormulaReturn_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        ss.SetCellContents("A1", 1.1);
+        ss.SetContentsOfCell("A1", "1.1");
         Formula f1 = new("A1*2");
         Formula f2 = new("B1*2");
-        ss.SetCellContents("B1", f1);
-        ss.SetCellContents("C1", f2);
+        ss.SetContentsOfCell("B1", "f1");
+        ss.SetContentsOfCell("C1", "f2");
 
-        List<string> results = ss.SetCellContents("A1", new Formula("D1*2")).ToList();
+        List<string> results = ss.SetContentsOfCell("A1", "D1*2").ToList();
 
         List<string> expected = new() { "A1", "B1", "C1" };
         CollectionAssert.AreEqual(expected, results);
@@ -155,9 +161,9 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
 
-        ss.SetCellContents("A1", new Formula("B1*2"));
-        ss.SetCellContents("B1", new Formula("C1*2"));
-        ss.SetCellContents("C1", new Formula("A1*2"));
+        ss.SetContentsOfCell("A1", "B1*2");
+        ss.SetContentsOfCell("B1", "C1*2");
+        ss.SetContentsOfCell("C1", "A1*2");
     }
 
     /// <summary>
@@ -170,7 +176,7 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
 
-        ss.SetCellContents("A1", new Formula("A1*2"));
+        ss.SetContentsOfCell("A1", "A1*2");
     }
 
     /// <summary>
@@ -181,10 +187,10 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestGetNamesOfAllNonemptyCellsCellsInGraph_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        double trueContents = 1.1;
-        ss.SetCellContents("A1", trueContents);
-        ss.SetCellContents("B1", trueContents);
-        ss.SetCellContents("C1", trueContents);
+        string trueContents = "1.1";
+        ss.SetContentsOfCell("A1", trueContents);
+        ss.SetContentsOfCell("B1", trueContents);
+        ss.SetContentsOfCell("C1", trueContents);
 
         HashSet<string> results = ss.GetNamesOfAllNonemptyCells().ToHashSet();
         HashSet<string> expected = new() { "A1", "B1", "C1" };
@@ -199,14 +205,14 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestGetNamesOfAllNonemptyCellsAddedAndRemoved_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        double trueContents = 1.1;
-        ss.SetCellContents("A1", trueContents);
-        ss.SetCellContents("B1", trueContents);
-        ss.SetCellContents("C1", trueContents);
+        string trueContents = "1.1";
+        ss.SetContentsOfCell("A1", trueContents);
+        ss.SetContentsOfCell("B1", trueContents);
+        ss.SetContentsOfCell("C1", trueContents);
 
-        ss.SetCellContents("A1", string.Empty);
-        ss.SetCellContents("B1", string.Empty);
-        ss.SetCellContents("C1", string.Empty);
+        ss.SetContentsOfCell("A1", string.Empty);
+        ss.SetContentsOfCell("B1", string.Empty);
+        ss.SetContentsOfCell("C1", string.Empty);
 
         Assert.IsTrue(ss.GetNamesOfAllNonemptyCells().Count == 0);
     }
@@ -231,9 +237,9 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsDouble_InvalidCellName()
     {
         Spreadsheet ss = new();
-        double trueContents = 1.1;
+        string trueContents = "1.1";
 
-        ss.SetCellContents("1A1A", trueContents);
+        ss.SetContentsOfCell("1A1A", trueContents);
     }
 
     /// <summary>
@@ -248,7 +254,7 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         string trueContents = "test";
 
-        ss.SetCellContents("A1", trueContents);
+        ss.SetContentsOfCell("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
     }
@@ -263,9 +269,9 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsDouble_ExpectedBehvaiour()
     {
         Spreadsheet ss = new();
-        double trueContents = 1.1;
+        string trueContents = "1.1";
 
-        ss.SetCellContents("A1", trueContents);
+        ss.SetContentsOfCell("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
     }
@@ -280,9 +286,9 @@ public class SpreadsheetTests
     public void SpreadsheetConstructor_TestSetCellContentsFormula_ExpectedBehvaiour()
     {
         Spreadsheet ss = new();
-        Formula trueContents = new("1+1");
+        string trueContents = "1+1";
 
-        ss.SetCellContents("A1", trueContents);
+        ss.SetContentsOfCell("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
     }
@@ -299,7 +305,7 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         string trueContents = string.Empty;
 
-        ss.SetCellContents("A1", trueContents);
+        ss.SetContentsOfCell("A1", trueContents);
 
         Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
     }
@@ -316,7 +322,7 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         string trueContents = string.Empty;
 
-        ss.SetCellContents("A1", trueContents);
+        ss.SetContentsOfCell("A1", trueContents);
 
         bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
         Assert.IsFalse(condition);
