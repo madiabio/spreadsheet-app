@@ -465,20 +465,25 @@ public class Spreadsheet
 
             ISet<string> vars = formula.GetVariables(); // get formula variables
             IEnumerable<string> toRecalc = []; // Stores cells to recalculate
-            
+
+            // FIXME: Ok for some reason now two of the tests have more and two have less than expected. when i txted you last i had put getdependents for both
+            // of the enumerables below instead of just one. i think its somethign w how im handlign dependencies cuz i get so mixed up abt dependee vs dependent.
+            // lowkey recommend re-writing the whole function considering the new logic.
+            // glhf :(
+
             // FIXME: IDK if we need both.
-            IEnumerable<string> oldDependees = dg.GetDependents(name); // store og the dependees of the cell in case need to restore bc of circ except.
+            // FIXME: lowkey maybe we do but also the for loop at the end could pbe moved back up to the top and maybe its not necessary to store the dependents.
+            IEnumerable<string> oldDependees = dg.GetDependees(name); // store og the dependees of the cell in case need to restore bc of circ except.
             IEnumerable<string> oldDependents = dg.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
-
-
 
             // If the cell has contents, check its dependencies and update.
             if (cells.ContainsKey(name))
             {
-                object oldContents = cells[name].Contents;
+                object oldContents = cells[name].Contents; // store old contents in case of  cir exception.
                 cells[name].Contents = formula; // update the contents of the cell
 
                 // FIXME: idk if this should be dependees or dependents.
+                // FIXME: i think dependees kinda makes sense because the cell is dependent on the variables in the formula
                 // dg.ReplaceDependents(name, vars); // replace the dependents of the cell with the new variables.need to do this b4 getcells2recalc because it relies on this.
                 dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
                 try
@@ -505,6 +510,7 @@ public class Spreadsheet
                 newCell.Contents = formula;
                 cells.Add(name, newCell); // add cell to dictionary
                 // FIXME: idk if this should be dependees or dependents.
+                // FIXME: i think dependees kinda makes sense because the cell is dependent on the variables in the formula
                 dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
                 try
                 {
@@ -519,9 +525,8 @@ public class Spreadsheet
                 }
             }
 
-
-            // FIXME: Idk if this should be dependees or dependents tbh. The code works with both? And neither fixes the actual issue.
-            foreach (string var in vars) // iterate thru each variable and check if this cell's dependentents were any of the variables its about to be a dependee of. If so, throw new circular exception and change nothing.
+            // FIXME: I'm pretty sure that this makes sense using the dependents rather than the dependees of the cell, but lowkey get really mixed up abt the two terms so idk.
+            foreach (string var in vars) // iterate thru each variable and check if this cell's old dependentents were any of the variables its about to be a dependee of. If so, throw new circular exception and change nothing.
             {
                 if ((var == name) || oldDependents.Contains(var))
                 {
