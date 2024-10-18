@@ -27,10 +27,10 @@
 // </para>
 // </summary>
 
-
 // ReSharper disable once CheckNamespace
 namespace CS3500.Spreadsheet;
 
+// ReSharper disable RedundantNameQualifier
 using CS3500.DependencyGraph;
 using CS3500.Formula;
 using System.Text.RegularExpressions;
@@ -65,6 +65,18 @@ public class SpreadsheetReadWriteException : Exception
 /// </summary>
 public class CircularException : Exception
 {
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="CircularException"/> class.
+    ///  <para>
+    ///     Creates the exception with a message defining what went wrong.
+    ///  </para>
+    /// </summary>
+    ///
+    /// <param name="msg"> An informative message to the user. </param>
+    public CircularException( string msg )
+        : base( msg )
+    {
+    }
 }
 
 /// <summary>
@@ -253,10 +265,37 @@ internal class Cell
 /// </summary>
 public class Spreadsheet
 {
+    /// <summary>
+    ///     This member variable reflects if the spreadsheet has been modified since the last save or initial load of a spreadsheet.
+    /// </summary>
+    #pragma warning disable SA1401
+    // TODO could revisit this, but docs said to keep public.
+    public readonly bool Changed = false;
+    #pragma warning restore SA1401
+
     private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
     private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
-    // #TODO START NEW METHODS.
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
+    ///     Default way to construct a new spreadsheet without a name to store the object.
+    /// </summary>
+    public Spreadsheet()
+    {
+        // TODO should create spreadsheet with name "default"
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
+    ///     Construct a new spreadsheet that uses a name to store spreadsheet object.
+    /// </summary>
+    /// <param name="spreadsheetName"> string name to be stored for spreadsheet. </param>
+    public Spreadsheet(string spreadsheetName)
+    {
+        // TODO should create spreadsheet with name given in constructor.
+    }
+
+    // #TODO This marks the start of new methods that were added and need to be written/ updated.
 
     /// <summary>
     /// <para>
@@ -325,7 +364,7 @@ public class Spreadsheet
     ///     (if this name does not match your existing code, use the JsonPropertyName attribute).
     /// </para>
     /// <para>
-    ///     There can be 0 cells in the dictionary, resulting in { "Cells" : {} }
+    ///     There can be 0 cells in the dictionary, resulting in { "Cells" : {} }.
     /// </para>
     /// <para>
     ///     Further, when writing the value of each cell...
@@ -355,7 +394,7 @@ public class Spreadsheet
     {
         throw new NotImplementedException();
     }
-        
+
     /// <summary>
     /// <para>
     ///     Read the data (JSON) from the file and instantiate the current
@@ -461,6 +500,7 @@ public class Spreadsheet
     /// </exception>
     public IList<string> SetContentsOfCell(string cellName, string content)
     {
+        // TODO handle the checking valid cellName here instead of in private methods.
         throw new NotImplementedException();
     }
 
@@ -647,7 +687,7 @@ public class Spreadsheet
         name = name.ToUpper(); // normalize name
         ISet<string> variables = formula.GetVariables(); // get formula variables
 
-        IEnumerable<string> toRecalc = []; // Stores cells to recalculate. May be un-needed
+        IEnumerable<string> cellsToRecalculate; // Stores cells to recalculate. May be un-needed
 
         IEnumerable<string> oldDependees = _dependencyGraph.GetDependees(name); // store og the dependees of the cell in case need to restore bc of circ except.
         IEnumerable<string> oldDependents = _dependencyGraph.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
@@ -657,7 +697,7 @@ public class Spreadsheet
 
         if (variables.Any(var => (var == name) || dependents.Contains(var)))
         {
-            throw new CircularException();
+            throw new CircularException("A cell cannot reference itself.");
         }
 
         // If the cell has contents, check its dependencies and update.
@@ -670,7 +710,7 @@ public class Spreadsheet
 
             try
             {
-                toRecalc = GetCellsToRecalculate(name);
+                cellsToRecalculate = GetCellsToRecalculate(name);
             }
             catch (CircularException)
             {
@@ -695,7 +735,7 @@ public class Spreadsheet
 
             try
             {
-                toRecalc = GetCellsToRecalculate(name);
+                cellsToRecalculate = GetCellsToRecalculate(name);
             }
             catch (CircularException)
             {
@@ -705,7 +745,7 @@ public class Spreadsheet
             }
         }
 
-        return toRecalc.ToList();
+        return cellsToRecalculate.ToList();
     }
 
     /// <summary>
@@ -769,7 +809,7 @@ public class Spreadsheet
         {
             if (dependent.Equals(start))
             {
-                throw new CircularException();
+                throw new CircularException("A cell cannot reference itself.");
             }
             else if (!visited.Contains(dependent))
             {
