@@ -36,21 +36,10 @@ NOTE to be removed: SADIES PERSONAL TIME TRACKING
 - Thursday: Spent 2 hours debugging A5 grading tests.
 - FRIDAY: Spent .5 Hour updating readme and documentation
 
-Hours
-Estimated/Worked,   Assignment,        Note
-
-    3/4,            Assignment 2,      N/A
-    3/5,            Assignment 3,      Spent about an hour extra debugging A2.
-    3/6 ,           Assignment 4,      Was tired and a little defeated so took longer than usual
-    4/9,            Assignment 5,      Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired.
-
-# Consulted Peers:
-	1. Sadie Bowen
-
 # References:
-	1. C# Documentation - https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/
-	2. ChatGPT - https://chatgpt.com/
-	2. Dot Net Pearls - https://www.dotnetperls.com/
+- [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
+- [ChatGPT] (https://chatgpt.com/)
+- [Dot Net Pearls](https://www.dotnetperls.com/)
 
 # Our Software Practices
 ## Examples of Good Software Practice (GSP)
