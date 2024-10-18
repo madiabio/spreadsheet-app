@@ -23,7 +23,7 @@ It is designed to expose potential bugs within the spreadsheet project.
 - These tests cover all code within the Spreadsheet Project.
 
 ## Comments to Evaluators:
-- There are no comments for evaluators.
+- The GradingTestsPS5 file was written by prof germain. It was commented out because some tests from that file were utilized in the SpreadsheetTests file.
 
 ## Assignment Specific Topics
 - See Spreadsheet Project README for more assignment specific topics.
