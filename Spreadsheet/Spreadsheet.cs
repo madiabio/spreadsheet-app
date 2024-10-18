@@ -464,29 +464,36 @@ public class Spreadsheet
             name = name.ToUpper(); // Normalize the name to uppercase
 
             ISet<string> vars = formula.GetVariables(); // get formula variables
+            IEnumerable<string> toRecalc = []; // Stores cells to recalculate
+            
+            // FIXME: IDK if we need both.
+            IEnumerable<string> oldDependees = dg.GetDependents(name); // store og the dependees of the cell in case need to restore bc of circ except.
+            IEnumerable<string> oldDependents = dg.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
 
-            IEnumerable<string> dependentsOfCell = dg.GetDependents(name); // get the dependees of the cell. these are all the cells that the cell is dependent on.
-            foreach (string var in vars)
-            {
-                if ( (var == name) || dependentsOfCell.Contains(var))
-                {
-                    throw new CircularException();
-                }
-            }
+
 
             // If the cell has contents, check its dependencies and update.
             if (cells.ContainsKey(name))
             {
                 object oldContents = cells[name].Contents;
                 cells[name].Contents = formula; // update the contents of the cell
+
+                // FIXME: idk if this should be dependees or dependents.
+                // dg.ReplaceDependents(name, vars); // replace the dependents of the cell with the new variables.need to do this b4 getcells2recalc because it relies on this.
+                dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
                 try
                 {
-                    GetCellsToRecalculate(name);
+                    toRecalc = GetCellsToRecalculate(name);
                 }
-                catch
+                catch (CircularException)
                 {
                     cells[name].Contents = oldContents; // change the contents back to the original and don't update.
 
+                    // FIXME: idk if this should be dependees or dependents.
+                    dg.ReplaceDependees(name, oldDependees); // Restore old dependees to cell in dg.
+
+                    toRecalc = []; // nothing to update if nothing changes.
+                    throw;
                 }
             }
 
@@ -496,11 +503,36 @@ public class Spreadsheet
                 Cell newCell = new();
                 newCell.Name = name;
                 newCell.Contents = formula;
-                cells.Add(name, newCell);
+                cells.Add(name, newCell); // add cell to dictionary
+                // FIXME: idk if this should be dependees or dependents.
+                dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
+                try
+                {
+                    toRecalc = GetCellsToRecalculate(name);
+                }
+                catch (CircularException)
+                {
+                    cells.Remove(name); // remove cell from dictionary if adding it creates a circular dependency.
+                    dg.ReplaceDependees(name, oldDependees); // Restore old dependees to cell in dg.
+                    toRecalc = []; // nothing to update if nothing changes.
+                    throw;
+                }
             }
 
-            dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables
-            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+
+            // FIXME: Idk if this should be dependees or dependents tbh. The code works with both? And neither fixes the actual issue.
+            foreach (string var in vars) // iterate thru each variable and check if this cell's dependentents were any of the variables its about to be a dependee of. If so, throw new circular exception and change nothing.
+            {
+                if ((var == name) || oldDependents.Contains(var))
+                {
+                    // TODO: potentially figure out how to update back to old cell contents but need to manage if the cell was empty before this so storing contents as an object doesn't work
+                    // unless u can type cast it to a string and ifgure out if it was an empty string, probably possible but idk how to do it and haven tried to figure it out.
+                    // cells[name].Contents = oldContents; // change the contents back to the original and don't update. <-- something like this
+                    // and make sure to remove the ecll from the graph if it was empty, and revert its dependees. and also make sure toReclac = [].
+                    throw new CircularException();
+                }
+            }
+            return toRecalc.ToList(); // return the list of cells that need to be recalculated
         }
 
         // if invalid name, throw exception.
