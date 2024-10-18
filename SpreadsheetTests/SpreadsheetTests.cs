@@ -53,6 +53,9 @@ public class SpreadsheetTests
     }
 
     // ----------- TEST this[string cellName] accessor -----------
+
+    
+
     // ----------- TEST Save function -----------
     // ----------- TEST Load function -----------
     // ----------- TEST GetCellValue function -----------
@@ -346,104 +349,104 @@ public class SpreadsheetTests
 
 // #FIXME I am pretty sure the utils class should be internal? And tested through the public methods... not sure though.
 
-/// <summary>
-/// This test class contains the tests for the <see cref="SpreadsheetUtils"/>
-/// which is a helper class for <see cref="Spreadsheet"/> and <see cref="Cell"/>.
-/// </summary>
-[TestClass]
-public class SpreadsheetUtilsTests
-{
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is true when
-    /// a valid cell name with mixed case is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameMixedCase_Valid()
-    {
-        Assert.IsTrue(SpreadsheetUtils.IsValidCellName("AaA1"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that starts with a number is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameNumberFirst_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName("1A"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that contains numbers and letters in a mixed order is
-    /// passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameNumbersLettersMixed_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A1A1"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that contains an invalid character is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameInvalidCharacter_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A!"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is an empty string is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameEmptyString_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName(string.Empty));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is whitespace is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameWhitespace_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName(" "));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// in the middle is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameWhitespaceInMiddle_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A 1"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// at the front is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtStart_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName(" A1"));
-    }
-
-    /// <summary>
-    /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
-    /// an invalid cell name that is an otherwise valid cell name containing whitespace
-    /// at the end is passed through.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtEnd_Invalid()
-    {
-        Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A1 "));
-    }
-}
+// /// <summary>
+// /// This test class contains the tests for the <see cref="SpreadsheetUtils"/>
+// /// which is a helper class for <see cref="Spreadsheet"/> and <see cref="Cell"/>.
+// /// </summary>
+// [TestClass]
+// public class SpreadsheetUtilsTests
+// {
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is true when
+//     /// a valid cell name with mixed case is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameMixedCase_Valid()
+//     {
+//         Assert.IsTrue(SpreadsheetUtils.IsValidCellName("AaA1"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that starts with a number is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameNumberFirst_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("1A"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that contains numbers and letters in a mixed order is
+//     /// passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameNumbersLettersMixed_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A1A1"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that contains an invalid character is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameInvalidCharacter_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A!"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that is an empty string is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameEmptyString_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName(string.Empty));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that is whitespace is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameWhitespace_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName(" "));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that is an otherwise valid cell name containing whitespace
+//     /// in the middle is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceInMiddle_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A 1"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that is an otherwise valid cell name containing whitespace
+//     /// at the front is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtStart_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName(" A1"));
+//     }
+//
+//     /// <summary>
+//     /// Checks <see cref="SpreadsheetUtils.IsValidCellName(string)"/> is false when
+//     /// an invalid cell name that is an otherwise valid cell name containing whitespace
+//     /// at the end is passed through.
+//     /// </summary>
+//     [TestMethod]
+//     public void SpreadsheetUtils_TestIsValidCellNameWhitespaceAtEnd_Invalid()
+//     {
+//         Assert.IsFalse(SpreadsheetUtils.IsValidCellName("A1 "));
+//     }
+// }

@@ -28,6 +28,7 @@
 // </summary>
 
 
+// ReSharper disable once CheckNamespace
 namespace CS3500.Spreadsheet;
 
 using CS3500.DependencyGraph;
@@ -111,7 +112,7 @@ public class InvalidContentsException : Exception
 ///     Extension class of spreadsheet. This class is designed to support functionality of Spreadsheet.
 ///     Contains a function for validating cell references.
 /// </summary>
-public static class SpreadsheetUtils
+internal static class SpreadsheetUtils
 {
     /// <summary>
     ///     This method validates if a given cell name is valid.
@@ -120,7 +121,7 @@ public static class SpreadsheetUtils
     ///     Returns false if the name is invalid, true otherwise.
     /// </returns>
     /// <param name="name">The name of the cell to validate.</param>
-    public static bool IsValidCellName(string name)
+    internal static bool IsValidCellName(string name)
     {
         // Regex for valid variable names (letters followed by numbers.
         const string variableRegExPattern = @"^[a-zA-Z]+\d+$";
@@ -143,7 +144,7 @@ public static class SpreadsheetUtils
 ///     This class determines whether a cell can be created based on valid cell names and values.
 /// </para>
 /// </summary>
-public class Cell
+internal class Cell
 {
     // Private fields to store the _contents, _value and _name of a cell.
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -156,7 +157,7 @@ public class Cell
     ///     Gets or sets public property for the Name of the cell. Validates that all names are letters followed
     ///     by numbers (proper variable syntax).
     /// </summary>
-    public string Name
+    internal string Name
     {
         get
         {
@@ -179,7 +180,7 @@ public class Cell
     /// <summary>
     /// Gets or sets public property for the Contents of the cell.
     /// </summary>
-    public object Contents
+    internal object Contents
     {
         get
         {
@@ -210,7 +211,7 @@ public class Cell
     /// <summary>
     /// Gets the <see cref="Value"/> of a cell. The value of a cell may not be set.
     /// </summary>
-    public object Value
+    internal object Value
     {
         get { return _value; }
     }
@@ -255,13 +256,6 @@ public class Spreadsheet
     private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
     private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
-    // TODO: make these three methods PRIVATE
-    private IList<string> SetCellContents( string name, double number );
-
-    private IList<string> SetCellContents( string name, string text );
-
-    private IList<string> SetCellContents( string name, Formula formula );
-
     // #TODO START NEW METHODS.
 
     /// <summary>
@@ -289,7 +283,10 @@ public class Spreadsheet
     /// <exception cref="InvalidNameException">
     ///     If the name parameter is invalid, throw an InvalidNameException.
     /// </exception>
-    public object this[string cellName] {}
+    public object this[string cellName]
+    {
+        get { throw new NotImplementedException(); }
+    }
 
     /// <summary>
     /// <para>
@@ -467,6 +464,8 @@ public class Spreadsheet
         throw new NotImplementedException();
     }
 
+    // #TODO END NEW METHODS.
+
     /// <summary>
     ///     Provides a copy of the names of all of the cells in the spreadsheet
     ///     that contain information (i.e., not empty cells).
@@ -479,8 +478,6 @@ public class Spreadsheet
     {
         return new HashSet<string>(_cells.Keys);
     }
-
-    // #TODO END NEW METHODS.
 
     /// <summary>
     ///     Returns the _contents (as opposed to the _value) of the named cell.
@@ -531,7 +528,7 @@ public class Spreadsheet
     ///     or indirectly, on the named cell.
     ///   </para>
     /// </returns>
-    public IList<string> SetCellContents(string name, double number)
+    private IList<string> SetCellContents(string name, double number)
     {
         // If valid name, check if cell exists in cells dictionary.
         if (SpreadsheetUtils.IsValidCellName(name))
@@ -577,7 +574,7 @@ public class Spreadsheet
     /// <returns>
     ///   The same list as defined in <see cref="SetCellContents(string, double)"/>.
     /// </returns>
-    public IList<string> SetCellContents(string name, string text)
+    private IList<string> SetCellContents(string name, string text)
     {
         // If valid name, check if cell exists in cells dictionary.
         if (SpreadsheetUtils.IsValidCellName(name))
@@ -640,7 +637,7 @@ public class Spreadsheet
     /// <returns>
     ///   The same list as defined in <see cref="SetCellContents(string, double)"/>.
     /// </returns>
-    public IList<string> SetCellContents(string name, Formula formula)
+    private IList<string> SetCellContents(string name, Formula formula)
     {
         if (!SpreadsheetUtils.IsValidCellName(name))
         {
