@@ -38,7 +38,7 @@ NOTE to be removed: SADIES PERSONAL TIME TRACKING
 
 # References:
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
-- [ChatGPT] (https://chatgpt.com/)
+- [ChatGPT](https://chatgpt.com/)
 - [Dot Net Pearls](https://www.dotnetperls.com/)
 
 # Our Software Practices
