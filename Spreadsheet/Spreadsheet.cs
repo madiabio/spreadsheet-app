@@ -9,7 +9,7 @@
 
 // <summary>
 // Author:    Madeline Abio
-// Partner:   N/A
+// Partner:   Sadie Bowen, updated code written by Madeline Abio on 10/17/2024
 // Date:      20/09/2024
 // Course:    CS 3500, University of Utah, School of Computing
 // Copyright: CS 3500 and Madeline Abio - This work may not
@@ -28,7 +28,6 @@ namespace CS3500.Spreadsheet;
 
 using CS3500.DependencyGraph;
 using CS3500.Formula;
-using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 /// <summary>
@@ -268,8 +267,8 @@ public class Cell
 /// </summary>
 public class Spreadsheet
 {
-    private readonly DependencyGraph dg = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
-    private Dictionary<string, Cell> cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
+    private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
+    private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
     ///   Provides a copy of the names of all of the cells in the spreadsheet
@@ -280,7 +279,7 @@ public class Spreadsheet
     /// </returns>
     public ISet<string> GetNamesOfAllNonemptyCells()
     {
-        return new HashSet<string>(cells.Keys);
+        return new HashSet<string>(_cells.Keys);
     }
 
     /// <summary>
@@ -302,19 +301,15 @@ public class Spreadsheet
         // or an empty string (if the cell has no contents)
         if (SpreadsheetUtils.IsValidCellName(name))
         {
-            if (cells.ContainsKey(name))
+            if (_cells.TryGetValue(name, out Cell? value))
             {
-                return cells[name].Contents;
+                return value.Contents;
             }
-            else
-            {
-                return string.Empty;
-            }
+
+            return string.Empty;
         }
-        else
-        {
-            throw new InvalidNameException($"{name} is not a valid cell name.");
-        }
+
+        throw new InvalidNameException($"{name} is not a valid cell name.");
     }
 
     /// <summary>
@@ -352,10 +347,10 @@ public class Spreadsheet
             name = name.ToUpper(); // Normalize the name to uppercase
 
             // If the cell has contents, check its dependencies and update.
-            if (cells.ContainsKey(name))
+            if (_cells.TryGetValue(name, out Cell? cell))
             {
-                cells[name].Contents = number; // update the contents of the cell
-                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+                cell.Contents = number; // update the contents of the cell
+                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
 
             // If empty cell, create new cell, add it to cells dictionary and update its contents.
@@ -364,8 +359,8 @@ public class Spreadsheet
                 Cell newCell = new();
                 newCell.Name = name;
                 newCell.Contents = number;
-                cells.Add(name, newCell);
-                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+                _cells.Add(name, newCell);
+                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
 
             }
 
@@ -373,10 +368,7 @@ public class Spreadsheet
         }
 
         // if Invalid name, throw exception.
-        else
-        {
-            throw new InvalidNameException($"{name} is not a valid cell name.");
-        }
+        throw new InvalidNameException($"{name} is not a valid cell name.");
     }
 
     /// <summary>
@@ -399,18 +391,18 @@ public class Spreadsheet
             name = name.ToUpper(); // Normalize the name to uppercase
 
             // If the cell has contents, check its dependencies and update.
-            if (cells.ContainsKey(name))
+            if (_cells.ContainsKey(name))
             {
                 if (string.IsNullOrEmpty(text))
                 {
-                    cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
+                    _cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
                 }
                 else
                 {
-                    cells[name].Contents = text; // update the contents of the cell
+                    _cells[name].Contents = text; // update the contents of the cell
                 }
 
-                dg.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
             }
 
             // If empty cell, create new, add it to cells dictionary and update its contents.
@@ -422,7 +414,7 @@ public class Spreadsheet
                     Cell newCell = new();
                     newCell.Name = name;
                     newCell.Contents = text;
-                    cells.Add(name, newCell);
+                    _cells.Add(name, newCell);
                 }
             }
 
@@ -430,10 +422,7 @@ public class Spreadsheet
         }
 
         // if Invalid name, throw exception.
-        else
-        {
-            throw new InvalidNameException($"{name} is not a valid cell name.");
-        }
+        throw new InvalidNameException($"{name} is not a valid cell name.");
     }
 
     /// <summary>
@@ -458,93 +447,73 @@ public class Spreadsheet
     /// </returns>
     public IList<string> SetCellContents(string name, Formula formula)
     {
-        // If valid name, check if cell exists in cells dictionary.
-        if (SpreadsheetUtils.IsValidCellName(name))
-        {
-            name = name.ToUpper(); // Normalize the name to uppercase
-
-            ISet<string> vars = formula.GetVariables(); // get formula variables
-            IEnumerable<string> toRecalc = []; // Stores cells to recalculate
-
-            // FIXME: Ok for some reason now two of the tests have more and two have less than expected. when i txted you last i had put getdependents for both
-            // of the enumerables below instead of just one. i think its somethign w how im handlign dependencies cuz i get so mixed up abt dependee vs dependent.
-            // lowkey recommend re-writing the whole function considering the new logic.
-            // glhf :(
-
-            // FIXME: IDK if we need both.
-            // FIXME: lowkey maybe we do but also the for loop at the end could pbe moved back up to the top and maybe its not necessary to store the dependents.
-            IEnumerable<string> oldDependees = dg.GetDependees(name); // store og the dependees of the cell in case need to restore bc of circ except.
-            IEnumerable<string> oldDependents = dg.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
-
-            // If the cell has contents, check its dependencies and update.
-            if (cells.ContainsKey(name))
-            {
-                object oldContents = cells[name].Contents; // store old contents in case of  cir exception.
-                cells[name].Contents = formula; // update the contents of the cell
-
-                // FIXME: idk if this should be dependees or dependents.
-                // FIXME: i think dependees kinda makes sense because the cell is dependent on the variables in the formula
-                // dg.ReplaceDependents(name, vars); // replace the dependents of the cell with the new variables.need to do this b4 getcells2recalc because it relies on this.
-                dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
-                try
-                {
-                    toRecalc = GetCellsToRecalculate(name);
-                }
-                catch (CircularException)
-                {
-                    cells[name].Contents = oldContents; // change the contents back to the original and don't update.
-
-                    // FIXME: idk if this should be dependees or dependents.
-                    dg.ReplaceDependees(name, oldDependees); // Restore old dependees to cell in dg.
-
-                    toRecalc = []; // nothing to update if nothing changes.
-                    throw;
-                }
-            }
-
-            // If empty cell, create new, add it to cells dictionary and update its contents.
-            else
-            {
-                Cell newCell = new();
-                newCell.Name = name;
-                newCell.Contents = formula;
-                cells.Add(name, newCell); // add cell to dictionary
-                // FIXME: idk if this should be dependees or dependents.
-                // FIXME: i think dependees kinda makes sense because the cell is dependent on the variables in the formula
-                dg.ReplaceDependees(name, vars); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
-                try
-                {
-                    toRecalc = GetCellsToRecalculate(name);
-                }
-                catch (CircularException)
-                {
-                    cells.Remove(name); // remove cell from dictionary if adding it creates a circular dependency.
-                    dg.ReplaceDependees(name, oldDependees); // Restore old dependees to cell in dg.
-                    toRecalc = []; // nothing to update if nothing changes.
-                    throw;
-                }
-            }
-
-            // FIXME: I'm pretty sure that this makes sense using the dependents rather than the dependees of the cell, but lowkey get really mixed up abt the two terms so idk.
-            foreach (string var in vars) // iterate thru each variable and check if this cell's old dependentents were any of the variables its about to be a dependee of. If so, throw new circular exception and change nothing.
-            {
-                if ((var == name) || oldDependents.Contains(var))
-                {
-                    // TODO: potentially figure out how to update back to old cell contents but need to manage if the cell was empty before this so storing contents as an object doesn't work
-                    // unless u can type cast it to a string and ifgure out if it was an empty string, probably possible but idk how to do it and haven tried to figure it out.
-                    // cells[name].Contents = oldContents; // change the contents back to the original and don't update. <-- something like this
-                    // and make sure to remove the ecll from the graph if it was empty, and revert its dependees. and also make sure toReclac = [].
-                    throw new CircularException();
-                }
-            }
-            return toRecalc.ToList(); // return the list of cells that need to be recalculated
-        }
-
-        // if invalid name, throw exception.
-        else
+        if (!SpreadsheetUtils.IsValidCellName(name))
         {
             throw new InvalidNameException($"{name} is not a valid cell name.");
         }
+
+        name = name.ToUpper(); // normalize name
+        ISet<string> variables = formula.GetVariables(); // get formula variables
+
+        IEnumerable<string> toRecalc = []; // Stores cells to recalculate. May be un-needed
+
+        IEnumerable<string> oldDependees = _dependencyGraph.GetDependees(name); // store og the dependees of the cell in case need to restore bc of circ except.
+        IEnumerable<string> oldDependents = _dependencyGraph.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
+
+        IEnumerable<string> dependees = oldDependees as string[] ?? oldDependees.ToArray();
+        IEnumerable<string> dependents = oldDependents as string[] ?? oldDependents.ToArray();
+
+        if (variables.Any(var => (var == name) || dependents.Contains(var)))
+        {
+            throw new CircularException();
+        }
+
+        // If the cell has contents, check its dependencies and update.
+        if (_cells.TryGetValue(name, out Cell? value))
+        {
+            object oldContents = value.Contents; // store old contents in case of  circular exception.
+            value.Contents = formula; // update the contents of the cell
+
+            _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
+
+            try
+            {
+                toRecalc = GetCellsToRecalculate(name);
+            }
+            catch (CircularException)
+            {
+                _cells[name].Contents = oldContents; // change the contents back to the original and don't update.
+
+                _dependencyGraph.ReplaceDependees(name, dependees); // Restore old dependees to cell in dg.
+                throw;
+            }
+        }
+
+        // If empty cell, create new, add it to cells dictionary and update its contents.
+        else
+        {
+            Cell newCell = new()
+            {
+                Name = name,
+                Contents = formula,
+            };
+
+            _cells.Add(name, newCell); // add cell to dictionary
+            _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
+
+            try
+            {
+                toRecalc = GetCellsToRecalculate(name);
+            }
+            catch (CircularException)
+            {
+                _cells.Remove(name); // remove cell from dictionary if adding it creates a circular dependency.
+                _dependencyGraph.ReplaceDependees(name, dependees); // Restore old dependees to cell in dg.
+                throw;
+            }
+        }
+
+        return toRecalc.ToList();
     }
 
     /// <summary>
@@ -568,7 +537,7 @@ public class Spreadsheet
     /// </returns>
     private IEnumerable<string> GetDirectDependents(string name)
     {
-        return dg.GetDependents(name);
+        return _dependencyGraph.GetDependents(name);
     }
 
     /// <summary>
