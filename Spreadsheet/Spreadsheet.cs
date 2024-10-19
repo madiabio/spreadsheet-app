@@ -246,8 +246,9 @@ internal class Cell
 
             case Formula formula:
                 // TODO: for when value handling is implemented
-                // _value = formula.Evaluate(); // Evaluate the formula and set the value
-                _value = formula;
+                // TODO: if a formula is the contents, then handle that in SetCelLContents, as it will be dependent on the spreadsheet.
+                // _value = formula.Evaluate(s =>  s.Value); // Evaluate the formula and set the value
+                _value = formula; // TODO: remove when val hadndling is implemented
                 break;
         }
     }
@@ -440,12 +441,11 @@ public class Spreadsheet
             throw new InvalidNameException($"{cellName} is not a valid cell name.");
         }
 
-        if (_cells.TryGetValue(cellName, out Cell? value))
+        if (_cells.TryGetValue(cellName, out Cell? value)) // Attempt to get a value from the cell
         {
             return value.Value;
         }
-
-        return string.Empty;
+        return string.Empty; // If no value available, cell is empty.
     }
 
     /// <summary>
@@ -512,8 +512,14 @@ public class Spreadsheet
     /// </exception>
     public IList<string> SetContentsOfCell(string cellName, string content)
     {
-        // TODO handle the checking valid cellName here instead of in private methods.
-        throw new NotImplementedException();
+        if (SpreadsheetUtils.IsValidCellName(cellName))
+        {
+            // TODO: remove filler code
+            int i = 0; // do nothing
+            i += 1; // do nothing
+        }
+
+        throw new InvalidNameException($"{cellName} is not a valid cell name");
     }
 
     // #TODO END NEW METHODS.
@@ -602,7 +608,6 @@ public class Spreadsheet
                 newCell.Contents = number;
                 _cells.Add(name, newCell);
                 _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
-
             }
 
             return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
