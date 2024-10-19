@@ -324,7 +324,7 @@ public class Spreadsheet
     /// </exception>
     public object this[string cellName]
     {
-        get { throw new NotImplementedException(); }
+        get { return GetCellValue(cellName); }
     }
 
     /// <summary>

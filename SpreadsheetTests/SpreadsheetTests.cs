@@ -47,8 +47,10 @@ public class SpreadsheetTests
     [TestMethod]
     public void SpreadsheetDefaultConstructor_TestNameIsDefault_Valid()
     {
+        // TODO need to update this test to actually use a filename.
         Spreadsheet spreadsheet = new();
         spreadsheet.Save("default");
+        spreadsheet.Load("default");
     }
 
     // ----------- TEST Spreadsheet named Constructor-----------
@@ -60,6 +62,7 @@ public class SpreadsheetTests
     [TestMethod]
     public void SpreadsheetNamedConstructor_TestSpreadsheetHasName_Valid()
     {
+        // TODO need to update this test to actually use a filename.
         Spreadsheet spreadsheet = new("namedSheet");
         spreadsheet.Save("namedSheet");
     }
