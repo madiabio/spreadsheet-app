@@ -392,6 +392,7 @@ public class Spreadsheet
     /// </exception>
     public void Save(string filename)
     {
+        // TODO use the builtin System.Text.Json serialization functionality
         throw new NotImplementedException();
     }
 
@@ -433,7 +434,18 @@ public class Spreadsheet
     /// </exception>
     public object GetCellValue(string cellName)
     {
-        throw new NotImplementedException();
+        // TODO, update cell class to return value.
+        if (!SpreadsheetUtils.IsValidCellName(cellName))
+        {
+            throw new InvalidNameException($"{cellName} is not a valid cell name.");
+        }
+
+        if (_cells.TryGetValue(cellName, out Cell? value))
+        {
+            return value.Value;
+        }
+
+        return string.Empty;
     }
 
     /// <summary>
