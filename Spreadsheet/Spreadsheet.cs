@@ -33,7 +33,10 @@ namespace CS3500.Spreadsheet;
 // ReSharper disable RedundantNameQualifier
 using CS3500.DependencyGraph;
 using CS3500.Formula;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 /// <summary>
 /// <para>
@@ -150,7 +153,7 @@ internal static class SpreadsheetUtils
 ///
 /// <para>
 ///     The <see cref="Cell"/> class is used in the <see cref="Spreadsheet"/> class to represent cells
-///     within a spreadsheet object. These cells have a name, contents and a value.
+///     within a spreadsheet object. These cells have a name, contents and a cell.
 /// </para>
 /// <para>
 ///     This class determines whether a cell can be created based on valid cell names and values.
@@ -159,11 +162,11 @@ internal static class SpreadsheetUtils
 internal class Cell
 {
     // Private fields to store the _contents, _value and _name of a cell.
-    #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    #pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private string _name;
     private object _contents;
     private object _value;
-    #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    #pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     /// <summary>
     ///     Gets or sets public property for the Name of the cell. Validates that all names are letters followed
@@ -211,7 +214,8 @@ internal class Cell
             if (value is string or double or Formula)
             {
                 _contents = value;
-                UpdateValue();
+                // TODO: remove this line.
+                // UpdateValue();
             }
             else
             {
@@ -221,37 +225,62 @@ internal class Cell
     }
 
     /// <summary>
-    /// Gets the <see cref="Value"/> of a cell. The value of a cell may not be set.
+    /// Gets or sets the <see cref="Value"/> of a cell. Since the cell class is internal to the spreadsheet,
+    /// Value is accessible. It should only be managed by <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
     /// </summary>
     internal object Value
     {
-        get { return _value; }
+        get
+        {
+            return _value;
+        }
+
+        set
+        {
+            _value = value;
+        }
     }
 
+    // TODO: Remove this code
+    /*
     /// <summary>
-    /// Update the value of a cell based on the contents.
+    /// Updates the cell of a cell based on its contents. 
+    /// The cell depends on whether the contents are a string, double, or formula.
     /// </summary>
-    private void UpdateValue()
+    /// <param name="lookup">
+    /// A function that provides the cell of a variable (cell) when evaluating a formula.
+    /// This is only needed if the cell contents are a formula.
+    /// If the contents are a string or double, the <paramref name="lookup"/> parameter is not used.
+    /// </param>
+
+    internal void UpdateValue(Lookup? lookup = null)
     {
         // Value is dependent on object type of cell.
         switch (_contents)
         {
             case string str:
-                _value = str; // If contents is a string, the value is the same string
+                _value = str; // If contents is a string, the cell is the same string
                 break;
 
             case double dbl:
-                _value = dbl; // If contents is a double, the value is the same number
+                _value = dbl; // If contents is a double, the cell is the same number
                 break;
 
             case Formula formula:
-                // TODO: for when value handling is implemented
+                // TODO: for when cell handling is implemented
                 // TODO: if a formula is the contents, then handle that in SetCelLContents, as it will be dependent on the spreadsheet.
-                // _value = formula.Evaluate(s =>  s.Value); // Evaluate the formula and set the value
-                _value = formula; // TODO: remove when val hadndling is implemented
+                // _value = formula.Evaluate(s =>  s.Value); // Evaluate the formula and set the cell
+                // _value = formula; // TODO: remove when val hadndling is implemented
+
+                // If no lookup is provided, use a default function that returns 0 for any variable
+                // lookup ??= _ => 0;  // If lookup is null, use a default function that returns 0
+#pragma warning disable CS8604 // Possible null reference argument.
+                _value = formula.Evaluate(lookup); // if this is nullrefexcept and this code executes, then its an issue in the spreadsheet code, not the cell code. dont try/catch.
+#pragma warning restore CS8604 // Possible null reference argument.
                 break;
         }
     }
+    */
 }
 
 /// <summary>
@@ -300,7 +329,7 @@ public class Spreadsheet
 
     /// <summary>
     /// <para>
-    ///     Shortcut syntax to for getting the value of the cell
+    ///     Shortcut syntax to for getting the cell of the cell
     ///     using the [] operator.
     /// </para>
     /// <para>
@@ -316,7 +345,7 @@ public class Spreadsheet
     /// </summary>
     /// <param name="cellName"> Any valid cell name. </param>
     /// <returns>
-    ///     Returns the value of a cell. Note: If the cell is a formula, the value
+    ///     Returns the cell of a cell. Note: If the cell is a formula, the cell
     ///     should
     ///     already have been computed.
     /// </returns>
@@ -368,17 +397,17 @@ public class Spreadsheet
     ///     There can be 0 cells in the dictionary, resulting in { "Cells" : {} }.
     /// </para>
     /// <para>
-    ///     Further, when writing the value of each cell...
+    ///     Further, when writing the cell of each cell...
     /// </para>
     /// <list type="bullet">
     /// <item>
-    ///     If the contents is a string, the value of StringForm is that string
+    ///     If the contents is a string, the cell of StringForm is that string
     /// </item>
     /// <item>
-    ///     If the contents is a double d, the value of StringForm is d.ToString()
+    ///     If the contents is a double d, the cell of StringForm is d.ToString()
     /// </item>
     /// <item>
-    ///     If the contents is a Formula f, the value of StringForm is "=" + f.ToString()
+    ///     If the contents is a Formula f, the cell of StringForm is "=" + f.ToString()
     /// </item>
     /// </list>
     /// <para>
@@ -420,32 +449,32 @@ public class Spreadsheet
 
     /// <summary>
     /// <para>
-    ///     Return the value of the named cell.
+    ///     Return the cell of the named cell.
     /// </para>
     /// </summary>
     /// <param name="cellName"> The cell in question. </param>
     /// <returns>
-    ///     Returns the value (as opposed to the contents) of the named cell. The return
-    ///     value's type should be either a string, a double, or a
+    ///     Returns the cell (as opposed to the contents) of the named cell. The return
+    ///     cell's type should be either a string, a double, or a
     ///     CS3500.Formula.FormulaError.
-    ///     If the cell contents are a formula, the value should have already been computed at this point.
+    ///     If the cell contents are a formula, the cell should have already been computed at this point.
     /// </returns>
     /// <exception cref="InvalidNameException">
     ///     If the provided name is invalid, throws an InvalidNameException.
     /// </exception>
     public object GetCellValue(string cellName)
     {
-        // TODO, update cell class to return value.
+        // TODO, update cell class to return cell.
         if (!SpreadsheetUtils.IsValidCellName(cellName))
         {
             throw new InvalidNameException($"{cellName} is not a valid cell name.");
         }
 
-        if (_cells.TryGetValue(cellName, out Cell? value)) // Attempt to get a value from the cell
+        if (_cells.TryGetValue(cellName, out Cell? cell)) // Attempt to get a cell from the cell
         {
-            return value.Value;
+            return cell.Value;
         }
-        return string.Empty; // If no value available, cell is empty.
+        return string.Empty; // If no cell available, cell is empty.
     }
 
     /// <summary>
@@ -512,11 +541,29 @@ public class Spreadsheet
     /// </exception>
     public IList<string> SetContentsOfCell(string cellName, string content)
     {
+        IList<string> toRecalc = []; // Cells to be recalculated
+        cellName = cellName.ToUpper(); // Normalize the name to uppercase
         if (SpreadsheetUtils.IsValidCellName(cellName))
         {
-            // TODO: remove filler code
-            int i = 0; // do nothing
-            i += 1; // do nothing
+            // Determine type of content
+            if (double.TryParse(content, out double dContent))
+            {
+                // if contents are double:
+                toRecalc = SetCellContents(cellName, dContent);
+            }
+            else if (content.Length > 0 && content[0] == '=')
+            {
+                // if contents are formula:
+                Formula fContent = new(content.Substring(1));
+                toRecalc = SetCellContents(cellName, fContent);
+            }
+            else
+            {
+                // if contents are string:
+                toRecalc = SetCellContents(cellName, content);
+            }
+
+            return toRecalc;
         }
 
         throw new InvalidNameException($"{cellName} is not a valid cell name");
@@ -557,9 +604,9 @@ public class Spreadsheet
         // or an empty string (if the cell has no contents)
         if (SpreadsheetUtils.IsValidCellName(name))
         {
-            if (_cells.TryGetValue(name, out Cell? value))
+            if (_cells.TryGetValue(name, out Cell? cell))
             {
-                return value.Contents;
+                return cell.Contents;
             }
 
             return string.Empty;
@@ -588,33 +635,25 @@ public class Spreadsheet
     /// </returns>
     private IList<string> SetCellContents(string name, double number)
     {
-        // If valid name, check if cell exists in cells dictionary.
-        if (SpreadsheetUtils.IsValidCellName(name))
+        // If the cell has contents, check its dependencies and update.
+        if (_cells.TryGetValue(name, out Cell? cell))
         {
-            name = name.ToUpper(); // Normalize the name to uppercase
-
-            // If the cell has contents, check its dependencies and update.
-            if (_cells.TryGetValue(name, out Cell? cell))
-            {
-                cell.Contents = number; // update the contents of the cell
-                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
-            }
-
-            // If empty cell, create new cell, add it to cells dictionary and update its contents.
-            else
-            {
-                Cell newCell = new();
-                newCell.Name = name;
-                newCell.Contents = number;
-                _cells.Add(name, newCell);
-                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
-            }
-
-            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+            cell.Contents = number; // update the contents of the cell
+            _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
         }
 
-        // if Invalid name, throw exception.
-        throw new InvalidNameException($"{name} is not a valid cell name.");
+        // If empty cell, create new cell, add it to cells dictionary and update its contents.
+        else
+        {
+            Cell newCell = new();
+            newCell.Name = name;
+            newCell.Contents = number;
+            _cells.Add(name, newCell);
+            _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+        }
+
+        _cells[name].Value = number; // update cell of cell
+        return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
     }
 
     /// <summary>
@@ -633,41 +672,37 @@ public class Spreadsheet
     /// </returns>
     private IList<string> SetCellContents(string name, string text)
     {
-        // If valid name, check if cell exists in cells dictionary.
-        if (SpreadsheetUtils.IsValidCellName(name))
+        // If the cell has contents, check its dependencies and update.
+        if (_cells.ContainsKey(name))
         {
-            name = name.ToUpper(); // Normalize the name to uppercase
-
-            // If the cell has contents, check its dependencies and update.
-            if (_cells.ContainsKey(name))
+            if (string.IsNullOrEmpty(text))
             {
-                if (string.IsNullOrEmpty(text))
-                {
-                    _cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
-                }
-                else
-                {
-                    _cells[name].Contents = text; // update the contents of the cell
-                }
-
-                _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
+                _cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
             }
-
-            // If empty cell, create new, add it to cells dictionary and update its contents.
             else
             {
-                // only update if the string isn't empty.
-                if ( !string.IsNullOrEmpty(text) )
-                {
-                    Cell newCell = new();
-                    newCell.Name = name;
-                    newCell.Contents = text;
-                    _cells.Add(name, newCell);
-                }
+                _cells[name].Contents = text; // update the contents of the cell
+                _cells[name].Value = text; // update cell of cell
             }
 
-            return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
+            _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
         }
+
+        // If empty cell, create new, add it to cells dictionary and update its contents.
+        else
+        {
+            // only update if the string isn't empty.
+            if ( !string.IsNullOrEmpty(text) )
+            {
+                Cell newCell = new();
+                newCell.Name = name;
+                newCell.Contents = text;
+                _cells.Add(name, newCell);
+                _cells[name].Value = text; // update cell of cell
+            }
+        }
+
+        return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
 
         // if Invalid name, throw exception.
         throw new InvalidNameException($"{name} is not a valid cell name.");
@@ -718,10 +753,26 @@ public class Spreadsheet
         }
 
         // If the cell has contents, check its dependencies and update.
-        if (_cells.TryGetValue(name, out Cell? value))
+        if (_cells.TryGetValue(name, out Cell? cell))
         {
-            object oldContents = value.Contents; // store old contents in case of  circular exception.
-            value.Contents = formula; // update the contents of the cell
+            object oldContents = cell.Contents; // store old contents in case of  circular exception.
+            object oldValue = cell.Value; // store old cell in case of circular exception
+
+            _cells[name].Contents = formula; // update the contents of the cell
+            _cells[name].Value = formula.Evaluate(s =>
+            {
+                var cellValue = GetCellValue(s);
+
+                // Try to parse the cell cell as a double; if successful, return the cell, otherwise throw an exception
+                if (double.TryParse(cellValue.ToString(), out double val))
+                {
+                    return val;
+                }
+                else
+                {
+                    throw new ArgumentException("Cell does not resolve to numeric cell");
+                }
+            }); // update the cell of the cell
 
             _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
 
@@ -732,10 +783,13 @@ public class Spreadsheet
             catch (CircularException)
             {
                 _cells[name].Contents = oldContents; // change the contents back to the original and don't update.
-
+                _cells[name].Value = oldValue;
                 _dependencyGraph.ReplaceDependees(name, dependees); // Restore old dependees to cell in dg.
                 throw;
             }
+
+            // TODO:
+            // If the code gets to this point, then the contents are valid. So, update cell.
         }
 
         // If empty cell, create new, add it to cells dictionary and update its contents.
@@ -745,7 +799,22 @@ public class Spreadsheet
             {
                 Name = name,
                 Contents = formula,
+                Value = formula.Evaluate(s =>
+                {
+                    var cellValue = GetCellValue(s);
+
+                    // Try to parse the cell cell as a double; if successful, return the cell, otherwise throw an exception
+                    if (double.TryParse(cellValue.ToString(), out double val))
+                    {
+                        return val;
+                    }
+                    else
+                    {
+                        throw new ArgumentException("Cell does not resolve to numeric cell");
+                    }
+                }), // update the cell of the cell
             };
+
 
             _cells.Add(name, newCell); // add cell to dictionary
             _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.

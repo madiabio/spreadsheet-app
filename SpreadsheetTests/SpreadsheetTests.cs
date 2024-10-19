@@ -77,7 +77,7 @@ public class SpreadsheetTests
     {
         Spreadsheet spreadsheet = new();
         spreadsheet.SetContentsOfCell( "A1", "=5+5" );
-        Assert.AreEqual(10, spreadsheet["A1"]);
+        Assert.AreEqual(10.0, spreadsheet["A1"]);
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ public class SpreadsheetTests
     /// </para>
     /// </summary>
     [TestMethod]
-    public void SpreadsheetDefault_TestSetSetContentsOfCellDouble_ExpectedBehaviour()
+    public void SpreadsheetDefault_TestSetContentsOfCellDouble_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
         ss.SetContentsOfCell("A1", "1.1");
@@ -330,11 +330,11 @@ public class SpreadsheetTests
     /// </para>
     /// </summary>
     [TestMethod]
-    public void SpreadsheetDefault_TestSetSetContentsOfCellFormula_ExpectedBehaviour()
+    public void SpreadsheetDefault_TestSetContentsOfCellFormula_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
 
-        ss.SetContentsOfCell("A1", "=1.1");
+        ss.SetContentsOfCell("A1", "=1+1");
         Formula formula = new("1+1");
 
         Assert.AreEqual(formula, ss.GetCellContents("A1"));
@@ -365,7 +365,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestSetContentsOfCellDoubleWithDependees_ExpectedBehaviour()
     {
         Spreadsheet ss = new();
-        ss.SetContentsOfCell("A1", "B1*2"); // A is dependent on B, meaning A has a dependee (B)
+        ss.SetContentsOfCell("A1", "=B1*2"); // A is dependent on B, meaning A has a dependee (B)
         ss.SetContentsOfCell("B1", "test");
 
         List<string> results = ss.SetContentsOfCell("B1", "1.1").ToList(); // update A to no longer be dependent on B.
@@ -384,9 +384,9 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
 
-        ss.SetContentsOfCell("A1", "B1*2");
-        ss.SetContentsOfCell("B1", "C1*2");
-        ss.SetContentsOfCell("C1", "A1*2");
+        ss.SetContentsOfCell("A1", "=B1*2");
+        ss.SetContentsOfCell("B1", "=C1*2");
+        ss.SetContentsOfCell("C1", "=A1*2");
     }
 
     /// <summary>
@@ -399,7 +399,7 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
 
-        ss.SetContentsOfCell("A1", "A1*2");
+        ss.SetContentsOfCell("A1", "=A1*2");
     }
 
     /// <summary>

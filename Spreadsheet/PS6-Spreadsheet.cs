@@ -10,35 +10,6 @@ public class Spreadsheet
 
     /// <summary>
     ///   <para>
-    ///     Shortcut syntax to for getting the value of the cell
-    ///     using the [] operator.
-    ///   </para>
-    ///   <para>
-    ///     See: <see cref="GetCellValue(string)"/>.
-    ///   </para>
-    ///   <para>
-    ///     Example Usage:
-    ///   </para>
-    ///   <code>
-    ///      sheet.SetContentsOfCell( "A1", "=5+5" );
-    ///
-    ///      sheet["A1"] == 10;
-    ///      // vs.
-    ///      sheet.GetCellValue("A1") == 10;
-    ///   </code>
-    /// </summary>
-    /// <param name="cellName"> Any valid cell name. </param>
-    /// <returns>
-    ///   Returns the value of a cell.  Note: If the cell is a formula, the value should
-    ///   already have been computed.
-    /// </returns>
-    /// <exception cref="InvalidNameException">
-    ///     If the name parameter is invalid, throw an InvalidNameException.
-    /// </exception>
-    public object this[ string cellName ];
-
-    /// <summary>
-    ///   <para>
     ///     Writes the contents of this spreadsheet to the named file using a JSON format.
     ///     If the file already exists, overwrite it.
     ///   </para>

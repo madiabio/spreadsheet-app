@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PS6-Spreadsheet.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DependencyGraph\DependencyGraph.csproj" />
     <ProjectReference Include="..\Formula\Formula.csproj" />
   </ItemGroup>
