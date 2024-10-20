@@ -26,6 +26,9 @@
 //         however, the original code was written by Madi Abio for Assignment 05.
 // </para>
 // </summary>
+#pragma warning disable SA1200
+using System.Globalization;
+#pragma warning restore SA1200
 
 // ReSharper disable once CheckNamespace
 namespace CS3500.Spreadsheet;
@@ -33,12 +36,8 @@ namespace CS3500.Spreadsheet;
 // ReSharper disable RedundantNameQualifier
 using CS3500.DependencyGraph;
 using CS3500.Formula;
-using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 /// <summary>
 /// <para>
@@ -248,22 +247,13 @@ internal class Cell
     {
         get
         {
-            if (_contents is string)
+            return _contents switch
             {
-                return (string)_contents;
-            }
-            else if (_contents is double)
-            {
-                return ((double)_contents).ToString();
-            }
-            else if (_contents is Formula)
-            {
-                return "=" + Contents.ToString();
-            }
-            else
-            {
-                return string.Empty;
-            }
+                string contents => contents,
+                double d => d.ToString(CultureInfo.InvariantCulture),
+                Formula => "=" + Contents,
+                _ => string.Empty
+            };
         }
     }
 }
@@ -280,19 +270,13 @@ internal class Cell
 /// </summary>
 public class Spreadsheet
 {
-    // TODO could revisit this, but docs said to keep public.
-
-    /// <summary>
-    ///     Gets a value indicating whether the spreadsheet has been modified since the last save or initial load of a spreadsheet.
-    /// </summary>
-#pragma warning disable SA1401
-    public bool Changed { get; private set; } = true; // Flag to track if the spreadsheet has been modified
-#pragma warning restore SA1401
-
-    private readonly string spreadsheetName; // Don't change becuaes 'name' is used as a variable a lot in methods.
-
     private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
     private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
+
+    /// <summary>
+    ///     Name of spreadsheet created.
+    /// </summary>
+    private string _spreadsheetName; // Don't change because 'name' is used as a variable a lot in methods.
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
@@ -302,10 +286,15 @@ public class Spreadsheet
     /// <param name="nameInput"> string name to be stored for spreadsheet. </param>
     public Spreadsheet(string nameInput = "default")
     {
-        spreadsheetName = nameInput;
+        _spreadsheetName = nameInput;
     }
 
-    // #TODO This marks the start of new methods that were added and need to be written/ updated.
+    /// <summary>
+    ///     Gets a value indicating whether the spreadsheet has been modified since the last save or initial load of a spreadsheet.
+    /// </summary>
+    #pragma warning disable SA1401
+    public bool Changed { get; private set; } = true; // Flag to track if the spreadsheet has been modified
+    #pragma warning restore SA1401
 
     /// <summary>
     /// <para>
@@ -402,7 +391,7 @@ public class Spreadsheet
     /// </exception>
     public void Save(string filename)
     {
-        bool changedTemp = Changed; // save bool state in case error
+        bool changedTemp = Changed; // save state in case of error
         try
         {
             // 1. Create a serializable structure for the cells
@@ -437,11 +426,11 @@ public class Spreadsheet
             // 5. After saving, mark the spreadsheet as unchanged
             Changed = false;
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
             // Handle any issues with opening/writing the file
             Changed = changedTemp; // revert changed back to old status
-            throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {ex.Message}");
+            throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {exception.Message}");
         }
     }
 
@@ -463,7 +452,22 @@ public class Spreadsheet
     ///     opened or the json is bad.</exception>
     public void Load( string filename )
     {
-        throw new NotImplementedException();
+        bool changedTemp = Changed; // save state in case of error
+        string tempSpreadsheetName = _spreadsheetName;
+
+        try
+        {
+            // // Save(_spreadsheetName); // save spreadsheet
+            // string jsonString = File.ReadAllText(filename);
+            // Spreadsheet spreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+        }
+        catch (Exception exception)
+        {
+            // Handle any issues with opening/writing the file
+            Changed = changedTemp; // revert changed back to old status
+            _spreadsheetName = tempSpreadsheetName; // revert spreadsheet to original file.
+            throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {exception.Message}");
+        }
     }
 
     /// <summary>
@@ -483,17 +487,17 @@ public class Spreadsheet
     /// </exception>
     public object GetCellValue(string cellName)
     {
-        // TODO, update cell class to return cell.
         if (!SpreadsheetUtils.IsValidCellName(cellName))
         {
             throw new InvalidNameException($"{cellName} is not a valid cell name.");
         }
 
-        if (_cells.TryGetValue(cellName, out Cell? cell)) // Attempt to get a cell from the cell
+        // Attempt to get a cell from the cell
+        if (_cells.TryGetValue(cellName, out Cell? cell))
         {
             return cell.Value;
         }
-        
+
         return string.Empty; // If no cell available, cell is empty.
     }
 
@@ -561,29 +565,29 @@ public class Spreadsheet
     /// </exception>
     public IList<string> SetContentsOfCell(string cellName, string content)
     {
-        IList<string> toRecalc = []; // Cells to be recalculated
         cellName = cellName.ToUpper(); // Normalize the name to uppercase
         if (SpreadsheetUtils.IsValidCellName(cellName))
         {
             // Determine type of content
+            IList<string> toRecalculate; // Cells to be recalculated
             if (double.TryParse(content, out double dContent))
             {
                 // if contents are double:
-                toRecalc = SetCellContents(cellName, dContent);
+                toRecalculate = SetCellContents(cellName, dContent);
             }
             else if (content.Length > 0 && content[0] == '=')
             {
                 // if contents are formula:
                 Formula fContent = new(content.Substring(1));
-                toRecalc = SetCellContents(cellName, fContent);
+                toRecalculate = SetCellContents(cellName, fContent);
             }
             else
             {
                 // if contents are string:
-                toRecalc = SetCellContents(cellName, content);
+                toRecalculate = SetCellContents(cellName, content);
             }
 
-            return toRecalc;
+            return toRecalculate;
         }
 
         throw new InvalidNameException($"{cellName} is not a valid cell name");
@@ -723,9 +727,6 @@ public class Spreadsheet
         }
 
         return GetCellsToRecalculate(name).ToList(); // return the list of cells that need to be recalculated
-
-        // if Invalid name, throw exception.
-        throw new InvalidNameException($"{name} is not a valid cell name.");
     }
 
     /// <summary>
@@ -834,7 +835,6 @@ public class Spreadsheet
                     }
                 }), // update the cell of the cell
             };
-
 
             _cells.Add(name, newCell); // add cell to dictionary
             _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.

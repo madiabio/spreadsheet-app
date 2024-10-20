@@ -1,12 +1,15 @@
-﻿// <copyright file="GradingTestsPS5.cs" company="UofU-CS3500">
-// Copyright (c) 2024 UofU-CS3500. All rights reserved.
-// </copyright>
-
-// namespace CS3500.GradingTestsPS5;
+﻿// // <copyright file="GradingTestsPS5.cs" company="UofU-CS3500">
+// // Copyright (c) 2024 UofU-CS3500. All rights reserved.
+// // </copyright>
+// //
+// // namespace CS3500.GradingTestsPS5;
+// //
+// // using CS3500.Spreadsheet;
+// // using CS3500.Formula;
+// // using Microsoft.VisualStudio.TestTools.UnitTesting;
 //
-// using CS3500.Spreadsheet;
 // using CS3500.Formula;
-// using Microsoft.VisualStudio.TestTools.UnitTesting;
+// using CS3500.Spreadsheet;
 //
 // /// <summary>
 // /// Authors:   Joe Zachary
@@ -65,7 +68,7 @@
 //     public void SetCellContents_InvalidCellName_Throws( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetContentsOfCell( "1A1A", 1.5 );
+//         s.SetContentsOfCell( "1A1A", "1.5" );
 //     }
 //
 //     /// <summary>
@@ -77,7 +80,7 @@
 //     public void SetGetCellContents_SetTheNumber_RetrieveTheNumber( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetContentsOfCell( "Z7", 1.5 );
+//         s.SetContentsOfCell( "Z7", "1.5" );
 //         Assert.AreEqual( 1.5, (double) s.GetCellContents( "Z7" ), 1e-9 );
 //     }
 //
@@ -123,7 +126,7 @@
 //     public void SetCellContents_InvalidCellNameForFormula_Throws( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetContentsOfCell( "1AZ", new Formula( "2" ) );
+//         s.SetContentsOfCell( "1AZ", "=2" );
 //     }
 //
 //     /// <summary>
@@ -135,7 +138,7 @@
 //     public void SetGetCellContents_SetAFormula_RetrieveTheFormula( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetContentsOfCell( "Z7", new Formula( "3" ) );
+//         s.SetContentsOfCell( "Z7", "=3");
 //         Formula f = (Formula)s.GetCellContents("Z7");
 //         Assert.AreEqual( new Formula( "3" ), f );
 //         Assert.AreNotEqual( new Formula( "2" ), f );
@@ -154,8 +157,8 @@
 //     {
 //         Spreadsheet s = new();
 //
-//         s.SetContentsOfCell( "A1", new Formula( "A2" ) );
-//         s.SetContentsOfCell( "A2", new Formula( "A1" ) );
+//         s.SetContentsOfCell( "A1", "=A2" );
+//         s.SetContentsOfCell( "A2", "=A1" );
 //     }
 //
 //     /// <summary>
@@ -168,10 +171,10 @@
 //     public void SetCellContents_CircularDependencyMultipleCells_Throws( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetContentsOfCell( "A1", new Formula( "A2+A3" ) );
-//         s.SetContentsOfCell( "A3", new Formula( "A4+A5" ) );
-//         s.SetContentsOfCell( "A5", new Formula( "A6+A7" ) );
-//         s.SetContentsOfCell( "A7", new Formula( "A1+A1" ) );
+//         s.SetContentsOfCell( "A1", "=A2+A3" );
+//         s.SetContentsOfCell( "A3", "=A4+A5" );
+//         s.SetContentsOfCell( "A5", "=A6+A7");
+//         s.SetContentsOfCell( "A7", "=A1+A1" );
 //     }
 //
 //     /// <summary>
@@ -187,10 +190,10 @@
 //         Spreadsheet s = new();
 //         try
 //         {
-//             s.SetContentsOfCell( "A1", new Formula( "A2+A3" ) );
-//             s.SetContentsOfCell( "A2", 15 );
-//             s.SetContentsOfCell( "A3", 30 );
-//             s.SetContentsOfCell( "A2", new Formula( "A3*A1" ) );
+//             s.SetContentsOfCell( "A1", "=A2+A3" );
+//             s.SetContentsOfCell( "A2", "15" );
+//             s.SetContentsOfCell( "A3", "30" );
+//             s.SetContentsOfCell( "A2", "=A3*A1" );
 //         }
 //         catch ( CircularException )
 //         {
@@ -212,8 +215,8 @@
 //         Spreadsheet s = new();
 //         try
 //         {
-//             s.SetCellContents( "A1", new Formula( "A2" ) );
-//             s.SetCellContents( "A2", new Formula( "A1" ) );
+//             s.SetContentsOfCell( "A1", "=A2" );
+//             s.SetContentsOfCell( "A2", "=A1" );
 //         }
 //         catch ( CircularException )
 //         {
@@ -246,7 +249,7 @@
 //     public void SetCellContents_SetEmptyCell_CellIsEmpty( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "B1", string.Empty );
+//         s.SetContentsOfCell( "B1", string.Empty );
 //         Assert.IsFalse( s.GetNamesOfAllNonemptyCells().GetEnumerator().MoveNext() );
 //     }
 //
@@ -259,7 +262,7 @@
 //     public void GetNamesOfAllNonEmptyCells_AddStringToCell_ThatCellIsNotEmpty( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "B1", "hello" );
+//         s.SetContentsOfCell( "B1", "hello" );
 //         Assert.IsTrue( new HashSet<string>( s.GetNamesOfAllNonemptyCells() ).SetEquals( [ "B1" ] ) );
 //     }
 //
@@ -272,7 +275,7 @@
 //     public void GetNamesOfAllNonEmptyCells_AddDoubleToCell_ThatCellIsNotEmpty( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "B1", 52.25 );
+//         s.SetContentsOfCell( "B1", "52.25" );
 //         Assert.IsTrue( s.GetNamesOfAllNonemptyCells().Matches( [ "B1" ] ) );
 //         Assert.IsTrue( new HashSet<string>( s.GetNamesOfAllNonemptyCells() ).SetEquals( [ "B1" ] ) );
 //     }
@@ -286,7 +289,7 @@
 //     public void GetNamesOfAllNonEmptyCells_AddFormulaToCell_ThatCellIsNotEmpty( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "B1", new Formula( "3.5" ) );
+//         s.SetContentsOfCell( "B1", "=3.5" );
 //         Assert.IsTrue( new HashSet<string>( s.GetNamesOfAllNonemptyCells() ).SetEquals( [ "B1" ] ) );
 //     }
 //
@@ -301,9 +304,9 @@
 //     {
 //         Spreadsheet s = new();
 //
-//         s.SetCellContents( "A1", 17.2 );
-//         s.SetCellContents( "C1", "hello" );
-//         s.SetCellContents( "B1", new Formula( "3.5" ) );
+//         s.SetContentsOfCell( "A1", "17.2" );
+//         s.SetContentsOfCell( "C1", "hello" );
+//         s.SetContentsOfCell( "B1", "3.5" );
 //
 //         Assert.IsTrue( s.GetNamesOfAllNonemptyCells().Matches( [ "A1", "B1", "C1" ] ) );
 //         Assert.IsTrue( new HashSet<string>( s.GetNamesOfAllNonemptyCells() ).SetEquals( [ "A1", "B1", "C1" ] ) );
@@ -322,9 +325,9 @@
 //     {
 //         Spreadsheet s = new();
 //
-//         s.SetCellContents( "B1", "hello" );
-//         s.SetCellContents( "C1", new Formula( "5" ) );
-//         var toReevaluate = s.SetCellContents( "A1", 17.2 );
+//         s.SetContentsOfCell( "B1", "hello" );
+//         s.SetContentsOfCell( "C1", "=5" );
+//         var toReevaluate = s.SetContentsOfCell( "A1", "17.2" );
 //         Assert.IsTrue( toReevaluate.Matches( [ "A1" ] ) ); // Note: Matches is not order dependent
 //     }
 //
@@ -339,10 +342,10 @@
 //     {
 //         Spreadsheet s = new();
 //
-//         s.SetCellContents( "A1", 17.2 );
-//         s.SetCellContents( "C1", new Formula( "5" ) );
+//         s.SetContentsOfCell( "A1", "17.2");
+//         s.SetContentsOfCell( "C1", "5" );
 //
-//         var toReevaluated = s.SetCellContents( "B1", "hello" );
+//         var toReevaluated = s.SetContentsOfCell( "B1", "hello" );
 //         Assert.IsTrue( toReevaluated.Matches( [ "B1" ] ) );
 //     }
 //
@@ -356,9 +359,9 @@
 //     public void SetCellContents_SettingIndependentCellToFormula_ReturnsOnlyThatCell( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "A1", 17.2 );
-//         s.SetCellContents( "B1", "hello" );
-//         var changed = s.SetCellContents( "C1", new Formula("5") );
+//         s.SetContentsOfCell( "A1", "17.2" );
+//         s.SetContentsOfCell( "B1", "hello" );
+//         var changed = s.SetContentsOfCell( "C1", "=5");
 //         Assert.IsTrue( changed.Matches( [ "C1" ] ) );
 //     }
 //
@@ -372,12 +375,12 @@
 //     public void SetCellContents_CreateChainModifyFirst_AllAreInNeedOfUpdate( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "A1", new Formula( "A2+A3" ) );
-//         s.SetCellContents( "A2", 6 );
-//         s.SetCellContents( "A3", new Formula( "A2+A4" ) );
-//         s.SetCellContents( "A4", new Formula( "A2+A5" ) );
+//         s.SetContentsOfCell( "A1", "A2+A3" );
+//         s.SetContentsOfCell( "A2", "6" );
+//         s.SetContentsOfCell( "A3", "A2+A4" );
+//         s.SetContentsOfCell( "A4", "A2+A5" );
 //
-//         var changed = s.SetCellContents( "A5", 82.5 );
+//         var changed = s.SetContentsOfCell( "A5", "82.5" );
 //
 //         Assert.IsTrue( changed.SequenceEqual( [ "A5", "A4", "A3", "A1" ] ) );
 //     }
@@ -393,8 +396,8 @@
 //     public void SetCellContents_ReplaceFormulaWithDouble_CellValueCorrect( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "A1", new Formula( "A2+A3" ) );
-//         s.SetCellContents( "A1", 2.5 );
+//         s.SetContentsOfCell( "A1", "A2+A3" );
+//         s.SetContentsOfCell( "A1", "2.5" );
 //         Assert.AreEqual( 2.5, (double) s.GetCellContents( "A1" ), 1e-9 );
 //     }
 //
@@ -407,8 +410,8 @@
 //     public void SetCellContents_ReplaceFormulaWithString_CellValueCorrect( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "A1", new Formula( "A2+A3" ) );
-//         s.SetCellContents( "A1", "Hello" );
+//         s.SetContentsOfCell( "A1", "=A2+A3" );
+//         s.SetContentsOfCell( "A1", "Hello" );
 //         Assert.AreEqual( "Hello", (string) s.GetCellContents( "A1" ) );
 //     }
 //
@@ -421,8 +424,8 @@
 //     public void SetCellContents_ReplaceStringWithFormula_CellValueCorrect( )
 //     {
 //         Spreadsheet s = new();
-//         s.SetCellContents( "A1", "Hello" );
-//         s.SetCellContents( "A1", new Formula( "23" ) );
+//         s.SetContentsOfCell( "A1", "Hello" );
+//         s.SetContentsOfCell( "A1", "=23" );
 //         Assert.AreEqual( new Formula( "23" ), (Formula) s.GetCellContents( "A1" ) );
 //         Assert.AreNotEqual( new Formula( "24" ), (Formula) s.GetCellContents( "A1" ) );
 //     }
@@ -440,23 +443,23 @@
 //     {
 //         Spreadsheet s = new();
 //
-//         s.SetCellContents( "A1", new Formula( "B1+B2" ) );
-//         s.SetCellContents( "B1", new Formula( "C1-C2" ) );
-//         s.SetCellContents( "B2", new Formula( "C3*C4" ) );
-//         s.SetCellContents( "C1", new Formula( "D1*D2" ) );
-//         s.SetCellContents( "C2", new Formula( "D3*D4" ) );
-//         s.SetCellContents( "C3", new Formula( "D5*D6" ) );
-//         s.SetCellContents( "C4", new Formula( "D7*D8" ) );
-//         s.SetCellContents( "D1", new Formula( "E1" ) );
-//         s.SetCellContents( "D2", new Formula( "E1" ) );
-//         s.SetCellContents( "D3", new Formula( "E1" ) );
-//         s.SetCellContents( "D4", new Formula( "E1" ) );
-//         s.SetCellContents( "D5", new Formula( "E1" ) );
-//         s.SetCellContents( "D6", new Formula( "E1" ) );
-//         s.SetCellContents( "D7", new Formula( "E1" ) );
-//         s.SetCellContents( "D8", new Formula( "E1" ) );
+//         s.SetContentsOfCell( "A1", "B1+B2" );
+//         s.SetContentsOfCell( "B1", "C1-C2" );
+//         s.SetContentsOfCell( "B2", "C3*C4" );
+//         s.SetContentsOfCell( "C1", "D1*D2" );
+//         s.SetContentsOfCell( "C2", "D3*D4" );
+//         s.SetContentsOfCell( "C3", "D5*D6" );
+//         s.SetContentsOfCell( "C4", "D7*D8" );
+//         s.SetContentsOfCell( "D1", "E1" );
+//         s.SetContentsOfCell( "D2", "E1" );
+//         s.SetContentsOfCell( "D3", "E1" );
+//         s.SetContentsOfCell( "D4", "E1" );
+//         s.SetContentsOfCell( "D5", "E1" );
+//         s.SetContentsOfCell( "D6", "E1" );
+//         s.SetContentsOfCell( "D7", "E1" );
+//         s.SetContentsOfCell( "D8", "E1" );
 //
-//         var cells = s.SetCellContents("E1", 0);
+//         var cells = s.SetContentsOfCell("E1", "0");
 //         Assert.IsTrue( cells.Matches( [ "A1", "B1", "B2", "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "E1" ] ) );
 //     }
 //
@@ -510,7 +513,7 @@
 //             string currentCell = "A" + i;
 //             expectedAnswers.Add( currentCell );
 //
-//             var changed = s.SetCellContents( currentCell, new Formula( "A" + ( i + 1 ) ) );
+//             var changed = s.SetContentsOfCell( currentCell, "A" + ( i + 1 ) );
 //
 //             Assert.IsTrue( changed.Matches( [ .. expectedAnswers ] ) );
 //         }
@@ -565,11 +568,11 @@
 //         {
 //             string currentCell = "A" + i;
 //             string nextCell    = "A" + ( i + 1 );
-//             s.SetCellContents( nextCell, 0 );
-//             s.SetCellContents( currentCell, new Formula( nextCell ) );
+//             s.SetContentsOfCell( nextCell, "0");
+//             s.SetContentsOfCell( currentCell, nextCell );
 //         }
 //
-//         s.SetCellContents( "A150", new Formula( "A50" ) );
+//         s.SetContentsOfCell( "A150",  "=A50" );
 //     }
 //
 //     /// <summary>
@@ -632,8 +635,8 @@
 //         {
 //             string currentCell = "A1" + i;
 //             string nextCell    = "A1" + ( i + 1 );
-//             s.SetCellContents( nextCell, 0 );
-//             s.SetCellContents( currentCell, new Formula( nextCell ) );
+//             s.SetContentsOfCell( nextCell, "0");
+//             s.SetContentsOfCell( currentCell, nextCell );
 //         }
 //
 //         List<string> firstCells = [];
@@ -650,8 +653,8 @@
 //         firstCells.Reverse();
 //         lastCells.Reverse();
 //
-//         var firstHalfNeedReevaluate = s.SetCellContents( "A1249", 25.0 );
-//         var secondHalfNeedReevaluate = s.SetCellContents( "A1499", 0 );
+//         var firstHalfNeedReevaluate = s.SetContentsOfCell( "A1249", "25.0 ");
+//         var secondHalfNeedReevaluate = s.SetContentsOfCell( "A1499", "0");
 //
 //         Assert.IsTrue( firstHalfNeedReevaluate.SequenceEqual( firstCells ) );
 //         Assert.IsTrue( secondHalfNeedReevaluate.SequenceEqual( lastCells ) );
@@ -767,13 +770,13 @@
 //                 switch ( rand.Next( 3 ) )
 //                 {
 //                     case 0:
-//                         s.SetCellContents( cellName, 3.14 );
+//                         s.SetContentsOfCell( cellName, "3.14" );
 //                         break;
 //                     case 1:
-//                         s.SetCellContents( cellName, "hello" );
+//                         s.SetContentsOfCell( cellName, "hello" );
 //                         break;
 //                     case 2:
-//                         s.SetCellContents( cellName, new Formula( GenerateRandomFormula( rand ) ) );
+//                         s.SetContentsOfCell( cellName, GenerateRandomFormula( rand ) );
 //                         break;
 //                 }
 //             }

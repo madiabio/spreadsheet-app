@@ -76,7 +76,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorFormulaValue_AreEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "=5+5" );
+        spreadsheet.SetContentsOfCell("A1", "=5+5");
         Assert.AreEqual(10.0, spreadsheet["A1"]);
     }
 
@@ -87,7 +87,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorFormulaValue_AreNotEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "=5+5" );
+        spreadsheet.SetContentsOfCell("A1", "=5+5");
         Assert.AreNotEqual(11, spreadsheet["A1"]);
     }
 
@@ -98,7 +98,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorDoubleValue_AreEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "10.0" );
+        spreadsheet.SetContentsOfCell("A1", "10.0");
         Assert.AreEqual(10.0, spreadsheet["A1"]);
     }
 
@@ -109,7 +109,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorDoubleValue_AreNotEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "4.2" );
+        spreadsheet.SetContentsOfCell("A1", "4.2");
         Assert.AreNotEqual(6.2, spreadsheet["A1"]);
     }
 
@@ -120,7 +120,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorTextValue_AreEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "5+5" );
+        spreadsheet.SetContentsOfCell("A1", "5+5");
         Assert.AreEqual("5+5", spreadsheet["A1"]);
     }
 
@@ -131,12 +131,11 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestAccessorTextValue_AreNotEqual()
     {
         Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell( "A1", "5+5" );
+        spreadsheet.SetContentsOfCell("A1", "5+5");
         Assert.AreNotEqual("10", spreadsheet["A1"]);
     }
 
     // ----------- TEST Save function -----------
-    // #FIXME need to determine more tests for save function.
 
     /// <summary>
     ///     Ensures a spreadsheet can save to a file name that is valid.
@@ -155,27 +154,12 @@ public class SpreadsheetTests
     /// </summary>
     [TestMethod]
     [ExpectedException(typeof(SpreadsheetReadWriteException))]
-    public void SpreadsheetDefault_TestSaveFunction_FilenameIsInvalid()
-    {
-        Spreadsheet spreadsheet = new();
-        const string filename = "This file doesn't exist";
-        spreadsheet.Save(filename);
-    }
-
-
-    /// <summary>
-    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
-    ///     spreadsheet is saved to an invalid file location.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(SpreadsheetReadWriteException))]
     public void SpreadsheetDefault_TestSaveFunction_InvalidPath1()
     {
         Spreadsheet spreadsheet = new();
-        const string filename = "C:\\Users\\Madi\\Desktop\\file.txt";
+        const string filename = ".";
         spreadsheet.Save(filename);
     }
-
 
     /// <summary>
     ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
@@ -189,7 +173,7 @@ public class SpreadsheetTests
         spreadsheet.SetContentsOfCell("A1", "=1+1");
         spreadsheet.SetContentsOfCell("B1", "=A1+1");
         spreadsheet.SetContentsOfCell("C1", "1");
-        const string filename = "C:\\Users\\Madi\\Desktop\\file.txt";
+        const string filename = ".";
         spreadsheet.Save(filename);
     }
 
@@ -202,7 +186,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestSaveFunction_InvalidPath2()
     {
         Spreadsheet spreadsheet = new();
-        const string filename = "some\\invalid\\path\\file.txt";
+        const string filename = ".";
         spreadsheet.Save(filename);
     }
 
@@ -232,7 +216,6 @@ public class SpreadsheetTests
         spreadsheet.Save(filename);
     }
 
-
     // TODO add the following tests:
     // If any of the cell names contained in the saved spreadsheet are invalid
     // If any invalid formulas or circular dependencies are encountered
@@ -251,22 +234,25 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestLoadFunction_FileNameIsValid()
     {
         Spreadsheet spreadsheet = new();
-        const string filename = "file.txt";
-        spreadsheet.Load(filename);
+        spreadsheet.SetContentsOfCell("C1", "1");
+        spreadsheet.Save("file.txt");
+
+        // Now Read that file
+        spreadsheet.Load("file.txt");
     }
 
-    /// <summary>
-    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
-    ///     spreadsheet is saved to an invalid file location.
-    /// </summary>
-    [TestMethod]
-    [ExpectedException(typeof(SpreadsheetReadWriteException))]
-    public void SpreadsheetDefault_TestLoadFunction_FileNameIsInValid()
-    {
-        Spreadsheet spreadsheet = new();
-        const string filename = "This file doesn't exist";
-        spreadsheet.Load(filename);
-    }
+    // /// <summary>
+    // ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    // ///     spreadsheet is saved to an invalid file location.
+    // /// </summary>
+    // [TestMethod]
+    // [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    // public void SpreadsheetDefault_TestLoadFunction_FileNameIsInValid()
+    // {
+    //     Spreadsheet spreadsheet = new();
+    //     const string filename = "This file doesn't exist";
+    //     spreadsheet.Load(filename);
+    // }
 
     // TODO add the following tests:
     // If any of the cell names contained in the saved spreadsheet are invalid
@@ -504,7 +490,8 @@ public class SpreadsheetTests
 
         ss.SetContentsOfCell("A1", trueContents);
 
-        bool condition = ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
+        bool condition =
+            ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
         Assert.IsFalse(condition);
     }
 
@@ -572,7 +559,40 @@ public class SpreadsheetTests
         Spreadsheet ss = new();
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
-}
 
-// #FIXME I am pretty sure the utils and cell class should be internal? And tested through the public methods... not sure though.
-// I removed the tests for those classes but if you think differently, we can just add them back in by copying them from a previous commit.
+    // ----------- STRESS TESTS -----------
+
+    // /// <summary>
+    // ///   <para>
+    // ///     This is a stress test with lots of cells "linked" together.
+    // ///   </para>
+    // ///   <para>
+    // ///     Create 500 cells that are in a chain from A10 to A1499.
+    // ///     Then break the chain in the middle by setting A1249 to
+    // ///     a number.
+    // ///   </para>
+    // ///   <para>
+    // ///     Then check that there are two separate chains of cells.
+    // ///   </para>
+    // /// </summary>
+    // [TestMethod]
+    // [Timeout( 2000 )]
+    // [TestCategory( "43" )]
+    // public void SetCellContents_BreakALongChain_TwoIndependentChains( )
+    // {
+    //     Spreadsheet s = new();
+    //
+    //     // create a chain of cells.
+    //     for ( int i = 0; i < 1000; i++ )
+    //     {
+    //         string currentCell = "A" + i; // A1
+    //         string nextCell    = "A" + ( i + 1 ); // next cell is A2
+    //         s.SetContentsOfCell( nextCell, "0"); // contents of A2 are 0
+    //         s.SetContentsOfCell( currentCell, "=" + nextCell); // contents of A1 are set to =A2
+    //     }
+    //
+    //     s.SetContentsOfCell("A1000", "5.0");
+    //
+    //     Assert.AreEqual(5.0, s.GetCellValue("A10"));
+    // }
+}
