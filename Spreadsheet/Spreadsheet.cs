@@ -269,13 +269,13 @@ internal class Cell
 /// </summary>
 public class Spreadsheet
 {
+    private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
+    private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
+
     /// <summary>
     ///     Name of spreadsheet created.
     /// </summary>
     private string _spreadsheetName; // Don't change because 'name' is used as a variable a lot in methods.
-
-    private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
-    private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
