@@ -47,7 +47,6 @@ public class SpreadsheetTests
     [TestMethod]
     public void SpreadsheetDefaultConstructor_TestNameIsDefault_Valid()
     {
-        // TODO need to update this test to actually use a filename.
         Spreadsheet spreadsheet = new();
         spreadsheet.Save("default");
         spreadsheet.Load("default");
@@ -62,7 +61,6 @@ public class SpreadsheetTests
     [TestMethod]
     public void SpreadsheetNamedConstructor_TestSpreadsheetHasName_Valid()
     {
-        // TODO need to update this test to actually use a filename.
         Spreadsheet spreadsheet = new("namedSheet");
         spreadsheet.Save("namedSheet");
     }
@@ -216,16 +214,7 @@ public class SpreadsheetTests
         spreadsheet.Save(filename);
     }
 
-    // TODO add the following tests:
-    // If any of the cell names contained in the saved spreadsheet are invalid
-    // If any invalid formulas or circular dependencies are encountered
-    // If there are any problems opening, reading, or closing the file
-    // There are no doubt other things that can go wrong
-    // if anything goes wrong, check to make sure original spreadsheet is unchanged.
-
     // ----------- TEST Load function -----------
-
-    // #FIXME need to determine more tests for load function.
 
     /// <summary>
     ///     Ensures a spreadsheet can save to a file name that is valid.
@@ -241,25 +230,18 @@ public class SpreadsheetTests
         spreadsheet.Load("file.txt");
     }
 
-    // /// <summary>
-    // ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
-    // ///     spreadsheet is saved to an invalid file location.
-    // /// </summary>
-    // [TestMethod]
-    // [ExpectedException(typeof(SpreadsheetReadWriteException))]
-    // public void SpreadsheetDefault_TestLoadFunction_FileNameIsInValid()
-    // {
-    //     Spreadsheet spreadsheet = new();
-    //     const string filename = "This file doesn't exist";
-    //     spreadsheet.Load(filename);
-    // }
-
-    // TODO add the following tests:
-    // If any of the cell names contained in the saved spreadsheet are invalid
-    // If any invalid formulas or circular dependencies are encountered
-    // If there are any problems opening, reading, or closing the file
-    // There are no doubt other things that can go wrong
-    // if anything goes wrong, check to make sure original spreadsheet is unchanged.
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestLoadFunction_FileNameIsInValid()
+    {
+        Spreadsheet spreadsheet = new();
+        const string filename = "This file doesn't exist";
+        spreadsheet.Load(filename);
+    }
 
     // ----------- TEST GetCellValue -----------
 
@@ -560,39 +542,52 @@ public class SpreadsheetTests
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
 
+    /// <summary>
+    ///     This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
+    ///     return an empty string if the cell is not in the graph (the cell is an empty cell).
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestGetCellContent_Valid()
+    {
+        Spreadsheet ss = new();
+        ss.SetContentsOfCell("A1", "5.0");
+        ss.SetContentsOfCell("A2", "=A1");
+        Assert.AreEqual(5.0, ss.GetCellContents("A2"));
+    }
+
     // ----------- STRESS TESTS -----------
 
-    // /// <summary>
-    // ///   <para>
-    // ///     This is a stress test with lots of cells "linked" together.
-    // ///   </para>
-    // ///   <para>
-    // ///     Create 500 cells that are in a chain from A10 to A1499.
-    // ///     Then break the chain in the middle by setting A1249 to
-    // ///     a number.
-    // ///   </para>
-    // ///   <para>
-    // ///     Then check that there are two separate chains of cells.
-    // ///   </para>
-    // /// </summary>
-    // [TestMethod]
-    // [Timeout( 2000 )]
-    // [TestCategory( "43" )]
-    // public void SetCellContents_BreakALongChain_TwoIndependentChains( )
-    // {
-    //     Spreadsheet s = new();
-    //
-    //     // create a chain of cells.
-    //     for ( int i = 0; i < 1000; i++ )
-    //     {
-    //         string currentCell = "A" + i; // A1
-    //         string nextCell    = "A" + ( i + 1 ); // next cell is A2
-    //         s.SetContentsOfCell( nextCell, "0"); // contents of A2 are 0
-    //         s.SetContentsOfCell( currentCell, "=" + nextCell); // contents of A1 are set to =A2
-    //     }
-    //
-    //     s.SetContentsOfCell("A1000", "5.0");
-    //
-    //     Assert.AreEqual(5.0, s.GetCellValue("A10"));
-    // }
+    /// <summary>
+    ///   <para>
+    ///     This is a stress test with lots of cells "linked" together.
+    ///   </para>
+    ///   <para>
+    ///     Create 500 cells that are in a chain from A10 to A1499.
+    ///     Then break the chain in the middle by setting A1249 to
+    ///     a number.
+    ///   </para>
+    ///   <para>
+    ///     Then check that there are two separate chains of cells.
+    ///   </para>
+    /// </summary>
+    [TestMethod]
+    [Timeout( 2000 )]
+    [TestCategory( "43" )]
+    public void SetCellContents_BreakALongChain_TwoIndependentChains( )
+    {
+        Spreadsheet s = new();
+    
+        // create a chain of cells.
+        for ( int i = 0; i < 1000; i++ )
+        {
+            string currentCell = "A" + i; // A1
+            string nextCell    = "A" + ( i + 1 ); // next cell is A2
+            s.SetContentsOfCell( nextCell, "0"); // contents of A2 are 0
+            s.SetContentsOfCell( currentCell, "=" + nextCell); // contents of A1 are set to =A2
+        }
+    
+        s.SetContentsOfCell("A1", "5.0");
+    
+        Assert.AreEqual(5.0, s.GetCellValue("A1000"));
+    }
 }

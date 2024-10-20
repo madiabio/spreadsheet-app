@@ -43,7 +43,6 @@ using System.Text.RegularExpressions;
 /// <para>
 ///     Thrown to indicate that a read or write attempt has failed with
 ///     an expected error message informing the user of what went wrong.
-///     #TODO this is a new exception.
 /// </para>
 /// </summary>
 public class SpreadsheetReadWriteException : Exception
@@ -457,15 +456,15 @@ public class Spreadsheet
 
         try
         {
-            // // Save(_spreadsheetName); // save spreadsheet
-            // string jsonString = File.ReadAllText(filename);
-            // Spreadsheet spreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+            Spreadsheet spreadsheet = new(filename);
+            string jsonString = File.ReadAllText(filename);
+            spreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+            Changed = false;
         }
         catch (Exception exception)
         {
             // Handle any issues with opening/writing the file
             Changed = changedTemp; // revert changed back to old status
-            _spreadsheetName = tempSpreadsheetName; // revert spreadsheet to original file.
             throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {exception.Message}");
         }
     }
@@ -475,7 +474,7 @@ public class Spreadsheet
     ///     Return the cell of the named cell.
     /// </para>
     /// </summary>
-    /// <param name="cellName"> The cell in question. </param>
+    /// <param name="cellName"> The cell in to be evaluated. </param>
     /// <returns>
     ///     Returns the cell (as opposed to the contents) of the named cell. The return
     ///     cell's type should be either a string, a double, or a
@@ -592,8 +591,6 @@ public class Spreadsheet
 
         throw new InvalidNameException($"{cellName} is not a valid cell name");
     }
-
-    // #TODO END NEW METHODS.
 
     /// <summary>
     ///     Provides a copy of the names of all of the cells in the spreadsheet
@@ -808,9 +805,6 @@ public class Spreadsheet
                 _dependencyGraph.ReplaceDependees(name, dependees); // Restore old dependees to cell in dg.
                 throw;
             }
-
-            // TODO:
-            // If the code gets to this point, then the contents are valid. So, update cell.
         }
 
         // If empty cell, create new, add it to cells dictionary and update its contents.
