@@ -658,7 +658,7 @@ public class SpreadsheetTests
     /// </summary>
     [TestMethod]
     [Timeout( 2000 )]
-    public void SetCellContents_CreateALongChain_AllCellsInChainShouldUpdate( )
+    public void SetContentsOfCell_CreateALongChain_AllCellsInChainShouldUpdate( )
     {
         Spreadsheet s = new();
         s.SetContentsOfCell("A0", "0");
