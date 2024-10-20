@@ -283,9 +283,19 @@ public class Spreadsheet
     ///     If no name is passed through, then the name of the spreadsheet is set to "default".
     /// </summary>
     /// <param name="nameInput"> string name to be stored for spreadsheet. </param>
-    public Spreadsheet(string nameInput = "default")
+    public Spreadsheet(string nameInput)
     {
         _spreadsheetName = nameInput;
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
+    ///     Construct a new spreadsheet that uses a name to store spreadsheet object.
+    ///     If no name is passed through, then the name of the spreadsheet is set to "default".
+    /// </summary>
+    public Spreadsheet()
+    {
+        _spreadsheetName = "default";
     }
 
     /// <summary>
@@ -452,20 +462,27 @@ public class Spreadsheet
     public void Load( string filename )
     {
         bool changedTemp = Changed; // save state in case of error
-        string tempSpreadsheetName = _spreadsheetName;
 
         try
         {
-            Spreadsheet spreadsheet = new(filename);
             string jsonString = File.ReadAllText(filename);
-            spreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+            Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+            _cells.Clear();
+
+            foreach (var cellEntry in loadSpreadsheet._cells)
+            { // Iterate thru each cell in the spreadsheet
+                Cell cell = cellEntry.Value;
+                SetContentsOfCell(cellEntry.Key, cell.Contents.ToString());
+            }
+
+            _spreadsheetName = filename;
             Changed = false;
         }
         catch (Exception exception)
         {
             // Handle any issues with opening/writing the file
             Changed = changedTemp; // revert changed back to old status
-            throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {exception.Message}");
+            throw new SpreadsheetReadWriteException($"Error loading the spreadsheet to file '{filename}': {exception.Message}");
         }
     }
 
@@ -569,10 +586,10 @@ public class Spreadsheet
         {
             // Determine type of content
             IList<string> toRecalculate; // Cells to be recalculated
-            if (double.TryParse(content, out double dContent))
+            if (double.TryParse(content, out double doubleContent))
             {
                 // if contents are double:
-                toRecalculate = SetCellContents(cellName, dContent);
+                toRecalculate = SetCellContents(cellName, doubleContent);
             }
             else if (content.Length > 0 && content[0] == '=')
             {

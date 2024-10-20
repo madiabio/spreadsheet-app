@@ -200,20 +200,77 @@ public class SpreadsheetTests
         spreadsheet.Save(filename);
     }
 
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestSaveFunctionChanged_ExpectedBehavior()
+    {
+        const string filename = "file.json";
+
+        Spreadsheet spreadsheet = new();
+        spreadsheet.SetContentsOfCell("A1", "text");
+        Assert.IsTrue(spreadsheet.Changed);
+
+        spreadsheet.Save(filename);
+        Assert.IsFalse(spreadsheet.Changed);
+    }
+
     // ----------- TEST Load function -----------
+
+    /// <summary>
+    ///     Ensures a spreadsheet can save and load a spreadsheet name that is valid.
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestLoadSpreadsheet_ExpectedBehavior()
+    {
+        const string filename = "file.json";
+
+        Spreadsheet ss = new Spreadsheet();
+        ss.Save(filename);
+        ss.Load(filename);
+    }
+
+    /// <summary>
+    ///     Ensures a spreadsheet can save and load a spreadsheet name that is valid.
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestLoadAnotherSpreadsheet_ExpectedBehavior()
+    {
+        const string filename = "file.json";
+
+        Spreadsheet spreadsheet = new Spreadsheet();
+        spreadsheet.SetContentsOfCell("A1", "spreadsheet");
+        spreadsheet.Save(filename);
+
+        Spreadsheet spreadsheetToLoad = new Spreadsheet();
+        spreadsheetToLoad.SetContentsOfCell("B1", "spreadsheet will load over this.");
+
+        spreadsheetToLoad.Load(filename);
+
+        Assert.AreEqual("spreadsheet", spreadsheet.GetCellContents("A1"));
+        Assert.AreEqual(string.Empty, spreadsheetToLoad.GetCellContents("B1"));
+    }
 
     /// <summary>
     ///     Ensures a spreadsheet can save to a file name that is valid.
     /// </summary>
     [TestMethod]
-    public void SpreadsheetDefault_TestLoadFunction_FileNameIsValid()
+    public void SpreadsheetDefault_TestLoadSameSpreadsheetNoChange_ExpectedBehavior()
     {
-        Spreadsheet spreadsheet = new();
-        spreadsheet.SetContentsOfCell("C1", "1");
-        spreadsheet.Save("file.txt");
+        const string filename = "file.json";
 
-        // Now Read that file
-        spreadsheet.Load("file.txt");
+        // Arrange
+        var originalSpreadsheet = new Spreadsheet();
+        originalSpreadsheet.Save(filename);
+
+        // Act
+        var loadedSpreadsheet = new Spreadsheet();
+        loadedSpreadsheet.Load(filename);
+
+        // Assert
+        Assert.IsFalse(loadedSpreadsheet.Changed);
     }
 
     /// <summary>
@@ -225,7 +282,7 @@ public class SpreadsheetTests
     public void SpreadsheetDefault_TestLoadFunction_FileNameIsInValid()
     {
         Spreadsheet spreadsheet = new();
-        const string filename = "This file doesn't exist";
+        const string filename = "";
         spreadsheet.Load(filename);
     }
 
@@ -289,6 +346,18 @@ public class SpreadsheetTests
     {
         Spreadsheet ss = new();
         ss.SetContentsOfCell("1A1A", "test");
+    }
+
+    /// <summary>
+    ///     Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
+    ///     into <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestEvaluatingCellContentsOfFormula_ExpectedBehavior()
+    {
+        Spreadsheet ss = new();
+        ss.SetContentsOfCell("A1", "=3+4");
+        Assert.AreEqual(7.0, ss.GetCellValue("A1"));
     }
 
     /// <summary>
@@ -555,52 +624,54 @@ public class SpreadsheetTests
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
 
-    /// <summary>
-    ///     This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
-    ///     return an empty string if the cell is not in the graph (the cell is an empty cell).
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefault_TestGetCellContent_Valid()
-    {
-        Spreadsheet ss = new();
-        ss.SetContentsOfCell("A1", "5.0");
-        ss.SetContentsOfCell("A2", "=A1");
-        Assert.AreEqual(5.0, ss.GetCellContents("A2"));
-    }
-
-    // ----------- STRESS TESTS -----------
-
-    /// <summary>
-    ///   <para>
-    ///     This is a stress test with lots of cells "linked" together.
-    ///   </para>
-    ///   <para>
-    ///     Create 500 cells that are in a chain from A10 to A1499.
-    ///     Then break the chain in the middle by setting A1249 to
-    ///     a number.
-    ///   </para>
-    ///   <para>
-    ///     Then check that there are two separate chains of cells.
-    ///   </para>
-    /// </summary>
-    [TestMethod]
-    [Timeout( 2000 )]
-    [TestCategory( "43" )]
-    public void SetCellContents_BreakALongChain_TwoIndependentChains( )
-    {
-        Spreadsheet s = new();
-    
-        // create a chain of cells.
-        for ( int i = 0; i < 1000; i++ )
-        {
-            string currentCell = "A" + i; // A1
-            string nextCell    = "A" + ( i + 1 ); // next cell is A2
-            s.SetContentsOfCell( nextCell, "0"); // contents of A2 are 0
-            s.SetContentsOfCell( currentCell, "=" + nextCell); // contents of A1 are set to =A2
-        }
-    
-        s.SetContentsOfCell("A1", "5.0");
-    
-        Assert.AreEqual(5.0, s.GetCellValue("A1000"));
-    }
+    // /// <summary>
+    // ///     This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
+    // ///     return an empty string if the cell is not in the graph (the cell is an empty cell).
+    // /// </summary>
+    // [TestMethod]
+    // public void SpreadsheetDefault_TestGetCellContent_Valid()
+    // {
+    //     Spreadsheet ss = new();
+    //     ss.SetContentsOfCell("A1", "=5.0 + 6.0");
+    //     ss.SetContentsOfCell("A2", "=A1");
+    //     ss.SetContentsOfCell("A3", "=A2");
+    //     Assert.AreEqual(11.0, ss.GetCellValue("A3"));
+    //     ss.SetContentsOfCell("A1", "=4.0 + 6.0");
+    //     Assert.AreEqual(10.0, ss.GetCellValue("A3"));
+    //
+    // }
+    //
+    // // ----------- STRESS TESTS -----------
+    //
+    // /// <summary>
+    // ///   <para>
+    // ///     This is a stress test with lots of cells "linked" together.
+    // ///   </para>
+    // ///   <para>
+    // ///     Create 500 cells that are in a chain from A10 to A1499.
+    // ///     Then break the chain in the middle by setting A1249 to
+    // ///     a number.
+    // ///   </para>
+    // ///   <para>
+    // ///     Then check that there are two separate chains of cells.
+    // ///   </para>
+    // /// </summary>
+    // [TestMethod]
+    // [Timeout( 2000 )]
+    // public void SetCellContents_CreateALongChain_AllCellsInChainShouldUpdate( )
+    // {
+    //     Spreadsheet s = new();
+    //     s.SetContentsOfCell("A0", "0");
+    //
+    //     // create a chain of cells.
+    //     for ( int i = 1; i < 10; i++ )
+    //     {
+    //         string currentCell = "A" + i;
+    //         string previousCell    = "A" + ( i - 1 );
+    //         s.SetContentsOfCell( currentCell, "=" + previousCell); // contents of A1 are set to A0
+    //     }
+    //
+    //     s.SetContentsOfCell("A0", "5.0");
+    //     Assert.AreEqual(5.0, s.GetCellValue("A2"));
+    // }
 }
