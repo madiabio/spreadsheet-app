@@ -22,14 +22,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spreadsheet", "Spreadsheet\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{E7007F3B-C06B-4002-BB8D-A5E54A40E36C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Whiteboard", "Whiteboard", "{62B11821-749F-41C3-8659-593078CA8955}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\architecture.png = ..\..\architecture.png
-		..\..\dependencygraph_whiteboard.png = ..\..\dependencygraph_whiteboard.png
-		..\..\formula_whiteboad.png = ..\..\formula_whiteboad.png
-		..\..\spreadsheet_whiteboard.png = ..\..\spreadsheet_whiteboard.png
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
