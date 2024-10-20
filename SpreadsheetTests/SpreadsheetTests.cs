@@ -624,54 +624,54 @@ public class SpreadsheetTests
         Assert.AreEqual(string.Empty, ss.GetCellContents("A1"));
     }
 
-    // /// <summary>
-    // ///     This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
-    // ///     return an empty string if the cell is not in the graph (the cell is an empty cell).
-    // /// </summary>
-    // [TestMethod]
-    // public void SpreadsheetDefault_TestGetCellContent_Valid()
-    // {
-    //     Spreadsheet ss = new();
-    //     ss.SetContentsOfCell("A1", "=5.0 + 6.0");
-    //     ss.SetContentsOfCell("A2", "=A1");
-    //     ss.SetContentsOfCell("A3", "=A2");
-    //     Assert.AreEqual(11.0, ss.GetCellValue("A3"));
-    //     ss.SetContentsOfCell("A1", "=4.0 + 6.0");
-    //     Assert.AreEqual(10.0, ss.GetCellValue("A3"));
-    //
-    // }
-    //
-    // // ----------- STRESS TESTS -----------
-    //
-    // /// <summary>
-    // ///   <para>
-    // ///     This is a stress test with lots of cells "linked" together.
-    // ///   </para>
-    // ///   <para>
-    // ///     Create 500 cells that are in a chain from A10 to A1499.
-    // ///     Then break the chain in the middle by setting A1249 to
-    // ///     a number.
-    // ///   </para>
-    // ///   <para>
-    // ///     Then check that there are two separate chains of cells.
-    // ///   </para>
-    // /// </summary>
-    // [TestMethod]
-    // [Timeout( 2000 )]
-    // public void SetCellContents_CreateALongChain_AllCellsInChainShouldUpdate( )
-    // {
-    //     Spreadsheet s = new();
-    //     s.SetContentsOfCell("A0", "0");
-    //
-    //     // create a chain of cells.
-    //     for ( int i = 1; i < 10; i++ )
-    //     {
-    //         string currentCell = "A" + i;
-    //         string previousCell    = "A" + ( i - 1 );
-    //         s.SetContentsOfCell( currentCell, "=" + previousCell); // contents of A1 are set to A0
-    //     }
-    //
-    //     s.SetContentsOfCell("A0", "5.0");
-    //     Assert.AreEqual(5.0, s.GetCellValue("A2"));
-    // }
+    /// <summary>
+    ///     This test checks <see cref="Spreadsheet.GetCellContents(string)"/> will
+    ///     return an empty string if the cell is not in the graph (the cell is an empty cell).
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestGetCellContent_Valid()
+    {
+        Spreadsheet ss = new();
+        ss.SetContentsOfCell("A1", "=5.0 + 6.0");
+        ss.SetContentsOfCell("A2", "=A1");
+        ss.SetContentsOfCell("A3", "=A2");
+        Assert.AreEqual(11.0, ss.GetCellValue("A3"));
+        ss.SetContentsOfCell("A1", "=4.0 + 6.0");
+        Assert.AreEqual(10.0, ss.GetCellValue("A3"));
+    
+    }
+    
+    // ----------- STRESS TESTS -----------
+    
+    /// <summary>
+    ///   <para>
+    ///     This is a stress test with lots of cells "linked" together.
+    ///   </para>
+    ///   <para>
+    ///     Create 500 cells that are in a chain from A10 to A1499.
+    ///     Then break the chain in the middle by setting A1249 to
+    ///     a number.
+    ///   </para>
+    ///   <para>
+    ///     Then check that there are two separate chains of cells.
+    ///   </para>
+    /// </summary>
+    [TestMethod]
+    [Timeout( 2000 )]
+    public void SetCellContents_CreateALongChain_AllCellsInChainShouldUpdate( )
+    {
+        Spreadsheet s = new();
+        s.SetContentsOfCell("A0", "0");
+    
+        // create a chain of cells.
+        for ( int i = 1; i < 10; i++ )
+        {
+            string currentCell = "A" + i;
+            string previousCell    = "A" + ( i - 1 );
+            s.SetContentsOfCell( currentCell, "=" + previousCell); // contents of A1 are set to A0
+        }
+    
+        s.SetContentsOfCell("A0", "5.0");
+        Assert.AreEqual(5.0, s.GetCellValue("A2"));
+    }
 }

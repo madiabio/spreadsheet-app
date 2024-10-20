@@ -603,6 +603,10 @@ public class Spreadsheet
                 toRecalculate = SetCellContents(cellName, content);
             }
 
+            // RECALCULATE THE CELLS IN toRecalculate:
+            
+
+
             return toRecalculate;
         }
 
