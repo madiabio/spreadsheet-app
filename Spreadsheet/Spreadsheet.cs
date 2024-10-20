@@ -34,6 +34,8 @@ namespace CS3500.Spreadsheet;
 using CS3500.DependencyGraph;
 using CS3500.Formula;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -162,11 +164,11 @@ internal static class SpreadsheetUtils
 internal class Cell
 {
     // Private fields to store the _contents, _value and _name of a cell.
-    #pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private string _name;
     private object _contents;
     private object _value;
-    #pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     /// <summary>
     ///     Gets or sets public property for the Name of the cell. Validates that all names are letters followed
@@ -214,8 +216,6 @@ internal class Cell
             if (value is string or double or Formula)
             {
                 _contents = value;
-                // TODO: remove this line.
-                // UpdateValue();
             }
             else
             {
@@ -241,46 +241,31 @@ internal class Cell
         }
     }
 
-    // TODO: Remove this code
-    /*
     /// <summary>
-    /// Updates the cell of a cell based on its contents. 
-    /// The cell depends on whether the contents are a string, double, or formula.
+    ///  Gets the contents of the cell in string form.
     /// </summary>
-    /// <param name="lookup">
-    /// A function that provides the cell of a variable (cell) when evaluating a formula.
-    /// This is only needed if the cell contents are a formula.
-    /// If the contents are a string or double, the <paramref name="lookup"/> parameter is not used.
-    /// </param>
-
-    internal void UpdateValue(Lookup? lookup = null)
+    internal string StringForm
     {
-        // Value is dependent on object type of cell.
-        switch (_contents)
+        get
         {
-            case string str:
-                _value = str; // If contents is a string, the cell is the same string
-                break;
-
-            case double dbl:
-                _value = dbl; // If contents is a double, the cell is the same number
-                break;
-
-            case Formula formula:
-                // TODO: for when cell handling is implemented
-                // TODO: if a formula is the contents, then handle that in SetCelLContents, as it will be dependent on the spreadsheet.
-                // _value = formula.Evaluate(s =>  s.Value); // Evaluate the formula and set the cell
-                // _value = formula; // TODO: remove when val hadndling is implemented
-
-                // If no lookup is provided, use a default function that returns 0 for any variable
-                // lookup ??= _ => 0;  // If lookup is null, use a default function that returns 0
-#pragma warning disable CS8604 // Possible null reference argument.
-                _value = formula.Evaluate(lookup); // if this is nullrefexcept and this code executes, then its an issue in the spreadsheet code, not the cell code. dont try/catch.
-#pragma warning restore CS8604 // Possible null reference argument.
-                break;
+            if (_contents is string)
+            {
+                return (string)_contents;
+            }
+            else if (_contents is double)
+            {
+                return ((double)_contents).ToString();
+            }
+            else if (_contents is Formula)
+            {
+                return "=" + Contents.ToString();
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
-    */
 }
 
 /// <summary>
@@ -295,13 +280,14 @@ internal class Cell
 /// </summary>
 public class Spreadsheet
 {
-    /// <summary>
-    ///     This member variable reflects if the spreadsheet has been modified since the last save or initial load of a spreadsheet.
-    /// </summary>
-    #pragma warning disable SA1401
     // TODO could revisit this, but docs said to keep public.
-    public readonly bool Changed = false;
-    #pragma warning restore SA1401
+
+    /// <summary>
+    ///     Gets a value indicating whether the spreadsheet has been modified since the last save or initial load of a spreadsheet.
+    /// </summary>
+#pragma warning disable SA1401
+    public bool Changed { get; private set; } = true; // Flag to track if the spreadsheet has been modified
+#pragma warning restore SA1401
 
     private readonly string spreadsheetName; // Don't change becuaes 'name' is used as a variable a lot in methods.
 
@@ -416,8 +402,47 @@ public class Spreadsheet
     /// </exception>
     public void Save(string filename)
     {
-        // TODO use the builtin System.Text.Json serialization functionality
-        throw new NotImplementedException();
+        bool changedTemp = Changed; // save bool state in case error
+        try
+        {
+            // 1. Create a serializable structure for the cells
+            var cellsData = new Dictionary<string, Dictionary<string, string>>();
+
+            foreach (var cellEntry in _cells)
+            { // Iterate thru each cell in the spreadsheet
+                string cellName = cellEntry.Key;
+                Cell cell = cellEntry.Value;
+
+                // Create the cell's serializable content in the expected format
+                var cellData = new Dictionary<string, string>
+                {
+                    { "StringForm", cell.StringForm },
+                };
+
+                cellsData[cellName] = cellData;
+            }
+
+            // 2. Prepare the final structure to be serialized
+            var spreadsheetData = new Dictionary<string, object>
+            {
+                { "Cells", cellsData },
+            };
+
+            // 3. Serialize the data to JSON
+            string json = JsonSerializer.Serialize(spreadsheetData, new JsonSerializerOptions { WriteIndented = true });
+
+            // 4. Write the JSON to the specified file
+            File.WriteAllText(filename, json);
+
+            // 5. After saving, mark the spreadsheet as unchanged
+            Changed = false;
+        }
+        catch (Exception ex)
+        {
+            // Handle any issues with opening/writing the file
+            Changed = changedTemp; // revert changed back to old status
+            throw new SpreadsheetReadWriteException($"Error saving the spreadsheet to file '{filename}': {ex.Message}");
+        }
     }
 
     /// <summary>

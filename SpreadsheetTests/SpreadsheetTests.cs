@@ -142,7 +142,7 @@ public class SpreadsheetTests
     ///     Ensures a spreadsheet can save to a file name that is valid.
     /// </summary>
     [TestMethod]
-    public void SpreadsheetDefault_TestSaveFunction_FileNameIsValid()
+    public void SpreadsheetDefault_TestSaveFunction_FilenameIsValid()
     {
         Spreadsheet spreadsheet = new();
         const string filename = "file.txt";
@@ -155,12 +155,83 @@ public class SpreadsheetTests
     /// </summary>
     [TestMethod]
     [ExpectedException(typeof(SpreadsheetReadWriteException))]
-    public void SpreadsheetDefault_TestSaveFunction_FileNameIsInValid()
+    public void SpreadsheetDefault_TestSaveFunction_FilenameIsInvalid()
     {
         Spreadsheet spreadsheet = new();
         const string filename = "This file doesn't exist";
         spreadsheet.Save(filename);
     }
+
+
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestSaveFunction_InvalidPath1()
+    {
+        Spreadsheet spreadsheet = new();
+        const string filename = "C:\\Users\\Madi\\Desktop\\file.txt";
+        spreadsheet.Save(filename);
+    }
+
+
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestSaveFunction_SpreadsheetHasContents_InvalidPath1()
+    {
+        Spreadsheet spreadsheet = new();
+        spreadsheet.SetContentsOfCell("A1", "=1+1");
+        spreadsheet.SetContentsOfCell("B1", "=A1+1");
+        spreadsheet.SetContentsOfCell("C1", "1");
+        const string filename = "C:\\Users\\Madi\\Desktop\\file.txt";
+        spreadsheet.Save(filename);
+    }
+
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestSaveFunction_InvalidPath2()
+    {
+        Spreadsheet spreadsheet = new();
+        const string filename = "some\\invalid\\path\\file.txt";
+        spreadsheet.Save(filename);
+    }
+
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestSaveFunction_InvalidPath3()
+    {
+        Spreadsheet spreadsheet = new();
+        const string filename = "some/invalid/path/file.txt";
+        spreadsheet.Save(filename);
+    }
+
+    /// <summary>
+    ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
+    ///     spreadsheet is saved to an invalid file location.
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(SpreadsheetReadWriteException))]
+    public void SpreadsheetDefault_TestSaveFunction_InvalidPath4()
+    {
+        Spreadsheet spreadsheet = new();
+        const string filename = ".";
+        spreadsheet.Save(filename);
+    }
+
 
     // TODO add the following tests:
     // If any of the cell names contained in the saved spreadsheet are invalid
@@ -256,7 +327,7 @@ public class SpreadsheetTests
 
     /// <summary>
     ///     Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
-    ///     into <see cref="Spreadsheet.SetCellContents(string, string)"/>.
+    ///     into <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
     /// </summary>
     [TestMethod]
     [ExpectedException(typeof(InvalidNameException))]
@@ -268,7 +339,7 @@ public class SpreadsheetTests
 
     /// <summary>
     ///     Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
-    ///     into <see cref="Spreadsheet.SetCellContents(string, string)"/>.
+    ///     into <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
     /// </summary>
     [TestMethod]
     [ExpectedException(typeof(FormulaFormatException))]
