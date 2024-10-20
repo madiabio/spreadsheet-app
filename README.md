@@ -21,7 +21,11 @@ At this stage, the Spreadsheet functionality has been implemented, though no GUI
 # Assignment Specific Topics:
 
 ### Time Management Skill Paragraph:
-DONT FORGET TO DO THIS FOR A6!!
+``
+We discussed how our time management has improved. We have learned that it is quite hard to predict how long something will take you. It can be difficult to not be too optimistic with time estimates 
+which would not serve us well at a job. We have both found the most useful way to predict how long somethign will take is easier done when you 
+break down the different aspects of what you are being asked to do and then predict how long those components will take.
+``
 
 ### Time Expenditures:
 | Assignment | Predicted Hours | Actual Hours |                                                                   Notes                                                                   |         Ownership         |
@@ -30,11 +34,7 @@ DONT FORGET TO DO THIS FOR A6!!
 |     A3     |        3        |      5       |                                                  Spent about an hour extra debugging A2.                                                  |         Madi Abio         |
 |     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
 |     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
-|     A6     |        8        |              |                                                                                                                                           | Madi Abio and Sadie Bowen |
-
-NOTE to be removed: SADIES PERSONAL TIME TRACKING 
-- Thursday: Spent 2 hours debugging A5 grading tests.
-- FRIDAY: Spent .5 Hour updating readme and documentation
+|     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
 
 # References:
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
