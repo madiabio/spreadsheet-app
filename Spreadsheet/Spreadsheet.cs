@@ -472,7 +472,7 @@ public class Spreadsheet
             foreach (var cellEntry in loadSpreadsheet._cells)
             { // Iterate thru each cell in the spreadsheet
                 Cell cell = cellEntry.Value;
-                SetContentsOfCell(cellEntry.Key, cell.Contents.ToString());
+                SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
             }
 
             _spreadsheetName = filename;
