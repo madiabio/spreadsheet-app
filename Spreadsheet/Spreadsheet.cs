@@ -303,26 +303,20 @@ public class Spreadsheet
     public readonly bool Changed = false;
     #pragma warning restore SA1401
 
+    private readonly string spreadsheetName; // Don't change becuaes 'name' is used as a variable a lot in methods.
+
     private readonly DependencyGraph _dependencyGraph = new(); // Dependency graph containing all the dependencies of all of the cells in the spreadsheet
     private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
-    ///     Default way to construct a new spreadsheet without a name to store the object.
-    /// </summary>
-    public Spreadsheet()
-    {
-        // TODO should create spreadsheet with name "default"
-    }
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
     ///     Construct a new spreadsheet that uses a name to store spreadsheet object.
+    ///     If no name is passed through, then the name of the spreadsheet is set to "default".
     /// </summary>
-    /// <param name="spreadsheetName"> string name to be stored for spreadsheet. </param>
-    public Spreadsheet(string spreadsheetName)
+    /// <param name="nameInput"> string name to be stored for spreadsheet. </param>
+    public Spreadsheet(string nameInput = "default")
     {
-        // TODO should create spreadsheet with name given in constructor.
+        spreadsheetName = nameInput;
     }
 
     // #TODO This marks the start of new methods that were added and need to be written/ updated.
@@ -474,6 +468,7 @@ public class Spreadsheet
         {
             return cell.Value;
         }
+        
         return string.Empty; // If no cell available, cell is empty.
     }
 
