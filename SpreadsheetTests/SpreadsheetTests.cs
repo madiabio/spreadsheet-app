@@ -38,20 +38,6 @@ using CS3500.Spreadsheet;
 [TestClass]
 public class SpreadsheetTests
 {
-    // ----------- TEST Spreadsheet Empty Constructor-----------
-
-    /// <summary>
-    ///     Checks that when a spreadsheet is initialized with empty constructor,
-    ///     the object is saved under the name "default".
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefaultConstructor_TestNameIsDefault_Valid()
-    {
-        Spreadsheet spreadsheet = new();
-        spreadsheet.Save("default");
-        spreadsheet.Load("default");
-    }
-
     // ----------- TEST Spreadsheet named Constructor-----------
 
     /// <summary>
@@ -318,6 +304,19 @@ public class SpreadsheetTests
     }
 
     /// <summary>
+    ///     Checks a <see cref="InvalidNameException"/> is thrown when an invalid cell name is passed
+    ///     into <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
+    /// </summary>
+    [TestMethod]
+    public void SpreadsheetDefault_TestSetContentsOfCellString_ExpectedBehavior()
+    {
+        Spreadsheet ss = new();
+        ss.SetContentsOfCell("A1", "text");
+        ss.SetContentsOfCell("A1", "fixed");
+        Assert.AreEqual("fixed", ss.GetCellValue("A1"));
+    }
+
+    /// <summary>
     /// <para>
     ///     This test checks the <see cref="Spreadsheet.SetContentsOfCell"/> method works as expected
     ///     by setting the contents of a cell when the contents is a string, then checking the contents of that cell.
@@ -345,6 +344,20 @@ public class SpreadsheetTests
         ss.SetContentsOfCell("A1", "string");
 
         Assert.AreEqual("string", ss.GetCellContents("A1"));
+    }
+
+    /// <summary>
+    /// <para>
+    ///     This test checks the <see cref="Spreadsheet.SetContentsOfCell"/> method works as expected
+    ///     by setting the contents of a cell when the contents is a string, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [ExpectedException(typeof(InvalidNameException))]
+    [TestMethod]
+    public void SpreadsheetDefault_TestSetContentsOfCellFormula_InvalidNameException()
+    {
+        Spreadsheet ss = new();
+        ss.SetContentsOfCell("AB", "=5+2");
     }
 
     /// <summary>

@@ -10,7 +10,7 @@
 
 ### Important Dates
 - Partnership Start Date (A6) ->  17-Oct-2024
-- Commit Date -> date time (when submission was completed)
+- Commit Date -> 20-Oct-2024
 
 ## Overview of this Project
 ``
@@ -36,10 +36,6 @@ It is designed to expose potential bugs within the spreadsheet project.
 - Professor de St. Germain's lecture slides were consulted throughout this assignment
 - Piazza was referenced to gain insight from other students' questions.
 - [Microsoft C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp)
-- [ChatGPT (See ChatGPT section for specific queries)](https://chatgpt.com/)
-
-### ChatGPT Specific Queries
-
 
 ### Consulted Peers
 - No peers were consulted outside of the partnership of Madi Abio and Sadie Bowen.

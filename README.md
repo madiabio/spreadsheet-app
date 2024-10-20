@@ -11,7 +11,7 @@
 ### Important Dates
 - Solution Start Date -> 01-Sep-2024 
 - Partnership Start Date ->  17-Oct-2024
-- Commit Date -> date time (when submission was completed)
+- Commit Date -> 20-Oct-2024
 
 # Comments to Evaluators:
 ``

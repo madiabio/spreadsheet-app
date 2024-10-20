@@ -11,7 +11,7 @@
 ### Important Dates
 - Start Date (A5): 20-Sep-2024
 - Partnership Start Date (A6) ->  17-Oct-2024
-- Commit Date -> date time (when submission was completed)
+- Commit Date -> 20-Oct-2024
 
 ## Overview of this Project
 ``
@@ -36,9 +36,8 @@ number of cells and their properties.
 - Piazza was referenced to gain insight from other students' questions.
 - [Microsoft C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp)
 - [ChatGPT (See ChatGPT section for specific queries)](https://chatgpt.com/)
-
-### ChatGPT Specific Queries
-
+- [multiple enumerations in C# stack overflow](https://stackoverflow.com/questions/8240844/handling-warning-for-possible-multiple-enumeration-of-ienumerable)
+- [multiple enumerations C# official documentation](https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1851)
 
 ### Consulted Peers
 - No peers were consulted outside of the partnership of Madi Abio and Sadie Bowen.
