@@ -233,7 +233,8 @@ internal class Cell
             {
                 string contents => contents,
                 double d => d.ToString(CultureInfo.InvariantCulture),
-                Formula => "=" + Contents
+                Formula => "=" + Contents,
+                _ => string.Empty
             };
         }
     }
@@ -760,7 +761,8 @@ public class Spreadsheet
     {
         ISet<string> variables = formula.GetVariables(); // get formula variables
 
-        IEnumerable<string> cellsToRecalculate; // Stores cells to recalculate. May be un-needed
+        // ReSharper disable once RedundantAssignment
+        IEnumerable<string> cellsToRecalculate = []; // Stores cells to recalculate. May be un-needed
 
         IEnumerable<string> oldDependees = _dependencyGraph.GetDependees(name); // store og the dependees of the cell in case need to restore bc of circ except.
         IEnumerable<string> oldDependents = _dependencyGraph.GetDependents(name); // store og the dependents of the cell in case need to restore bc of circ except.
@@ -789,10 +791,8 @@ public class Spreadsheet
                 {
                     return val;
                 }
-                else
-                {
-                    throw new ArgumentException("Cell does not resolve to numeric cell");
-                }
+
+                throw new ArgumentException("Cell does not resolve to numeric cell");
             }); // update the cell of the cell
 
             _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
@@ -826,10 +826,8 @@ public class Spreadsheet
                     {
                         return val;
                     }
-                    else
-                    {
-                        throw new ArgumentException("Cell does not resolve to numeric cell");
-                    }
+
+                    throw new ArgumentException("Cell does not resolve to numeric cell");
                 }), // update the cell of the cell
             };
 
