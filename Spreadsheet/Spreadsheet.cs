@@ -165,6 +165,7 @@ internal class Cell
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private string _name;
     private object _contents;
+    private object _value;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     /// <summary>
@@ -207,7 +208,18 @@ internal class Cell
     /// Gets or sets the <see cref="Value"/> of a cell. Since the cell class is internal to the spreadsheet,
     /// Value is accessible. It should only be managed by <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
     /// </summary>
-    internal object Value { get; set; }
+    internal object Value
+    {
+        get
+        {
+            return _value;
+        }
+
+        set
+        {
+            _value = value;
+        }
+    }
 
     /// <summary>
     ///  Gets the contents of the cell in string form.
@@ -438,12 +450,6 @@ public class Spreadsheet
             string jsonString = File.ReadAllText(filename);
             Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
             _cells.Clear();
-
-            foreach (var cellEntry in loadSpreadsheet._cells)
-            { // Iterate thru each cell in the spreadsheet
-                Cell cell = cellEntry.Value;
-                SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
-            }
 
             _spreadsheetName = filename;
             Changed = false;
