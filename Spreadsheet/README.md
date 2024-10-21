@@ -20,7 +20,9 @@ number of cells and their properties.
 ``
 
 #### Contents of this Project
-- 
+- This project represents a fully functioning spreadsheet model
+- It is capable of Loading and Saving a spreadsheet using JSON serialization.
+- It is capable of setting the contents of a cell with a string of text, a Formula or a number.
 
 ## Comments to Evaluators:
 - There are no comments for evaluators. 
