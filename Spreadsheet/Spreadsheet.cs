@@ -100,24 +100,24 @@ public class InvalidNameException : Exception
     }
 }
 
-/// <summary>
-///   <para>
-///         Thrown to indicate that the _contents attempting to be set are invalid.
-///   </para>
-/// </summary>
-public class InvalidContentsException : Exception
-{
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="InvalidContentsException"/> class.
-    ///     Allows a message to be added to the exception.
-    /// </summary>
-    ///
-    /// <param name="message"> is the message to be thrown. </param>
-    public InvalidContentsException(string message)
-    : base(message)
-    {
-    }
-}
+// /// <summary>
+// ///   <para>
+// ///         Thrown to indicate that the _contents attempting to be set are invalid.
+// ///   </para>
+// /// </summary>
+// public class InvalidContentsException : Exception
+// {
+//     /// <summary>
+//     ///     Initializes a new instance of the <see cref="InvalidContentsException"/> class.
+//     ///     Allows a message to be added to the exception.
+//     /// </summary>
+//     ///
+//     /// <param name="message"> is the message to be thrown. </param>
+//     public InvalidContentsException(string message)
+//     : base(message)
+//     {
+//     }
+// }
 
 /// <summary>
 ///  <para>
@@ -163,6 +163,7 @@ internal class Cell
 {
     // Private fields to store the _contents, _value and _name of a cell.
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    // ReSharper disable once NotAccessedField.Local
     private string _name;
     private object _contents;
     private object _value;
@@ -451,11 +452,11 @@ public class Spreadsheet
             Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
             _cells.Clear();
 
-            // foreach (var cellEntry in loadSpreadsheet._cells)
-            // { // Iterate thru each cell in the spreadsheet
-            //     Cell cell = cellEntry.Value;
-            //     SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
-            // }
+            foreach (var cellEntry in loadSpreadsheet._cells)
+            { // Iterate thru each cell in the spreadsheet
+                Cell cell = cellEntry.Value;
+                SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
+            }
 
             _spreadsheetName = filename;
             Changed = false;
