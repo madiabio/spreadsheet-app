@@ -462,6 +462,23 @@ public class SpreadsheetTests
     }
 
     /// <summary>
+    /// <para>
+    ///     This test checks the <see cref="Spreadsheet.SetContentsOfCell"/> method works as expected
+    ///     by setting the contents of a cell with a <see cref="Formula"/>, then checking the contents of that cell.
+    /// </para>
+    /// </summary>
+    [TestMethod]
+    [ExpectedException(typeof(CircularException))]
+    public void SpreadsheetDefault_TestSetContentsOfCellFormula_CircularException()
+    {
+        Spreadsheet ss = new();
+
+        ss.SetContentsOfCell("A1", "=1+1");
+        ss.SetContentsOfCell("B1", "=A1");
+        ss.SetContentsOfCell("A1", "=B1");
+    }
+
+    /// <summary>
     ///     Ensure <see cref="Spreadsheet.SetContentsOfCell"/> returns the correct list of cells that
     ///     were updated when the cell was set.
     /// </summary>

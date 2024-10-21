@@ -451,6 +451,12 @@ public class Spreadsheet
             Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
             _cells.Clear();
 
+            // foreach (var cellEntry in loadSpreadsheet._cells)
+            // { // Iterate thru each cell in the spreadsheet
+            //     Cell cell = cellEntry.Value;
+            //     SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
+            // }
+
             _spreadsheetName = filename;
             Changed = false;
         }
