@@ -169,25 +169,16 @@ internal class Cell
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     /// <summary>
-    ///     Gets or sets public property for the Name of the cell. Validates that all names are letters followed
+    ///     Sets public property for the Name of the cell. Validates that all names are letters followed
     ///     by numbers (proper variable syntax).
     /// </summary>
     internal string Name
     {
-        get
-        {
-            return _name;
-        }
-
         set
         {
             if (SpreadsheetUtils.IsValidCellName(value))
             {
                 _name = value.ToUpper();
-            }
-            else
-            {
-                throw new InvalidNameException($"{_name} is not a valid cell name.");
             }
         }
     }
@@ -206,18 +197,9 @@ internal class Cell
         set
         {
             // handle if string is empty
-            if (value is string str && string.IsNullOrWhiteSpace(str))
-            {
-                throw new InvalidContentsException("Contents may not be null or whitespace.");
-            }
-
             if (value is string or double or Formula)
             {
                 _contents = value;
-            }
-            else
-            {
-                throw new InvalidContentsException("Contents must be a string, double, or Formula.");
             }
         }
     }
@@ -264,7 +246,7 @@ internal class Cell
 ///
 /// <para>
 ///     This file represents a the state of a Spreadsheet object. A spreadsheet represents an infinite number
-///     of named cells. A cell can represent 3 different types: A string of text, a number (double), or a Formula.
+///     of d cells. A cell can represent 3 different types: A string of text, a number (double), or a Formula.
 /// </para>
 /// </summary>
 public class Spreadsheet
