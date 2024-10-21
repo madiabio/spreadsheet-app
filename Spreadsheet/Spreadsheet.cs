@@ -582,35 +582,41 @@ public class Spreadsheet
     public IList<string> SetContentsOfCell(string cellName, string content)
     {
         cellName = cellName.ToUpper(); // Normalize the name to uppercase
-        if (SpreadsheetUtils.IsValidCellName(cellName))
+        if (!SpreadsheetUtils.IsValidCellName(cellName))
         {
-            // Determine type of content
-            IList<string> toRecalculate; // Cells to be recalculated
-            if (double.TryParse(content, out double doubleContent))
-            {
-                // if contents are double:
-                toRecalculate = SetCellContents(cellName, doubleContent);
-            }
-            else if (content.Length > 0 && content[0] == '=')
-            {
-                // if contents are formula:
-                Formula fContent = new(content.Substring(1));
-                toRecalculate = SetCellContents(cellName, fContent);
-            }
-            else
-            {
-                // if contents are string:
-                toRecalculate = SetCellContents(cellName, content);
-            }
-
-            // RECALCULATE THE CELLS IN toRecalculate:
-            
-
-
-            return toRecalculate;
+            throw new InvalidNameException($"{cellName} is not a valid cell name");
         }
 
-        throw new InvalidNameException($"{cellName} is not a valid cell name");
+        // Determine type of content
+        IList<string> toRecalculate; // Cells to be recalculated
+        if (double.TryParse(content, out double doubleContent))
+        {
+            // if contents are double:
+            toRecalculate = SetCellContents(cellName, doubleContent);
+        }
+        else if (content.StartsWith($"="))
+        {
+            // if contents are formula:
+            Formula fContent = new(content.Substring(1));
+            toRecalculate = SetCellContents(cellName, fContent);
+        }
+        else
+        {
+            // if contents are string:
+            toRecalculate = SetCellContents(cellName, content);
+        }
+
+        // RECALCULATE THE CELLS IN toRecalculate:
+        foreach (string dependency in toRecalculate)
+        {
+            if (_cells[dependency].Contents is Formula formula)
+            {
+                SetCellContents(dependency, formula);
+            }
+        }
+
+        Changed = true;
+        return toRecalculate;
     }
 
     /// <summary>

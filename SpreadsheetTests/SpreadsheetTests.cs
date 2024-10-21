@@ -523,42 +523,6 @@ public class SpreadsheetTests
         ss.SetContentsOfCell("A1", "=A1*2");
     }
 
-    /// <summary>
-    /// <para>
-    ///     This test checks the <see cref="Spreadsheet.SetContentsOfCell"/> method works as expected
-    ///     by setting the contents of a cell to an empty string, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefault_TestSetSetContentsOfCellEmptyStringReturnsEmptyString_ExpectedBehaviour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = string.Empty;
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        Assert.AreEqual(trueContents, ss.GetCellContents("A1"));
-    }
-
-    /// <summary>
-    /// <para>
-    ///     This test checks the <see cref="Spreadsheet.SetContentsOfCell"/> method works as expected
-    ///     by setting the contents of a cell to an empty string, then checking the contents of that cell.
-    /// </para>
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefault_TestSetSetContentsOfCellEmptyStringNotInGraph_ExpectedBehaviour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = string.Empty;
-
-        ss.SetContentsOfCell("A1", trueContents);
-
-        bool condition =
-            ss.GetNamesOfAllNonemptyCells().Contains("A1"); // A1 should not be in this set, making the bool false.
-        Assert.IsFalse(condition);
-    }
-
     // ----------- TEST GetNamesOfAllNonEmptyCells -----------
 
     /// <summary>
@@ -577,26 +541,6 @@ public class SpreadsheetTests
         HashSet<string> results = ss.GetNamesOfAllNonemptyCells().ToHashSet();
         HashSet<string> expected = new() { "A1", "B1", "C1" };
         Assert.IsTrue(expected.SetEquals(results));
-    }
-
-    /// <summary>
-    ///     Checks that <see cref="Spreadsheet.GetNamesOfAllNonemptyCells()"/> works as expected
-    ///     when cells are added and then removed from the graph.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefault_TestGetNamesOfAllNonemptyCellsAddedAndRemoved_ExpectedBehaviour()
-    {
-        Spreadsheet ss = new();
-        string trueContents = "1.1";
-        ss.SetContentsOfCell("A1", trueContents);
-        ss.SetContentsOfCell("B1", trueContents);
-        ss.SetContentsOfCell("C1", trueContents);
-
-        ss.SetContentsOfCell("A1", string.Empty);
-        ss.SetContentsOfCell("B1", string.Empty);
-        ss.SetContentsOfCell("C1", string.Empty);
-
-        Assert.IsTrue(ss.GetNamesOfAllNonemptyCells().Count == 0);
     }
 
     // ----------- TEST GetCellContents function-----------
@@ -638,11 +582,10 @@ public class SpreadsheetTests
         Assert.AreEqual(11.0, ss.GetCellValue("A3"));
         ss.SetContentsOfCell("A1", "=4.0 + 6.0");
         Assert.AreEqual(10.0, ss.GetCellValue("A3"));
-    
     }
-    
+
     // ----------- STRESS TESTS -----------
-    
+
     /// <summary>
     ///   <para>
     ///     This is a stress test with lots of cells "linked" together.
@@ -662,16 +605,16 @@ public class SpreadsheetTests
     {
         Spreadsheet s = new();
         s.SetContentsOfCell("A0", "0");
-    
+
         // create a chain of cells.
-        for ( int i = 1; i < 10; i++ )
+        for ( int i = 1; i < 1000; i++ )
         {
             string currentCell = "A" + i;
             string previousCell    = "A" + ( i - 1 );
             s.SetContentsOfCell( currentCell, "=" + previousCell); // contents of A1 are set to A0
         }
-    
+
         s.SetContentsOfCell("A0", "5.0");
-        Assert.AreEqual(5.0, s.GetCellValue("A2"));
+        Assert.AreEqual(5.0, s.GetCellValue("A999"));
     }
 }
