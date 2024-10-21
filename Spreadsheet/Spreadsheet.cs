@@ -667,9 +667,8 @@ public class Spreadsheet
         // If the cell has contents, check its dependencies and update.
         if (_cells.TryGetValue(name, out Cell? cell))
         {
-            object oldContents = cell.Contents; // store old contents in case of  circular exception.
-            object oldValue = cell.Value; // store old cell in case of circular exception
-
+            // object oldContents = cell.Contents; // store old contents in case of  circular exception.
+            // object oldValue = cell.Value; // store old cell in case of circular exception
             _cells[name].Contents = formula; // update the contents of the cell
             _cells[name].Value = formula.Evaluate(s =>
             {
