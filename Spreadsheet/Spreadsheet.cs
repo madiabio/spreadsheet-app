@@ -165,7 +165,6 @@ internal class Cell
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     private string _name;
     private object _contents;
-    private object _value;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null cell when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
     /// <summary>
@@ -208,18 +207,7 @@ internal class Cell
     /// Gets or sets the <see cref="Value"/> of a cell. Since the cell class is internal to the spreadsheet,
     /// Value is accessible. It should only be managed by <see cref="Spreadsheet.SetContentsOfCell(string, string)"/>.
     /// </summary>
-    internal object Value
-    {
-        get
-        {
-            return _value;
-        }
-
-        set
-        {
-            _value = value;
-        }
-    }
+    internal object Value { get; set; }
 
     /// <summary>
     ///  Gets the contents of the cell in string form.
