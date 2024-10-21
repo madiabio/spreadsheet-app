@@ -706,16 +706,8 @@ public class Spreadsheet
         // If the cell has contents, check its dependencies and update.
         if (_cells.ContainsKey(name))
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                _cells.Remove(name); // remove the cell if the text is empty (cell is now empty)
-            }
-            else
-            {
-                _cells[name].Contents = text; // update the contents of the cell
-                _cells[name].Value = text; // update cell of cell
-            }
-
+            _cells[name].Contents = text; // update the contents of the cell
+            _cells[name].Value = text; // update cell of cell
             _dependencyGraph.ReplaceDependees(name, new HashSet<string>()); // remove all dependees of the cell because it now a constant.
         }
 
