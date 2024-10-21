@@ -686,17 +686,7 @@ public class Spreadsheet
 
             _dependencyGraph.ReplaceDependees(name, variables); // replace the dependees of the cell with the new variables. need to do this b4 getcells2recalc because it relies on this.
 
-            try
-            {
-                cellsToRecalculate = GetCellsToRecalculate(name);
-            }
-            catch (CircularException)
-            {
-                _cells[name].Contents = oldContents; // change the contents back to the original and don't update.
-                _cells[name].Value = oldValue;
-                _dependencyGraph.ReplaceDependees(name, dependees); // Restore old dependees to cell in dg.
-                throw;
-            }
+            cellsToRecalculate = GetCellsToRecalculate(name);
         }
 
         // If empty cell, create new, add it to cells dictionary and update its contents.
