@@ -112,6 +112,18 @@ public class SpreadsheetTests
     ///     Ensures the updated accessor [] can properly return the value of a cell with a string.
     /// </summary>
     [TestMethod]
+    [ExpectedException(typeof(CircularException))]
+    public void SpreadsheetDefault_TestAccessorTextValue_CircularException()
+    {
+        Spreadsheet spreadsheet = new();
+        spreadsheet.SetContentsOfCell("A1", "=5+5");
+        spreadsheet.SetContentsOfCell("A1", "=A1");
+    }
+
+    /// <summary>
+    ///     Ensures the updated accessor [] can properly return the value of a cell with a string.
+    /// </summary>
+    [TestMethod]
     public void SpreadsheetDefault_TestAccessorTextValue_AreNotEqual()
     {
         Spreadsheet spreadsheet = new();

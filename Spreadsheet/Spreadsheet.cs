@@ -904,7 +904,8 @@ public class Spreadsheet
             {
                 throw new CircularException("A cell cannot reference itself.");
             }
-            else if (!visited.Contains(dependent))
+
+            if (!visited.Contains(dependent))
             {
                 Visit(start, dependent, visited, changed);
             }
