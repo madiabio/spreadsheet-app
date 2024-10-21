@@ -100,24 +100,24 @@ public class InvalidNameException : Exception
     }
 }
 
-/// <summary>
-///   <para>
-///         Thrown to indicate that the _contents attempting to be set are invalid.
-///   </para>
-/// </summary>
-public class InvalidContentsException : Exception
-{
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="InvalidContentsException"/> class.
-    ///     Allows a message to be added to the exception.
-    /// </summary>
-    ///
-    /// <param name="message"> is the message to be thrown. </param>
-    public InvalidContentsException(string message)
-    : base(message)
-    {
-    }
-}
+// /// <summary>
+// ///   <para>
+// ///         Thrown to indicate that the _contents attempting to be set are invalid.
+// ///   </para>
+// /// </summary>
+// public class InvalidContentsException : Exception
+// {
+//     /// <summary>
+//     ///     Initializes a new instance of the <see cref="InvalidContentsException"/> class.
+//     ///     Allows a message to be added to the exception.
+//     /// </summary>
+//     ///
+//     /// <param name="message"> is the message to be thrown. </param>
+//     public InvalidContentsException(string message)
+//     : base(message)
+//     {
+//     }
+// }
 
 /// <summary>
 ///  <para>
