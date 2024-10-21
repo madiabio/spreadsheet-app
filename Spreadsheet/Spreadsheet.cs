@@ -385,7 +385,9 @@ public class Spreadsheet
         try
         {
             string jsonString = File.ReadAllText(filename);
-            Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException(); // assignment Json to new spreadsheet.
+
+            // ReSharper disable once UnusedVariable
+            Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException();
             _cells.Clear();
 
             // Was not able to make this code work.
@@ -394,7 +396,6 @@ public class Spreadsheet
             //     Cell cell = cellEntry.Value;
             //     SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
             // }
-
             _spreadsheetName = filename;
             Changed = false;
         }
@@ -666,6 +667,7 @@ public class Spreadsheet
         }
 
         // If the cell has contents, check its dependencies and update.
+        // ReSharper disable once UnusedVariable
         if (_cells.TryGetValue(name, out Cell? cell))
         {
             // object oldContents = cell.Contents; // store old contents in case of  circular exception.
