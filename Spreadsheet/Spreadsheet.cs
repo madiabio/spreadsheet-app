@@ -233,8 +233,7 @@ internal class Cell
             {
                 string contents => contents,
                 double d => d.ToString(CultureInfo.InvariantCulture),
-                Formula => "=" + Contents,
-                _ => string.Empty
+                Formula => "=" + Contents
             };
         }
     }
