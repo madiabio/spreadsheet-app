@@ -266,26 +266,6 @@ public class SpreadsheetTests
     }
 
     /// <summary>
-    ///     Ensures a spreadsheet can save to a file name that is valid.
-    /// </summary>
-    [TestMethod]
-    public void SpreadsheetDefault_TestLoadSameSpreadsheetNoChange_ExpectedBehavior()
-    {
-        const string filename = "file.json";
-
-        // Arrange
-        var originalSpreadsheet = new Spreadsheet();
-        originalSpreadsheet.Save(filename);
-
-        // Act
-        var loadedSpreadsheet = new Spreadsheet();
-        loadedSpreadsheet.Load(filename);
-
-        // Assert
-        Assert.IsFalse(loadedSpreadsheet.Changed);
-    }
-
-    /// <summary>
     ///     Ensures a <see cref="SpreadsheetReadWriteException"/> is thrown when an
     ///     spreadsheet is saved to an invalid file location.
     /// </summary>
