@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using System;
 using System.Diagnostics;
+using CS3500.Spreadsheet;
 
 /// <summary>
 ///  FIXME.
@@ -42,6 +43,14 @@ public partial class SpreadsheetGUI
     /// </summary>
     private static char[ ] Alphabet { get; } = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
+    // TODO: verify correctness of this injection code
+
+    /// <summary>
+    /// Gets or sets the Spreadsheet class.
+    /// </summary>
+    [Inject]
+    private Spreadsheet SS { get; set; } = null!; // Non-nullable with a null-forgiving operator to satisfy the compiler
+
     /// <summary>
     ///   Gets or sets the javascript object for this web page that allows
     ///   you to interact with any javascript in the associated file.
@@ -51,7 +60,7 @@ public partial class SpreadsheetGUI
    /// <summary>
     ///   Gets or sets FIXME.
     /// </summary>
-    private string FileSaveName { get; set; } = "Spreadsheet.sprd";
+    private string FileSaveName { get; set; } = "Spreadsheet.sprd"; // FIXME: needs to be implemented.
 
     /// <summary>
     ///   <para> Gets or sets the data for the Tool Bar Cell Contents text area, e.g., =57+A2. </para>
@@ -90,7 +99,8 @@ public partial class SpreadsheetGUI
     public bool HasSpreadSheetChanged(  )
     {
         Debug.WriteLine( $"{"HasSpreadSheetChanged",-30}: {Navigator.Uri}. Remove Me." );
-        return false;
+
+        return SS.Changed;
     }
 
     /// <summary>
@@ -150,11 +160,11 @@ public partial class SpreadsheetGUI
     /// <param name="cellName"> The name of the cell. </param>
     /// <param name="row"> The returned conversion between row and zero based index. </param>
     /// <param name="col"> The returned conversion between column letter and zero based matrix index. </param>
-    private static void ConvertCellNameToRowCol( string cellName, out int row, out int col )
+    private static void ConvertCellNameToRowCol(string cellName, out int row, out int col)
     {
-        // FIXME: this needs to be written.
-        col = 0;  // A1 --> (0,0)
-        row = 0;
+        // TODO: Verify this is correct (it's been implemented. og code was hard coded col=0, row=0)
+        col = Array.IndexOf(Alphabet, cellName[0]);  // A1 --> (0,0)
+        row = int.Parse(cellName.Substring(1)) - 1;
     }
 
     /// <summary>

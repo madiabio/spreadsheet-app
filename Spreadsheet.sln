@@ -23,8 +23,14 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpreadsheetTests", "SpreadsheetTests\SpreadsheetTests.csproj", "{E7007F3B-C06B-4002-BB8D-A5E54A40E36C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI", "GUI\GUI.csproj", "{099497C9-F4A0-4AC6-B58B-DD6D18551E48}"
+	ProjectSection(ProjectDependencies) = postProject
+		{88822239-9B46-4355-87B6-EAB7251E5EF4} = {88822239-9B46-4355-87B6-EAB7251E5EF4}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GUI.Client", "GUI.Client\GUI.Client.csproj", "{59F619B6-8996-47C4-9A08-31AA41AA90F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{88822239-9B46-4355-87B6-EAB7251E5EF4} = {88822239-9B46-4355-87B6-EAB7251E5EF4}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
