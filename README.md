@@ -21,12 +21,33 @@ There was an issue with submission and we had to submit the branch. Submitting m
 
 # Assignment Specific Topics:
 
-### Time Management Skill Paragraph:
+### Parnerhsip Contributions
+``
+Briefly describe contributions of each partner. If all work was done via pair programming state as much. 
+``
+
+### Branching
+``
+Detail any branches that were made so that each partner could wokr on seperate functionality. Describe merge process and any challenges. Mkae sure to list commit numbers.``
+
+### Time Management Skill Paragraph (PS6):
 ``
 We discussed how our time management has improved. We have learned that it is quite hard to predict how long something will take you. It can be difficult to not be too optimistic with time estimates 
 which would not serve us well at a job. We have both found the most useful way to predict how long somethign will take is easier done when you 
 break down the different aspects of what you are being asked to do and then predict how long those components will take.
 ``
+### Time Management Skill Table (PS7):
+``
+add paragraph or two reflecting on how estimates rare getting better/worse and what theyre telling abt ur abiliiies
+``
+
+### Partnership evaluation
+``
+if partnership was success write 2 parargaphs. first paragrpah should list one or two examples wehre pratenrship was most effective. what did u do right, how did it make the coding process faster and code better. incldued etails on how assigning tassks helped.
+
+second task should be an area of teamwokr u need to improve upon
+``
+
 
 ### Time Expenditures:
 | Assignment | Predicted Hours | Actual Hours |                                                                   Notes                                                                   |         Ownership         |
@@ -36,6 +57,11 @@ break down the different aspects of what you are being asked to do and then pred
 |     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
 |     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
 |     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
+|     A7     |        8        |              |                                                                                                                                           | Madi Abio and Sadie Bowen |
+
+#### PS7:
+- 2Hrs debugging A6
+- 30 min adding stuff to readme based off design specs and doing all the branching/merging/etc stuff
 
 # References:
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
