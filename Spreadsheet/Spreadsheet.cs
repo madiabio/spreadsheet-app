@@ -38,6 +38,7 @@ using CS3500.DependencyGraph;
 using CS3500.Formula;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 /// <summary>
 /// <para>
@@ -285,7 +286,7 @@ public class Spreadsheet
     ///     Gets a value indicating whether the spreadsheet has been modified since the last save or initial load of a spreadsheet.
     /// </summary>
     #pragma warning disable SA1401
-    public bool Changed { get; private set; } = true; // Flag to track if the spreadsheet has been modified
+    public bool Changed { get; private set; } = false; // Flag to track if the spreadsheet has been modified. Set to false upon init.
     #pragma warning restore SA1401
 
     /// <summary>
@@ -386,16 +387,43 @@ public class Spreadsheet
         {
             string jsonString = File.ReadAllText(filename);
 
+            // FIXME: Old code
+            /*
             // ReSharper disable once UnusedVariable
             Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException();
             _cells.Clear();
 
-            // Was not able to make this code work.
-            // foreach (var cellEntry in loadSpreadsheet._cells)
-            // { // Iterate thru each cell in the spreadsheet
-            //     Cell cell = cellEntry.Value;
-            //     SetContentsOfCell(cellEntry.Key, cell.Contents.ToString() ?? throw new InvalidOperationException());
-            // }
+            // FIXME: Was not able to make this code work:
+            foreach (var cellEntry in loadSpreadsheet._cells)
+            {
+                string cellName = cellEntry.Key; // The key representing the cell name
+                Cell cell = cellEntry.Value; // The cell object
+
+                // Ensure that the cell's contents are properly converted to a string
+                SetContentsOfCell(cellName, cell.Contents?.ToString() ?? throw new InvalidOperationException("Cell contents are null."));
+            }
+            */
+
+            var spreadsheetData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(jsonString) // Deserialise the JSON into dict form.
+            ?? throw new InvalidOperationException("Failed to deserialize spreadsheet.");
+
+            _cells.Clear(); // Clear cells in current spreadsheet
+
+            // Update _Cells dict:
+            var cellsData = spreadsheetData["Cells"];
+            // Iterate over each cell and add it to the spreadsheet
+            foreach (var cellEntry in cellsData)
+            {
+                string cellName = cellEntry.Key;
+                var cellContents = cellEntry.Value;
+
+                // Convert the cell data back into the required format
+                string stringForm = cellContents["StringForm"];
+
+                // Use SetContentsOfCell to populate the spreadsheet with the deserialized content
+                SetContentsOfCell(cellName, stringForm);
+            }
+
             _spreadsheetName = filename;
             Changed = false;
         }
@@ -424,11 +452,13 @@ public class Spreadsheet
     /// </exception>
     public object GetCellValue(string cellName)
     {
+        // Normalise name
+        cellName = cellName.ToUpper();
+
         if (!SpreadsheetUtils.IsValidCellName(cellName))
         {
             throw new InvalidNameException($"{cellName} is not a valid cell name.");
         }
-
         // Attempt to get a cell from the cell
         if (_cells.TryGetValue(cellName, out Cell? cell))
         {
@@ -491,9 +521,9 @@ public class Spreadsheet
         // RECALCULATE THE CELLS IN toRecalculate:
         foreach (string dependency in toRecalculate)
         {
-            if (_cells[dependency].Contents is Formula formula)
+            if (_cells.ContainsKey(dependency) && _cells[dependency].Contents is Formula formula)
             {
-                SetCellContents(dependency, formula);
+                    SetCellContents(dependency, formula);
             }
         }
 
