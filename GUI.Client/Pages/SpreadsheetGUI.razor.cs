@@ -43,8 +43,6 @@ public partial class SpreadsheetGUI
     /// </summary>
     private static char[ ] Alphabet { get; } = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
-    // TODO: verify correctness of this injection code
-
     /// <summary>
     /// Gets or sets the Spreadsheet class.
     /// </summary>
