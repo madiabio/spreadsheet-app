@@ -411,6 +411,7 @@ public class Spreadsheet
 
             // Update _Cells dict:
             var cellsData = spreadsheetData["Cells"];
+
             // Iterate over each cell and add it to the spreadsheet
             foreach (var cellEntry in cellsData)
             {
@@ -459,6 +460,7 @@ public class Spreadsheet
         {
             throw new InvalidNameException($"{cellName} is not a valid cell name.");
         }
+
         // Attempt to get a cell from the cell
         if (_cells.TryGetValue(cellName, out Cell? cell))
         {

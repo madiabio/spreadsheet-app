@@ -64,6 +64,7 @@ second task should be an area of teamwokr u need to improve upon
 - 30 min adding stuff to readme based off design specs and doing all the branching/merging/etc stuff
 
 # References:
+- [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
 - [ChatGPT](https://chatgpt.com/)
 - [Dot Net Pearls](https://www.dotnetperls.com/)
