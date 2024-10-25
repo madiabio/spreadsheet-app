@@ -4,6 +4,4 @@
 
 var builder = Microsoft.AspNetCore.Components.WebAssembly.Hosting.WebAssemblyHostBuilder.CreateDefault(args);
 
-builder.Services.AddSingleton<CS3500.Spreadsheet.Spreadsheet>(); // FIXME: might need to be transient or scoped?
-
 await builder.Build().RunAsync();

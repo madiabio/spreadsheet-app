@@ -35,8 +35,4 @@
     </Content>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Spreadsheet\Spreadsheet.csproj" />
-  </ItemGroup>
-
 </Project>
