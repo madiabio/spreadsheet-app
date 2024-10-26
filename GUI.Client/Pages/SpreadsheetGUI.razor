@@ -31,8 +31,8 @@ else
         <div>
             <label for="FormulaContent">Content:</label>
             <input name="FormulaContent" id="FormulaContent" @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
-            <label for="FormulaContent">Value:</label>
-            <input name="FormulaContent" id="FormulaContent" @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
+            <label for="FormulaValue">Value:</label>
+            <input @bind="ToolBarCellContents" readonly class="input-box"/>
         </div>
     </div>
 
@@ -112,7 +112,7 @@ else
     ///   The name of the file that we want to download to.
     /// </summary>
     private string SaveFileName = "Spreadsheet.sprd";
-
+    
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
     ///   widget and update the toolbar.
