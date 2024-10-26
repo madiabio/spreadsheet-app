@@ -4,6 +4,7 @@
 // Ignore Spelling: Spreadsheeeeeeeeee
 
 namespace SpreadsheetNS;
+using CS3500.Spreadsheet;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -37,6 +38,11 @@ using System.Diagnostics;
 /// </summary>
 public partial class SpreadsheetGUI
 {
+    /// <summary>
+    ///     Instantiate a new instance of a Spreadsheet object.
+    /// </summary>
+    private Spreadsheet _spreadsheet = new();
+
     /// <summary>
     ///    Gets the alphabet for ease of creating columns.
     /// </summary>
@@ -180,6 +186,8 @@ public partial class SpreadsheetGUI
         try
         {
             InputWidgetBackingStore = $"{row},{col}";
+            string cellName = CellNameFromRowCol(row, col);
+            _spreadsheet.SetContentsOfCell(cellName, newInput);
 
             // FIXME: add your connection to the model here.
             //        then update the GUI as appropriate.

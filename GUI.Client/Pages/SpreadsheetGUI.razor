@@ -33,6 +33,7 @@ else
             <input name="FormulaContent" id="FormulaContent" @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
             <input @bind="ToolBarCellContents" readonly class="input-box"/>
+            <p role="CurrentCell">@currentCell</p>
         </div>
     </div>
 
@@ -112,6 +113,8 @@ else
     ///   The name of the file that we want to download to.
     /// </summary>
     private string SaveFileName = "Spreadsheet.sprd";
+
+    private string currentCell = "A1";
     
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
@@ -121,7 +124,6 @@ else
     /// <param name="col"></param>
     private void FocusMainInput( int row, int col )
     {
-        // FIXME: show the user which cell was clicked on
         UpdateToolbar();
         HighlightCell(row, col);
 
@@ -134,8 +136,7 @@ else
     /// </summary>
     private void UpdateToolbar()
     {
-        InputWidgetBackingStore = "hi there";
-
+        InputWidgetBackingStore = ToolBarCellContents;
         StateHasChanged();
     }
 
@@ -157,6 +158,7 @@ else
         }
 
         CellsClassBackingStore[theRow, theCol] = "selected";
+        currentCell = $"{CellNameFromRowCol(theRow, theCol)}";
     }
 
     /// <summary>
