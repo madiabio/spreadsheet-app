@@ -158,9 +158,21 @@ public partial class SpreadsheetGUI
     /// <param name="col"> The returned conversion between column letter and zero based matrix index. </param>
     private static void ConvertCellNameToRowCol( string cellName, out int row, out int col )
     {
-        // FIXME: this needs to be written.
-        col = 0;  // A1 --> (0,0)
+        col = 0;
         row = 0;
+        string letters = new (cellName.TakeWhile(char.IsLetter).ToArray());
+        string numbers = new (cellName.SkipWhile(char.IsLetter).ToArray());
+
+        int.TryParse(numbers, out row);
+
+        foreach (char t in letters)
+        {
+            col *= 26;
+            col += char.ToUpper(t) - 'A' + 1;
+        }
+
+        col--;
+        row--;
     }
 
     /// <summary>

@@ -60,8 +60,8 @@ else
                                 {
                                     int r = row;
                                     int c = col;
-                                    <td class="@CellsClassBackingStore[r,c]"  @onclick="() => FocusMainInput(r,c)">
-                                        <span title="@CellsBackingStore[r,c] "class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
+                                    <td class="@CellsClassBackingStore[r, c]" @onclick="() => FocusMainInput(r, c)">
+                                        <span title="@CellsBackingStore[r, c] "class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
                                     </td>
                                 }
                             </tr>
@@ -169,8 +169,7 @@ else
     private void ChangeSpreadsheetCellValue( ChangeEventArgs eventArgs )
     {
         // FIXME: determine the currently select row, col (hint: it should be saved)
-        int row = 0;
-        int col = 0;
+        ConvertCellNameToRowCol(currentCell, out var row, out var col);
 
         string newInput = eventArgs.Value?.ToString() ?? "oops";
         InputWidgetBackingStore = newInput;
