@@ -200,6 +200,7 @@ public partial class SpreadsheetGUI
             InputWidgetBackingStore = $"{row},{col}";
             string cellName = CellNameFromRowCol(row, col);
             _spreadsheet.SetContentsOfCell(cellName, newInput);
+            cellValue = _spreadsheet.GetCellValue(cellName).ToString();
 
             // FIXME: add your connection to the model here.
             //        then update the GUI as appropriate.

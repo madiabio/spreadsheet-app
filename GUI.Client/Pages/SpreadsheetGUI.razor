@@ -85,9 +85,9 @@ else
             <br/>
 
             <label for="RowsInput"> Number of Rows: </label>
-            <input @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
+            <input @oninput="UpdateSpreadsheetRowSize" @bind="rowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
             <label for="ColsInput"> Number of Cols: </label>
-            <input @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
+            <input @oninput="UpdateSpreadsheetColumnSize" @bind="columnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
         </div>
     </div>
 }
@@ -116,17 +116,11 @@ else
     private string SaveFileName = "Spreadsheet.sprd";
 
     private string currentCell = "A1";
-    // private string cellContents = "";
-    private string cellValue = "value";
+    private string? cellValue = "value";
     
     private static int rowSize = 99;
 
     private static int columnSize = 26;
-
-    // private string _textCellValue = "";
-    // private double _doubleCellValue = 0;
-    // private FormulaError _formulaError = new FormulaError("ERROR");
-
     
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
