@@ -69,13 +69,13 @@ public partial class SpreadsheetGUI
     ///   <para> Gets or sets the data for all of the cells in the spreadsheet GUI. </para>
     ///   <remarks>Backing Store for HTML</remarks>
     /// </summary>
-    private string[,] CellsBackingStore { get; set; } = new string[ 10, 10 ];
+    private string[,] CellsBackingStore { get; set; } = new string[ rowSize, columnSize ];
 
     /// <summary>
     ///   <para> Gets or sets the html class string for all of the cells in the spreadsheet GUI. </para>
     ///   <remarks>Backing Store for HTML CLASS strings</remarks>
     /// </summary>
-    private string[,] CellsClassBackingStore { get; set; } = new string[ 10, 10 ];
+    private string[,] CellsClassBackingStore { get; set; } = new string[ rowSize, columnSize ];
 
     /// <summary>
     ///   Gets or sets a value indicating whether we are showing the save "popup" or not.

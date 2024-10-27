@@ -6,6 +6,7 @@
 @namespace SpreadsheetNS  
 
 @using System.Diagnostics
+@using CS3500.Formula
 
 <NavigationLock ConfirmExternalNavigation="true"
                 OnBeforeInternalNavigation="OnBeforeLeavePage" />
@@ -32,7 +33,7 @@ else
             <label for="FormulaContent">Content:</label>
             <input name="FormulaContent" id="FormulaContent" @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
-            <input @bind="ToolBarCellContents" readonly class="input-box"/>
+            <input @bind="cellValue" readonly class="input-box"/>
             <p role="CurrentCell">@currentCell</p>
         </div>
     </div>
@@ -44,7 +45,7 @@ else
                     <thead>
                         <tr class="fixed-header">
                             <th scope="col">&nbsp;</th>
-                            @for ( int col = 0; col < 10; col++ )
+                            @for ( int col = 0; col < columnSize; col++ )
                             {
                                 <th scope="col">@Alphabet[col]</th>
                             }
@@ -52,16 +53,16 @@ else
                     </thead>
 
                     <tbody>
-                        @for ( int row = 0; row < 10; row++ )
+                        @for ( int row = 0; row < rowSize; row++ )
                         {
                             <tr style="padding:0px !important;">
                                 <th style="padding:0px !important;" scope="row" class="fixed-column">@(row + 1)</th>
-                                @for ( int col = 0; col < 10; col++ )
+                                @for ( int col = 0; col < columnSize; col++ )
                                 {
                                     int r = row;
                                     int c = col;
                                     <td class="@CellsClassBackingStore[r, c]" @onclick="() => FocusMainInput(r, c)">
-                                        <span title="@CellsBackingStore[r, c] "class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
+                                        <span title="@CellsBackingStore[r, c]" class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
                                     </td>
                                 }
                             </tr>
@@ -84,9 +85,9 @@ else
             <br/>
 
             <label for="RowsInput"> Number of Rows: </label>
-            <input name="RowsInput" id="RowsInput" min="1" max="10"/>
+            <input @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
             <label for="ColsInput"> Number of Cols: </label>
-            <input name="ColsInput" id="ColsInput" min="1" max="10"/>
+            <input @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
         </div>
     </div>
 }
@@ -115,6 +116,17 @@ else
     private string SaveFileName = "Spreadsheet.sprd";
 
     private string currentCell = "A1";
+    // private string cellContents = "";
+    private string cellValue = "value";
+    
+    private static int rowSize = 99;
+
+    private static int columnSize = 26;
+
+    // private string _textCellValue = "";
+    // private double _doubleCellValue = 0;
+    // private FormulaError _formulaError = new FormulaError("ERROR");
+
     
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
@@ -139,6 +151,33 @@ else
         InputWidgetBackingStore = ToolBarCellContents;
         StateHasChanged();
     }
+    
+    /// <summary>
+    ///   Make the value and content display/input of the tool bar match the
+    ///   spreadsheet.
+    /// </summary>
+    private void UpdateSpreadsheetRowSize(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int inputValue))
+        {
+            Debug.WriteLine($"Input changed to: {inputValue}");
+            rowSize = inputValue;
+            StateHasChanged();
+        }
+    }
+    
+    /// <summary>
+    ///   Update spreadsheet to have more columns.
+    /// </summary>
+    private void UpdateSpreadsheetColumnSize(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value?.ToString(), out int inputValue))
+        {
+            Debug.WriteLine($"Input changed to: {inputValue}");
+            columnSize = inputValue;
+            StateHasChanged();
+        }
+    }
 
     /// <summary>
     ///   Outline the current cell. erase outlines from everyone else.
@@ -149,9 +188,9 @@ else
     {
         // FIXME: shouldn't use magic constants (e.g., 10).
         // probably should just remember the last cell and empty its backing store.
-        for (int row=0;row<10;row++)
+        for (int row=0;row<rowSize;row++)
         {
-            for (int col=0;col<10;col++)
+            for (int col=0;col<columnSize;col++)
             {
                 CellsClassBackingStore[row, col] = string.Empty;
             }
@@ -168,7 +207,6 @@ else
     /// <param name="eventArgs"></param>
     private void ChangeSpreadsheetCellValue( ChangeEventArgs eventArgs )
     {
-        // FIXME: determine the currently select row, col (hint: it should be saved)
         ConvertCellNameToRowCol(currentCell, out var row, out var col);
 
         string newInput = eventArgs.Value?.ToString() ?? "oops";
