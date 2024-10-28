@@ -30,12 +30,12 @@ else
 {
     <div id="toolbar">
         <div>
+            <p role="CurrentCell">@currentCell</p>
             <label for="FormulaContent">Content:</label>
             <input name="FormulaContent" id="FormulaContent" @oninput="UpdateCellValues" 
                    @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
             <input @bind="cellValue" readonly class="input-box"/>
-            <p role="CurrentCell">@currentCell</p>
         </div>
     </div>
 
@@ -181,8 +181,6 @@ else
     /// <param name="theCol">the cell's col.</param>
     private void HighlightCell(int theRow, int theCol)
     {
-        // FIXME: shouldn't use magic constants (e.g., 10).
-        // probably should just remember the last cell and empty its backing store.
         for (int row=0;row<rowSize;row++)
         {
             for (int col=0;col<columnSize;col++)
