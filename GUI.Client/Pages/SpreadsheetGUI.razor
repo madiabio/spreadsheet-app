@@ -63,6 +63,7 @@ else
                                     int c = col;
                                     <td class="@CellsClassBackingStore[r, c]" @onclick="() => FocusMainInput(r, c)">
                                         <span title="@CellsBackingStore[r, c]" class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
+                                        <input @bind=""/>
                                     </td>
                                 }
                             </tr>
