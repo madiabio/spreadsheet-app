@@ -31,7 +31,8 @@ else
     <div id="toolbar">
         <div>
             <label for="FormulaContent">Content:</label>
-            <input name="FormulaContent" id="FormulaContent" @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
+            <input name="FormulaContent" id="FormulaContent" @oninput="UpdateCellValues" 
+                   @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
             <input @bind="cellValue" readonly class="input-box"/>
             <p role="CurrentCell">@currentCell</p>
@@ -63,7 +64,6 @@ else
                                     int c = col;
                                     <td class="@CellsClassBackingStore[r, c]" @onclick="() => FocusMainInput(r, c)">
                                         <span title="@CellsBackingStore[r, c]" class="SpreadsheetCell">@CellsBackingStore[r, c]</span>
-                                        <input @bind=""/>
                                     </td>
                                 }
                             </tr>
@@ -117,7 +117,7 @@ else
     private string SaveFileName = "Spreadsheet.sprd";
 
     private string currentCell = "A1";
-    private string? cellValue = "value";
+    private string? cellValue = "";
     
     private static int rowSize = 99;
 
@@ -219,7 +219,7 @@ else
     /// <returns></returns>
     private async Task OnBeforeLeavePage( LocationChangingContext context )
     {
-        if ( true ) // FIXME: don't confirm if the sheet is not changed.
+        if ( _spreadsheet.Changed )
         {
             var isConfirmed = await JS.InvokeAsync<bool>(
                 "confirm",

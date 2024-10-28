@@ -201,6 +201,7 @@ public partial class SpreadsheetGUI
             string cellName = CellNameFromRowCol(row, col);
             _spreadsheet.SetContentsOfCell(cellName, newInput);
             cellValue = _spreadsheet.GetCellValue(cellName).ToString();
+            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString() ?? throw new InvalidOperationException();
 
             // FIXME: add your connection to the model here.
             //        then update the GUI as appropriate.
@@ -210,6 +211,11 @@ public partial class SpreadsheetGUI
             // a way to communicate to the user that something went wrong.
             await JS.InvokeVoidAsync( "alert", "Something went wrong." );
         }
+    }
+
+    private void UpdateCellValues(ChangeEventArgs e)
+    {
+        cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
     }
 
     /// <summary>
@@ -301,7 +307,5 @@ public partial class SpreadsheetGUI
         {
             bool success = await JS.InvokeAsync<bool>( "confirm", "Clear the sheet?" );
         }
-
-        // FIXME: you know the drill.
     }
 }
