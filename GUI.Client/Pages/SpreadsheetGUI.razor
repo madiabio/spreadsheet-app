@@ -131,10 +131,12 @@ else
     /// <param name="col"></param>
     private void FocusMainInput( int row, int col )
     {
-        UpdateToolbar();
         HighlightCell(row, col);
+        UpdateToolbar();
 
         FormulaContentEditableInput.FocusAsync(); // <remarks> move focus back to input widget. </remarks>
+
+        StateHasChanged();
     }
 
     /// <summary>

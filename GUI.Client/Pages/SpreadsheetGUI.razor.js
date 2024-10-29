@@ -52,7 +52,7 @@ export function TestJavaScriptInterop( message )
 window.addEventListener("beforeunload",
     async function (event)
     {
-        console.log("Remove Me: JS - calling Blazor's HasSpreadSheetChanged");
+        // console.log("Remove Me: JS - calling Blazor's HasSpreadSheetChanged");
 
         var changed = await dotNetInterface.invokeMethodAsync("HasSpreadSheetChanged");
 
@@ -65,7 +65,7 @@ window.addEventListener("beforeunload",
         }
         else
         {
-            console.log("Remove Me: JS - The spreadsheet was not changed, so we can navigate elsewhere.");
+            // console.log("Remove Me: JS - The spreadsheet was not changed, so we can navigate elsewhere.");
         }
     });
 
@@ -78,7 +78,6 @@ export function saveToFile(fileName, fileContent)
 {
     try
     {
-        console.log(`download file ${fileName} - Remove Me` );
         // Create a blob with the file content
         const blob = new Blob([fileContent], { type: "text/plain" });
 

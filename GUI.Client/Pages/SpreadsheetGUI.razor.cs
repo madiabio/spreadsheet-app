@@ -14,6 +14,7 @@ using Microsoft.JSInterop;
 using System;
 using System.Diagnostics;
 using System.Linq.Expressions;
+using System.Reflection;
 
 /// <summary>
 ///  FIXME.
@@ -164,8 +165,6 @@ public partial class SpreadsheetGUI
     {
         base.OnAfterRender( firstRender );
 
-        Debug.WriteLine( $"{"OnAfterRenderStart",-30}: {Navigator.Uri} - first time({firstRender}). Remove Me." );
-
         if ( firstRender )
         {
             /////////////////////////////////////////////////
@@ -177,8 +176,6 @@ public partial class SpreadsheetGUI
             await JSModule.InvokeVoidAsync( "TestJavaScriptInterop", "Hello JavaScript!" ); // test that it is working.  You could remove this.
             await FormulaContentEditableInput.FocusAsync(); // when we start up, put the focus on the input. you will want to do this anytime a cell is clicked.
         }
-
-        Debug.WriteLine( $"{"OnAfterRender Done",-30}: {Navigator.Uri} - Remove Me." );
     }
 
     /// <summary>
@@ -283,6 +280,9 @@ public partial class SpreadsheetGUI
             CellsClassBackingStore[row, col] = "cell-populated"; // Optional: Apply a class for non-empty cells
         }
 
+        ConvertCellNameToRowCol("A1", out int row2, out int col2);
+        FocusMainInput(row2, col2);
+
         // Notify the component to refresh the UI
         StateHasChanged();
     }
@@ -311,7 +311,7 @@ public partial class SpreadsheetGUI
                 }
             }
 
-            string fileContent = string.Empty; // init to nothing so it can't be null?
+            string fileContent = string.Empty; // init to nothing so it can't be null
 
             InputFileChangeEventArgs eventArgs = args as InputFileChangeEventArgs ?? throw new Exception("that didn't work");
             if ( eventArgs.FileCount == 1 )
@@ -326,24 +326,22 @@ public partial class SpreadsheetGUI
                 using var reader = new System.IO.StreamReader(stream);
                 fileContent = await reader.ReadToEndAsync();
 
-                bool successfulLoad = false; // FIXME: this may be unnecessary
                 try
                 {
-                    // FIXME: in the task sheet it says that the load should remove all existing data BEFORE loading the new data,
-                    //      but i feel like that is handled by the .InstantiateFromJSON method? so idk. check.
                     _spreadsheet.InstantiateFromJSON(fileContent); // Load from JSON string
+                    ResetBackingStores();
                     UpdateBackingStoresFromSpreadsheet(); // Update backing stores with new data
-                    successfulLoad = true;
+                    FileSaveName = _spreadsheet.SpreadsheetName;
                 }
                 catch
                 {
-                    successfulLoad = false;
-                    throw;
-                }
+                    if (JSModule is null)
+                    {
+                        JSModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/SpreadsheetGUI.razor.js");
+                    }
 
-                if (successfulLoad)
-                {
-                    FileSaveName = _spreadsheet.SpreadsheetName;
+                    await JS.InvokeAsync<bool>(
+            "alert", "The load attempt was unsuccessful.");
                 }
 
                 StateHasChanged();
@@ -407,14 +405,14 @@ public partial class SpreadsheetGUI
             }
 
             _spreadsheet = new(); // Init new spreadsheet
-            ResetSpreadsheetData(); // Reset all back end data
+            ResetBackingStores(); // Reset all back end data
         }
     }
 
     /// <summary>
     /// Resets all backend spreadsheet data then refreshes the UI.
     /// </summary>
-    private IList<object> ResetSpreadsheetData()
+    private IList<object> ResetBackingStores()
     {
         string[,] oldBackingStore = CellsBackingStore;
         string[,] oldCellsClassBackingStore = CellsClassBackingStore;
@@ -433,7 +431,10 @@ public partial class SpreadsheetGUI
         // Reset other state variables
         currentCell = "A1";
         cellValue = string.Empty;
-        ToolBarCellContents = string.Empty;
+
+        ConvertCellNameToRowCol("A1", out int row, out int col);
+        FocusMainInput(row, col);
+        HighlightStartingCell(0, 0);
 
         StateHasChanged(); // Refresh UI
 
@@ -441,9 +442,9 @@ public partial class SpreadsheetGUI
     }
 
     /// <summary>
-    /// Restores data in case of failed load operation. For use with old vals returned by <see cref="ResetSpreadsheetData"/>.
+    /// Restores data in case of failed load operation. For use with old vals returned by <see cref="ResetBackingStores"/>.
     /// </summary>
-    private void RestoreData(IList<object> oldVals)
+    private void RestoreBackingStores(IList<object> oldVals)
     {
         // FIXME: not sure if we need this function actually.
         CellsBackingStore = (string[,])oldVals[0];
