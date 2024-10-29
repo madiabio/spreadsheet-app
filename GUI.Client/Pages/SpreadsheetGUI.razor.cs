@@ -103,6 +103,28 @@ public partial class SpreadsheetGUI
     }
 
     /// <summary>
+    ///     updates the current contents of the toolbar.
+    ///     FIXME docs.
+    /// </summary>
+    /// <param name="currentCell"> cell. </param>
+    /// <returns> return. </returns>
+    public string UpdateToolbarContents(string currentCell)
+    {
+        return _spreadsheet.GetCellContents(currentCell).ToString() ?? throw new InvalidOperationException();
+    }
+
+    /// <summary>
+    ///     updates the current contents of the toolbar.
+    ///     FIXME docs.
+    /// </summary>
+    /// <param name="currentCell"> cell. </param>
+    /// <returns> return. </returns>
+    public string UpdateToolbarValue(string currentCell)
+    {
+        return _spreadsheet.GetCellValue(currentCell).ToString() ?? throw new InvalidOperationException();
+    }
+
+    /// <summary>
     ///   Example of how JavaScript can talk "back" to the C# side.
     /// </summary>
     /// <param name="message"> string from javascript side. </param>
@@ -202,12 +224,13 @@ public partial class SpreadsheetGUI
         {
             InputWidgetBackingStore = $"{row},{col}";
             string cellName = CellNameFromRowCol(row, col);
-            _spreadsheet.SetContentsOfCell(cellName, newContents);
-            cellValue = _spreadsheet.GetCellValue(cellName).ToString();
-            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString() ?? throw new InvalidOperationException();
 
-            // FIXME: add your connection to the model here.
-            //        then update the GUI as appropriate.
+            _spreadsheet.SetContentsOfCell(cellName, newContents);
+
+            // FIXME this might be not needed.
+            cellValue = _spreadsheet.GetCellValue(cellName).ToString();
+            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString()
+                                          ?? throw new InvalidOperationException();
         }
         catch
         {

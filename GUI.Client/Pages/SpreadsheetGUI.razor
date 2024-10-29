@@ -86,9 +86,9 @@ else
             <br/>
 
             <label for="RowsInput"> Number of Rows: </label>
-            <input @oninput="UpdateSpreadsheetRowSize" @bind="rowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
+            <input @bind="rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
             <label for="ColsInput"> Number of Cols: </label>
-            <input @oninput="UpdateSpreadsheetColumnSize" @bind="columnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
+            <input @bind="columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
         </div>
     </div>
 }
@@ -119,9 +119,9 @@ else
     private string currentCell = "A1";
     private string? cellValue = "";
     
-    private static int rowSize = 99;
+    private static int rowSize = 10;
 
-    private static int columnSize = 26;
+    private static int columnSize = 10;
     
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
@@ -143,7 +143,8 @@ else
     /// </summary>
     private void UpdateToolbar()
     {
-        InputWidgetBackingStore = ToolBarCellContents;
+        InputWidgetBackingStore = UpdateToolbarContents(currentCell);
+        cellValue = UpdateToolbarValue(currentCell);
         StateHasChanged();
     }
     
@@ -174,6 +175,25 @@ else
         }
     }
 
+    /// <summary>
+    ///   Outline the current cell. erase outlines from everyone else.
+    /// </summary>
+    /// <param name="theRow">the cell's row.</param>
+    /// <param name="theCol">the cell's col.</param>
+    private void HighlightStartingCell(int theRow, int theCol)
+    {
+        for (int row=0;row<rowSize;row++)
+        {
+            for (int col=0;col<columnSize;col++)
+            {
+                CellsClassBackingStore[row, col] = string.Empty;
+            }
+        }
+
+        CellsClassBackingStore[0, 0] = "selected";
+        currentCell = $"{CellNameFromRowCol(theRow, theCol)}";
+    }
+    
     /// <summary>
     ///   Outline the current cell. erase outlines from everyone else.
     /// </summary>
