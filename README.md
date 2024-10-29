@@ -23,7 +23,7 @@ There was an issue with submission and we had to submit the branch. Submitting m
 
 ### Parnerhsip Contributions
 ``
-Briefly describe contributions of each partner. If all work was done via pair programming state as much. 
+All work was done via pair programming
 ``
 
 ### Branching
@@ -38,16 +38,24 @@ break down the different aspects of what you are being asked to do and then pred
 ``
 ### Time Management Skill Table (PS7):
 ``
-add paragraph or two reflecting on how estimates rare getting better/worse and what theyre telling abt ur abiliiies
+Time estimates are getting somewhat worse as the task complexity inceeased over the past two assignments. Debugging has been considered more in the time estimations, but learning 
+new material was not completely considered for A7 as neither partners were familiar with Blazor before this project. This says that there is still much to leran about time
+estimations and how to make them more accurate, especially when new material is incorporated into an assignment.
 ``
 
 ### Partnership evaluation
-``
-if partnership was success write 2 parargaphs. first paragrpah should list one or two examples wehre pratenrship was most effective. what did u do right, how did it make the coding process faster and code better. incldued etails on how assigning tassks helped.
+```
+This partnership proved highly effective, particularly in our collaborative approach to debugging and the open exchange of assistance throughout the assignment. 
+When encountering complex bugs, working together provided invaluable insights that one of us alone might not have spotted. For example, debugging as a 
+team brought fresh perspectives and ideas, often leading to faster and more effective problem-solving. Additionally, although we didn’t divide tasks explicitly, 
+we maintained a fluid dynamic, where each of us readily provided support when the other needed it. This unstructured but collaborative approach allowed us to 
+maximize our individual strengths and work through challenges as a unit, leading to a more refined final product.
 
-second task should be an area of teamwokr u need to improve upon
-``
-
+However, an area for improvement in our teamwork is in managing our time and scheduling collaborative work sessions. Coordinating times to work together was 
+challenging, and this sometimes led to delays or interruptions in our workflow. Improving our time management skills and proactively setting dedicated times for 
+joint work could make our process smoother and more efficient in future collaborations. This would help us avoid scheduling conflicts and ensure that both partners 
+are consistently on the same page, ultimately allowing us to complete tasks more seamlessly and with less stress.
+```
 
 ### Time Expenditures:
 | Assignment | Predicted Hours | Actual Hours |                                                                   Notes                                                                   |         Ownership         |
@@ -57,13 +65,17 @@ second task should be an area of teamwokr u need to improve upon
 |     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
 |     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
 |     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
-|     A7     |        8        |              |                                                                                                                                           | Madi Abio and Sadie Bowen |
+|     A7     |        8        |      12      |                                                         Spent extra time learning Blazor                                                  | Madi Abio and Sadie Bowen |
 
-#### PS7:
+#### PS7 time tracking (needs to be updated):
+```
+** maybe remove this tbh: **
 - 2Hrs debugging A6
 - 30 min adding stuff to readme based off design specs and doing all the branching/merging/etc stuff
 - 2Hrs trying to learn Blazor stuff
 - 3Hrs implementing save, load, clear
+- 2Hrs bugfixing
+```
 
 # References:
 - [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
