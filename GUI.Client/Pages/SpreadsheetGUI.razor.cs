@@ -5,6 +5,7 @@
 
 namespace SpreadsheetNS;
 using CS3500.Spreadsheet;
+using CS3500.Formula;
 
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
@@ -122,6 +123,11 @@ public partial class SpreadsheetGUI
     /// <returns> return. </returns>
     public string UpdateToolbarValue(string currentCell)
     {
+        if (_spreadsheet.GetCellValue(currentCell) is FormulaError)
+        {
+            return "ERROR";
+        }
+
         return _spreadsheet.GetCellValue(currentCell).ToString() ?? throw new InvalidOperationException();
     }
 
@@ -235,6 +241,7 @@ public partial class SpreadsheetGUI
 
             // FIXME this might be not needed.
             cellValue = _spreadsheet.GetCellValue(cellName).ToString();
+
             CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString()
                                           ?? throw new InvalidOperationException();
         }
@@ -248,7 +255,7 @@ public partial class SpreadsheetGUI
     // FIXME: make a summary for this?
     private void UpdateCellValues(ChangeEventArgs e)
     {
-        cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
+            cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
     }
 
     /// <summary>
