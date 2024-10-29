@@ -326,7 +326,7 @@ public class Spreadsheet
         bool changedTemp = Changed; // save state in case of error
         try
         {
-            // 1. Create a serializable structure for the cells
+            // Create a serializable structure for the cells
             var cellsData = new Dictionary<string, Dictionary<string, string>>();
 
             foreach (var cellEntry in _cells)
@@ -575,6 +575,41 @@ public class Spreadsheet
         }
 
         throw new InvalidNameException($"{name} is not a valid cell name.");
+    }
+
+    /// <summary>
+    /// Computes the JSON that would be used in Save method.
+    /// </summary>
+    /// <returns>returns the JSON as a string instead of saving to a file.</returns>
+    public string GetJSON()
+    {
+        // Create a serializable structure for the cells
+        var cellsData = new Dictionary<string, Dictionary<string, string>>();
+
+        foreach (var cellEntry in _cells)
+        { // Iterate thru each cell in the spreadsheet
+            string cellName = cellEntry.Key;
+            Cell cell = cellEntry.Value;
+
+            // Create the cell's serializable content in the expected format
+            var cellData = new Dictionary<string, string>
+                {
+                    { "StringForm", cell.StringForm },
+                };
+
+            cellsData[cellName] = cellData;
+        }
+
+        // 2. Prepare the final structure to be serialized
+        var spreadsheetData = new Dictionary<string, object>
+            {
+                { "Cells", cellsData },
+            };
+
+        // 3. Serialize the data to JSON
+        string json = JsonSerializer.Serialize(spreadsheetData, new JsonSerializerOptions { WriteIndented = true });
+
+        return json;
     }
 
     /// <summary>

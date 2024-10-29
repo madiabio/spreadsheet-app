@@ -96,8 +96,9 @@ public partial class SpreadsheetGUI
     [JSInvokable]
     public bool HasSpreadSheetChanged(  )
     {
+        // FIXME: potentially remove this debug line??
         Debug.WriteLine( $"{"HasSpreadSheetChanged",-30}: {Navigator.Uri}. Remove Me." );
-        return false;
+        return _spreadsheet.Changed;
     }
 
     /// <summary>
@@ -310,7 +311,7 @@ public partial class SpreadsheetGUI
             bool success = await JS.InvokeAsync<bool>( "confirm", "Clear the sheet?" );
 
             // If the spreadsheet has been modified since last save, display warning dialogue
-            if (_spreadsheet.Changed)
+            if (HasSpreadSheetChanged())
             {
                 bool proceed = await ConfirmUnsavedDataLoss();
                 if (!proceed)
