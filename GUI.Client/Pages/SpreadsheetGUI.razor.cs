@@ -110,7 +110,8 @@ public partial class SpreadsheetGUI
     /// <returns> return. </returns>
     public string UpdateToolbarContents(string currentCell)
     {
-        return _spreadsheet.GetCellContents(currentCell).ToString() ?? throw new InvalidOperationException();
+        string contents = _spreadsheet.GetCellContents(currentCell).ToString() ?? throw new InvalidOperationException();
+        return "=" + contents;
     }
 
     /// <summary>
@@ -224,8 +225,13 @@ public partial class SpreadsheetGUI
         {
             InputWidgetBackingStore = $"{row},{col}";
             string cellName = CellNameFromRowCol(row, col);
+            IList<string> list = _spreadsheet.SetContentsOfCell(cellName, newContents);
 
-            _spreadsheet.SetContentsOfCell(cellName, newContents);
+            foreach (string item in list)
+            {
+                ConvertCellNameToRowCol(item, out int updateRow, out int updateCol);
+                CellsBackingStore[updateRow, updateCol] = _spreadsheet.GetCellValue(item).ToString() ?? throw new InvalidOperationException();
+            }
 
             // FIXME this might be not needed.
             cellValue = _spreadsheet.GetCellValue(cellName).ToString();
