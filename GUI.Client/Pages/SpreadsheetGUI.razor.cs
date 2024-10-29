@@ -235,12 +235,14 @@ public partial class SpreadsheetGUI
     {
         try
         {
-            // FIXME: you only need to confirm if the sheet "dirty" (hasn't been changed)
-            bool success = await JS.InvokeAsync<bool>( "confirm", "Do this?" );
-
-            if ( !success )
+            // Check if spreadsheet has been changed. If so, give warning.
+            if (HasSpreadSheetChanged())
             {
-                return;    // user canceled the action.
+                bool success = await ConfirmUnsavedDataLoss();
+                if (!success)
+                {
+                    return;    // user canceled the action.
+                }
             }
 
             string fileContent = string.Empty;
@@ -291,10 +293,11 @@ public partial class SpreadsheetGUI
         // the Blazor life cycle and cannot assure of non-null. </remarks>
         if ( JSModule is not null )
         {
-            var success = await JSModule.InvokeAsync<bool>( "saveToFile", "testfile.txt", "hello world" );
+            string sprdDataJSON = _spreadsheet.GetJSON(); // get the JSON string.
+            var success = await JSModule.InvokeAsync<bool>("saveToFile", SaveFileName, sprdDataJSON);
             if (success)
             {
-                ShowHideSaveGUI( false );
+                ShowHideSaveGUI(false);
                 StateHasChanged();
             }
         }
@@ -320,19 +323,26 @@ public partial class SpreadsheetGUI
                 }
             }
 
-            _spreadsheet = new(); // Clear spreadsheet
-
-            // Reset backing stores to reflect the cleared state
-            CellsBackingStore = new string[rowSize, columnSize];
-            CellsClassBackingStore = new string[rowSize, columnSize];
-
-            // Reset other state variables
-            currentCell = "A1";
-            cellValue = string.Empty;
-            ToolBarCellContents = string.Empty;
-
-            StateHasChanged(); // Refresh UI
+            _spreadsheet = new(); // Init new spreadsheet
+            ResetSpreadsheetData(); // Reset all back end data
         }
+    }
+
+    /// <summary>
+    /// Resets all backend spreadsheet data then refreshes the UI.
+    /// </summary>
+    private void ResetSpreadsheetData()
+    {
+        // Reset backing stores to reflect the cleared state
+        CellsBackingStore = new string[rowSize, columnSize];
+        CellsClassBackingStore = new string[rowSize, columnSize];
+
+        // Reset other state variables
+        currentCell = "A1";
+        cellValue = string.Empty;
+        ToolBarCellContents = string.Empty;
+
+        StateHasChanged(); // Refresh UI
     }
 
     /// <summary>
@@ -349,7 +359,7 @@ public partial class SpreadsheetGUI
 
         // Use JavaScript to show a confirmation dialog
         bool userConfirmed = await JS.InvokeAsync<bool>(
-            "confirm", "You have unsaved changes. Do you really want to proceed and lose them?");
+            "confirm", "You have unsaved changes. Would you like to proceed and lose them?");
 
         return userConfirmed;
     }

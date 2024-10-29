@@ -387,23 +387,6 @@ public class Spreadsheet
         {
             string jsonString = File.ReadAllText(filename);
 
-            // FIXME: Old code
-            /*
-            // ReSharper disable once UnusedVariable
-            Spreadsheet loadSpreadsheet = JsonSerializer.Deserialize<Spreadsheet>(jsonString) ?? throw new InvalidOperationException();
-            _cells.Clear();
-
-            // FIXME: Was not able to make this code work:
-            foreach (var cellEntry in loadSpreadsheet._cells)
-            {
-                string cellName = cellEntry.Key; // The key representing the cell name
-                Cell cell = cellEntry.Value; // The cell object
-
-                // Ensure that the cell's contents are properly converted to a string
-                SetContentsOfCell(cellName, cell.Contents?.ToString() ?? throw new InvalidOperationException("Cell contents are null."));
-            }
-            */
-
             var spreadsheetData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(jsonString) // Deserialise the JSON into dict form.
             ?? throw new InvalidOperationException("Failed to deserialize spreadsheet.");
 
@@ -434,6 +417,37 @@ public class Spreadsheet
             Changed = changedTemp; // revert changed back to old status
             throw new SpreadsheetReadWriteException($"Error loading the spreadsheet to file '{filename}': {exception.Message}");
         }
+    }
+
+    /// <summary>
+    /// Loads a spreadsheet from just a JSON string. <see cref="_spreadsheetName"/> is NOT changed in this method.
+    /// </summary>
+    /// <param name="jsonString"> string to load spreadsheet from. </param>
+    /// <exception cref="InvalidOperationException"> Thrown if there is an error when deserialization. </exception>
+    public void LoadFromJSON(string jsonString)
+    {
+        var spreadsheetData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(jsonString) // Deserialise the JSON into dict form.
+        ?? throw new InvalidOperationException("Failed to deserialize spreadsheet.");
+
+        _cells.Clear(); // Clear cells in current spreadsheet
+
+        // Update _Cells dict:
+        var cellsData = spreadsheetData["Cells"];
+
+        // Iterate over each cell and add it to the spreadsheet
+        foreach (var cellEntry in cellsData)
+        {
+            string cellName = cellEntry.Key;
+            var cellContents = cellEntry.Value;
+
+            // Convert the cell data back into the required format
+            string stringForm = cellContents["StringForm"];
+
+            // Use SetContentsOfCell to populate the spreadsheet with the deserialized content
+            SetContentsOfCell(cellName, stringForm);
+        }
+
+        Changed = false;
     }
 
     /// <summary>
