@@ -202,7 +202,7 @@ else
     {
         ConvertCellNameToRowCol(currentCell, out var row, out var col);
 
-        string newInput = eventArgs.Value?.ToString() ?? "oops";
+        string newInput = eventArgs.Value?.ToString() ?? "oops"; // TODO: maybe change from oops to string.Empty? ie no update occurs
         InputWidgetBackingStore = newInput;
 
         HandleUpdateCellInSpreadsheet( newInput, row, col );

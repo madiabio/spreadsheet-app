@@ -438,7 +438,7 @@ public class Spreadsheet
 
     /// <summary>
     /// <para>
-    ///     Return the cell of the named cell.
+    ///     Return the value of the named cell.
     /// </para>
     /// </summary>
     /// <param name="cellName"> The cell in to be evaluated. </param>

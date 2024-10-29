@@ -63,6 +63,7 @@ public partial class SpreadsheetGUI
     ///   <para> Gets or sets the data for the Tool Bar Cell Contents text area, e.g., =57+A2. </para>
     ///   <remarks>Backing Store for HTML</remarks>
     /// </summary>
+    // FIXME: issues w/ toolbar not updating cell contents Scould be with how this is defined
     private string ToolBarCellContents { get; set; } = string.Empty;
 
     /// <summary>
@@ -189,17 +190,17 @@ public partial class SpreadsheetGUI
 
     /// <summary>
     ///   Called when the input widget (representing the data in a particular cell) is modified.
-    /// </summary>
-    /// <param name="newInput"> The new value to put at row/col. </param>
+    ///  </summary>
+    /// <param name="newContents"> The new contents to put at row/col. </param>
     /// <param name="row"> The matrix row identifier. </param>
     /// <param name="col"> The matrix column identifier. </param>
-    private async void HandleUpdateCellInSpreadsheet( string newInput, int row, int col )
+    private async void HandleUpdateCellInSpreadsheet( string newContents, int row, int col )
     {
         try
         {
             InputWidgetBackingStore = $"{row},{col}";
             string cellName = CellNameFromRowCol(row, col);
-            _spreadsheet.SetContentsOfCell(cellName, newInput);
+            _spreadsheet.SetContentsOfCell(cellName, newContents);
             cellValue = _spreadsheet.GetCellValue(cellName).ToString();
             CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString() ?? throw new InvalidOperationException();
 
@@ -213,6 +214,7 @@ public partial class SpreadsheetGUI
         }
     }
 
+    // FIXME: comment this
     private void UpdateCellValues(ChangeEventArgs e)
     {
         cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
@@ -307,5 +309,24 @@ public partial class SpreadsheetGUI
         {
             bool success = await JS.InvokeAsync<bool>( "confirm", "Clear the sheet?" );
         }
+    }
+
+    /// <summary>
+    /// Displays a warning dialog if an action will result in the loss of unsaved data.
+    /// </summary>
+    /// <returns>A Task that returns true if the user confirms; otherwise, false.</returns>
+    private async Task<bool> ConfirmUnsavedDataLoss()
+    {
+        // Ensure JSModule is initialized (for example, in OnAfterRender when firstRender is true)
+        if (JSModule is null)
+        {
+            JSModule = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/SpreadsheetGUI.razor.js");
+        }
+
+        // Use JavaScript to show a confirmation dialog
+        bool userConfirmed = await JS.InvokeAsync<bool>(
+            "confirm", "You have unsaved changes. Do you really want to proceed and lose them?");
+
+        return userConfirmed;
     }
 }
