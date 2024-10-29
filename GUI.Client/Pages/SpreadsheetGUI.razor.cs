@@ -308,6 +308,29 @@ public partial class SpreadsheetGUI
         if ( JSModule is not null )
         {
             bool success = await JS.InvokeAsync<bool>( "confirm", "Clear the sheet?" );
+
+            // If the spreadsheet has been modified since last save, display warning dialogue
+            if (_spreadsheet.Changed)
+            {
+                bool proceed = await ConfirmUnsavedDataLoss();
+                if (!proceed)
+                {
+                    return; // user decided to cancel action
+                }
+            }
+
+            _spreadsheet = new(); // Clear spreadsheet
+
+            // Reset backing stores to reflect the cleared state
+            CellsBackingStore = new string[rowSize, columnSize];
+            CellsClassBackingStore = new string[rowSize, columnSize];
+
+            // Reset other state variables
+            currentCell = "A1";
+            cellValue = string.Empty;
+            ToolBarCellContents = string.Empty;
+
+            StateHasChanged(); // Refresh UI
         }
     }
 
