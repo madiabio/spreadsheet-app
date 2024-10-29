@@ -63,6 +63,7 @@ second task should be an area of teamwokr u need to improve upon
 - 2Hrs debugging A6
 - 30 min adding stuff to readme based off design specs and doing all the branching/merging/etc stuff
 - 2Hrs trying to learn Blazor stuff
+- 3Hrs implementing save, load, clear
 
 # References:
 - [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
