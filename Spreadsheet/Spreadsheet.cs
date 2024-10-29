@@ -36,6 +36,7 @@ namespace CS3500.Spreadsheet;
 // ReSharper disable RedundantNameQualifier
 using CS3500.DependencyGraph;
 using CS3500.Formula;
+using System;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
@@ -257,9 +258,9 @@ public class Spreadsheet
     private readonly Dictionary<string, Cell> _cells = []; // Dictionary containing all of the cell names pointing to their actual Cell object (cellName -> Cell object)
 
     /// <summary>
-    ///     Name of spreadsheet created.
+    ///     Private field for the name of the spreadsheet.
     /// </summary>
-    private string _spreadsheetName; // Don't change because 'name' is used as a variable a lot in methods.
+    private string _spreadsheetName;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="Spreadsheet"/> class.
@@ -283,9 +284,28 @@ public class Spreadsheet
     }
 
     /// <summary>
+    ///     Gets or sets the name of the spreadsheet. Controls access to ensure consistency.
+    /// </summary>
+    public string SpreadsheetName
+    {
+        get => _spreadsheetName;
+        set
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                _spreadsheetName = value;
+            }
+            else
+            {
+                throw new ArgumentException("Spreadsheet name cannot be empty.");
+            }
+        }
+    }
+
+    /// <summary>
     ///     Gets a value indicating whether the spreadsheet has been modified since the last save or initial load of a spreadsheet.
     /// </summary>
-    #pragma warning disable SA1401
+#pragma warning disable SA1401
     public bool Changed { get; private set; } = false; // Flag to track if the spreadsheet has been modified. Set to false upon init.
     #pragma warning restore SA1401
 
@@ -408,46 +428,56 @@ public class Spreadsheet
                 SetContentsOfCell(cellName, stringForm);
             }
 
-            _spreadsheetName = filename;
+            SpreadsheetName = filename;
             Changed = false;
         }
         catch (Exception exception)
         {
             // Handle any issues with opening/writing the file
             Changed = changedTemp; // revert changed back to old status
-            throw new SpreadsheetReadWriteException($"Error loading the spreadsheet to file '{filename}': {exception.Message}");
+            throw new SpreadsheetReadWriteException($"Error loading the spreadsheet from file '{filename}': {exception.Message}");
         }
     }
 
     /// <summary>
-    /// Loads a spreadsheet from just a JSON string. <see cref="_spreadsheetName"/> is NOT changed in this method.
+    /// Loads a spreadsheet from just a JSON string. <see cref="SpreadsheetName"/> is NOT changed in this method.
     /// </summary>
     /// <param name="jsonString"> string to load spreadsheet from. </param>
     /// <exception cref="InvalidOperationException"> Thrown if there is an error when deserialization. </exception>
-    public void LoadFromJSON(string jsonString)
+    public void InstantiateFromJSON(string jsonString)
     {
-        var spreadsheetData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(jsonString) // Deserialise the JSON into dict form.
-        ?? throw new InvalidOperationException("Failed to deserialize spreadsheet.");
-
-        _cells.Clear(); // Clear cells in current spreadsheet
-
-        // Update _Cells dict:
-        var cellsData = spreadsheetData["Cells"];
-
-        // Iterate over each cell and add it to the spreadsheet
-        foreach (var cellEntry in cellsData)
+        bool changedTemp = Changed;
+        try
         {
-            string cellName = cellEntry.Key;
-            var cellContents = cellEntry.Value;
+            var spreadsheetData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(jsonString) // Deserialise the JSON into dict form.
+            ?? throw new InvalidOperationException("Failed to deserialize spreadsheet.");
 
-            // Convert the cell data back into the required format
-            string stringForm = cellContents["StringForm"];
+            _cells.Clear(); // Clear cells in current spreadsheet
 
-            // Use SetContentsOfCell to populate the spreadsheet with the deserialized content
-            SetContentsOfCell(cellName, stringForm);
+            // Update _Cells dict:
+            var cellsData = spreadsheetData["Cells"];
+
+            // Iterate over each cell and add it to the spreadsheet
+            foreach (var cellEntry in cellsData)
+            {
+                string cellName = cellEntry.Key;
+                var cellContents = cellEntry.Value;
+
+                // Convert the cell data back into the required format
+                string stringForm = cellContents["StringForm"];
+
+                // Use SetContentsOfCell to populate the spreadsheet with the deserialized content
+                SetContentsOfCell(cellName, stringForm);
+            }
+
+            Changed = false;
         }
-
-        Changed = false;
+        catch (Exception exception)
+        {
+            // Handle any issues with opening/writing the file
+            Changed = changedTemp; // revert changed back to old status
+            throw new SpreadsheetReadWriteException($"Error loading the spreadsheet from file': {exception.Message}");
+        }
     }
 
     /// <summary>

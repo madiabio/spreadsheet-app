@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.JSInterop;
 using System;
 using System.Diagnostics;
+using System.Linq.Expressions;
 
 /// <summary>
 ///  FIXME.
@@ -215,10 +216,39 @@ public partial class SpreadsheetGUI
         }
     }
 
-    // FIXME: comment this
+    // FIXME: make a summary for this?
     private void UpdateCellValues(ChangeEventArgs e)
     {
         cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
+    }
+
+    /// <summary>
+    /// Updates CellsBackingStore and CellsClassBackingStore with data from _spreadsheet after loading.
+    /// </summary>
+    private void UpdateBackingStoresFromSpreadsheet()
+    {
+        // Clear existing backing stores
+        CellsBackingStore = new string[rowSize, columnSize];
+        CellsClassBackingStore = new string[rowSize, columnSize];
+
+        // Iterate through non-empty cells in the loaded spreadsheet
+        foreach (var cellName in _spreadsheet.GetNamesOfAllNonemptyCells())
+        {
+            ConvertCellNameToRowCol(cellName, out int row, out int col);
+
+            // Get cell content and value from the spreadsheet
+            var cellContent = _spreadsheet.GetCellContents(cellName).ToString();
+            var cellValue = _spreadsheet.GetCellValue(cellName).ToString();
+
+            // Update CellsBackingStore and CellsClassBackingStore
+            CellsBackingStore[row, col] = cellValue ?? string.Empty;
+
+            // FIXME: check the following line. Not sure what HTML class is lowkey
+            CellsClassBackingStore[row, col] = "cell-populated"; // Optional: Apply a class for non-empty cells
+        }
+
+        // Notify the component to refresh the UI
+        StateHasChanged();
     }
 
     /// <summary>
@@ -245,7 +275,7 @@ public partial class SpreadsheetGUI
                 }
             }
 
-            string fileContent = string.Empty;
+            string fileContent = string.Empty; // init to nothing so it can't be null?
 
             InputFileChangeEventArgs eventArgs = args as InputFileChangeEventArgs ?? throw new Exception("that didn't work");
             if ( eventArgs.FileCount == 1 )
@@ -260,9 +290,26 @@ public partial class SpreadsheetGUI
                 using var reader = new System.IO.StreamReader(stream);
                 fileContent = await reader.ReadToEndAsync();
 
-                await JS.InvokeVoidAsync( "alert", fileContent );
+                bool successfulLoad = false; // FIXME: this may be unnecessary
+                try
+                {
+                    // FIXME: in the task sheet it says that the load should remove all existing data BEFORE loading the new data,
+                    //      but i feel like that is handled by the .InstantiateFromJSON method? so idk. check.
+                    _spreadsheet.InstantiateFromJSON(fileContent); // Load from JSON string
+                    UpdateBackingStoresFromSpreadsheet(); // Update backing stores with new data
+                    successfulLoad = true;
+                }
+                catch
+                {
+                    successfulLoad = false;
+                    throw;
+                }
 
-                // FIXME: you need to do something with this data
+                if (successfulLoad)
+                {
+                    FileSaveName = _spreadsheet.SpreadsheetName;
+                }
+
                 StateHasChanged();
             }
         }
@@ -331,8 +378,18 @@ public partial class SpreadsheetGUI
     /// <summary>
     /// Resets all backend spreadsheet data then refreshes the UI.
     /// </summary>
-    private void ResetSpreadsheetData()
+    private IList<object> ResetSpreadsheetData()
     {
+        string[,] oldBackingStore = CellsBackingStore;
+        string[,] oldCellsClassBackingStore = CellsClassBackingStore;
+
+        string oldCurrentCell = currentCell;
+        string? oldCellValue = cellValue ?? string.Empty;
+
+        string oldToolbarCellContents = ToolBarCellContents;
+
+        IList<object> oldVals = [oldBackingStore, oldCellsClassBackingStore, oldCurrentCell, oldCellValue, oldToolbarCellContents];
+
         // Reset backing stores to reflect the cleared state
         CellsBackingStore = new string[rowSize, columnSize];
         CellsClassBackingStore = new string[rowSize, columnSize];
@@ -343,6 +400,21 @@ public partial class SpreadsheetGUI
         ToolBarCellContents = string.Empty;
 
         StateHasChanged(); // Refresh UI
+
+        return oldVals;
+    }
+
+    /// <summary>
+    /// Restores data in case of failed load operation. For use with old vals returned by <see cref="ResetSpreadsheetData"/>.
+    /// </summary>
+    private void RestoreData(IList<object> oldVals)
+    {
+        // FIXME: not sure if we need this function actually.
+        CellsBackingStore = (string[,])oldVals[0];
+        CellsClassBackingStore = (string[,])oldVals[1];
+        currentCell = (string)oldVals[2];
+        cellValue = (string)oldVals[3];
+        ToolBarCellContents = (string)oldVals[4];
     }
 
     /// <summary>
