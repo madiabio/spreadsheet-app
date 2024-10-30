@@ -10,7 +10,7 @@
 
 ### Important Dates
 - Start Date (A7): 23-Oct-2024
-- Commit Date -> 28-Oct-2024
+- Commit Date -> 29-Oct-2024
 
 ## Overview of this Project
 ``
@@ -34,6 +34,7 @@ This project represents the web pages displayed by the Spreadsheet GUI. It is th
 - Professor de St. Germain's lecture slides were consulted throughout this assignment
 - Piazza was referenced to gain insight from other students' questions.
 - [Microsoft C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp)
+- [W3Schools HTML Tutorial Page](https://www.w3schools.com/html/default.asp)
 
 ### Consulted Peers
 - No peers were consulted outside of the partnership of Madi Abio and Sadie Bowen.

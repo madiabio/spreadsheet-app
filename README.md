@@ -11,24 +11,28 @@
 ### Important Dates
 - Solution Start Date -> 01-Sep-2024 
 - Partnership Start Date ->  17-Oct-2024
-- Commit Date -> 20-Oct-2024
+- Commit Date -> 29-Oct-2024
 
 # Comments to Evaluators:
 ``
-At this stage, the Spreadsheet functionality has been implemented, though no GUI exists and also no methods for handling values of cells exist when the value relies on formulas.
-There was an issue with submission and we had to submit the branch. Submitting main was timing out.
+There are no comments for evaluators at this time. For GUI related questions, see the GUI homepage for information.
 ``
 
 # Assignment Specific Topics:
 
-### Parnerhsip Contributions
+### Partnership Contributions
 ``
-All work was done via pair programming
+All work was done via pair programming. We each took turns implementing code while the other took on a passenger style role
+and helped make comments and provide support to one another. There was a branch made, detailed below created by Sadie Bowen to try to mitigate issues
+that arose when the starter code files were created by Madi. This consisted simply of re-adding the files.
 ``
 
 ### Branching
 ``
-Detail any branches that were made so that each partner could wokr on seperate functionality. Describe merge process and any challenges. Mkae sure to list commit numbers.``
+A branch was made for the PS7 re-adding of starer code. This was not done for separating work purposes, it was done because when on Madi's computer
+the files were not adding correctly. We made a branch so that we could re-add the starter code to create a safe environment away from the README's we had already created.
+The branch was promptly re-merged back into the PS7 branch.
+``
 
 ### Time Management Skill Paragraph (PS6):
 ``
@@ -47,7 +51,7 @@ estimations and how to make them more accurate, especially when new material is 
 ```
 This partnership proved highly effective, particularly in our collaborative approach to debugging and the open exchange of assistance throughout the assignment. 
 When encountering complex bugs, working together provided invaluable insights that one of us alone might not have spotted. For example, debugging as a 
-team brought fresh perspectives and ideas, often leading to faster and more effective problem-solving. Additionally, although we didn’t divide tasks explicitly, 
+team brought fresh perspectives and ideas, often leading to faster and more effective problem-solving. Additionally, although we didnï¿½t divide tasks explicitly, 
 we maintained a fluid dynamic, where each of us readily provided support when the other needed it. This unstructured but collaborative approach allowed us to 
 maximize our individual strengths and work through challenges as a unit, leading to a more refined final product.
 
@@ -65,17 +69,7 @@ are consistently on the same page, ultimately allowing us to complete tasks more
 |     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
 |     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
 |     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
-|     A7     |        8        |      12      |                                                         Spent extra time learning Blazor                                                  | Madi Abio and Sadie Bowen |
-
-#### PS7 time tracking (needs to be updated):
-```
-** maybe remove this tbh: **
-- 2Hrs debugging A6
-- 30 min adding stuff to readme based off design specs and doing all the branching/merging/etc stuff
-- 2Hrs trying to learn Blazor stuff
-- 3Hrs implementing save, load, clear
-- 2Hrs bugfixing
-```
+|     A7     |        8        |      12      |                                                  Spent extra time learning to use Blazor                                                  | Madi Abio and Sadie Bowen |
 
 # References:
 - [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
