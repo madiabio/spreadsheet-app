@@ -26,6 +26,74 @@
     <button class="btn btn-primary" @onclick="HandleSaveFile">Save</button>
     <button class="btn btn-primary" @onclick="() => ShowHideSaveGUI(false)">Cancel</button>
 }
+else if (BetaCellEditor)
+{
+    <div id="toolbar">
+        <div>
+            <p role="CurrentCell">@currentCell</p>
+            <label for="FormulaContent">Content:</label>
+            <input name="FormulaContent" id="FormulaContent" @oninput="UpdateCellValues" 
+                   @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
+            <label for="FormulaValue">Value:</label>
+            <input @bind="cellValue" readonly class="input-box"/>
+        </div>
+    </div>
+
+    <div class="container" style="cursor: pointer;">
+        <div class="table-container">
+            <div class="scrollable">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="fixed-header">
+                            <th scope="col">&nbsp;</th>
+                            @for ( int col = 0; col < columnSize; col++ )
+                            {
+                                <th scope="col">@Alphabet[col]</th>
+                            }
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @for ( int row = 0; row < rowSize; row++ )
+                        {
+                            <tr style="padding:0px !important;">
+                                <th style="padding:0px !important;" scope="row" class="fixed-column">@(row + 1)</th>
+                                @for ( int col = 0; col < columnSize; col++ )
+                                {
+                                    int r = row;
+                                    int c = col;
+                                    <td class="@CellsClassBackingStore[r, c]">
+                                        <input type="text" 
+                                               value="@CellsBackingStore[r, c]" @onchange="@(e => HandleUpdateCellInSpreadsheet(e.Value!.ToString() ?? throw new InvalidOperationException(), r, c))"
+                                               class="cell-input" />
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="FileMenu">
+        <h2>File Menu</h2>
+        <div id="FileHandlers">
+            <button class="btn btn-primary" @onclick="HandleClear">Clear</button>
+            <button class="btn btn-primary" @onclick="() => ShowHideSaveGUI(true)">Save</button>
+            <div id="hideUglyWidget">
+                <InputFile id="inputwidget" name="abc" class="custom-input" type="file" OnChange="HandleLoadFile" />
+            </div>
+            <label for="inputwidget" class="btn btn-primary">Load</label>
+            <br/>
+
+            <label for="RowsInput"> Number of Rows: </label>
+            <input @bind="rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
+            <label for="ColsInput"> Number of Cols: </label>
+            <input @bind="columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
+        </div>
+    </div>
+}
 else
 {
     <div id="toolbar">
@@ -79,6 +147,7 @@ else
         <div id="FileHandlers">
             <button class="btn btn-primary" @onclick="HandleClear">Clear</button>
             <button class="btn btn-primary" @onclick="() => ShowHideSaveGUI(true)">Save</button>
+            <button class="btn btn-primary" @onclick="() => ShowBetaCellEditor(true)">Beta</button>
             <div id="hideUglyWidget">
                 <InputFile id="inputwidget" name="abc" class="custom-input" type="file" OnChange="HandleLoadFile" />
             </div>

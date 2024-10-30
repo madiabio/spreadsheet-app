@@ -86,6 +86,8 @@ public partial class SpreadsheetGUI
     /// </summary>
     private bool SaveGUIView { get; set; }
 
+    private bool BetaCellEditor { get; set; }
+
     /// <summary>
     ///   Query the spreadsheet to see if it has been changed.
     ///   <remarks>
@@ -378,6 +380,16 @@ public partial class SpreadsheetGUI
     private void ShowHideSaveGUI(bool show)
     {
         SaveGUIView = show;
+        StateHasChanged();
+    }
+
+    /// <summary>
+    ///   Switch between the beta spreadsheet view and the main spreadsheet view..
+    /// </summary>
+    /// <param name="show"> if true, show the beta spreadsheet view. </param>
+    private void ShowBetaCellEditor(bool show)
+    {
+        BetaCellEditor = show;
         StateHasChanged();
     }
 

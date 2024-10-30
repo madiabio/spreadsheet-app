@@ -2,21 +2,37 @@
 
 <PageTitle>CS 3500</PageTitle>
 
-<h1>CS 3500 - Spreadsheet GUI in Blazor!</h1>
+<h1>Hello TAs, welcome to Sadie & Madi's Spreadsheet!</h1>
+<h2> How to use our spreadsheet: </h2>
+<ul>
+    <li> Start by navigating to the spreadsheet homepage   </li>
+    <li> You should start with your focus in A1 with a spreadsheet of 26 columns and 99 rows. This is the max size of a spreadsheet.  </li>
+    <li> Cells can be edited by clicking on the contents section of the toolbar.   </li>
+    <li> The cell you are "focused" on will be displayed in the toolbar.   </li>
+    <li> You can update the contents of a cell by clicking on it.   </li>
+    <li> The contents bar will show the original contents a user puts.   </li>
+    <li> The value bar will show the evaluation of a cell's contents.   </li>
 
-<p> Click on the spreadsheet nav link!</p>
+</ul>
 
-<h2> Items that need to be implemented: Basics pulled from AS7 description</h2>
+<h2> Issues we had & important bugs to note: </h2>
+<ul>
+    <li> We were unable to display a useful error message for formula errors inside of a cell itself. There is a simple "ERROR" displayed in the toolbar.   </li>
+    <li> Clear has two prompts, one for asserting that the user would like to clear and one for informing the user if there were changes that may be overwritten.  </li>
+    <li> We were unable to create a useful load message if the user tries to load an invalid file.   </li>
+</ul>
 
-<p> TASK: error messages display in grid                                        STATUS: Not Done </p>
-<p> TASK: A1 needs to highlight on start!!                                         STATUS: Not Done </p>
-<p> TASK: Error message isn't useful                                         STATUS: Not Done </p>
-<p> TASK: Home needs to actually be useful                                         STATUS: Not Done </p>
-
-
-EXTRA ADDITIONS MAYBE FOR EXTRA POINTS / if time
-<p> TASK: make clear only have one prompt for clear and save.     STATUS: NOT DONE </p>
-<p> TASK: make the base starting size 10.                                       STATUS: Not Done </p>
+<h2> Additional Features: </h2>
+<ul>
+    <li> You will notice a "beta" button on our spreadsheet. 
+        This will take you to the beginning of our implementation of allowing the user to directly input 
+        their contents directly into a cell. </li>
+    <li> We were unable to work out some of the visual issues, like the additional boxes that exist around all of the cells.
+        Instead of just deleting it we decided to add an additional page so you could look at it without compromising 
+        our original spreadsheet. </li>
+    <li> We did not work how the toolbar would be worked into this additional feature. </li>
+    <li> In order to exit the beta version, instead of reloading the page, simply return Home (this page) and then navigate back to spreadsheet. </li>
+</ul>
 
 <environment names="Development">
     <script src="_framework/aspnetcore-browser-refresh.js"></script>
