@@ -249,13 +249,21 @@ public partial class SpreadsheetGUI
             }
 
             // FIXME this might be not needed.
-            cellValue = _spreadsheet.GetCellValue(cellName).ToString();
-            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString() ?? throw new InvalidOperationException();
+            if (_spreadsheet.GetCellValue(currentCell) is FormulaError)
+            {
+                cellValue = "ERROR";
+                CellsBackingStore[row, col] = "ERROR";
+            }
+            else
+            {
+                cellValue = _spreadsheet.GetCellValue(cellName).ToString();
+                CellsBackingStore[row, col] = cellValue ?? throw new InvalidOperationException();
+            }
         }
         catch
         {
             // a way to communicate to the user that something went wrong.
-            await JS.InvokeVoidAsync( "alert", "Something went wrong." );
+            await JS.InvokeVoidAsync( "alert", "Your input is invalid." );
         }
     }
 
@@ -444,7 +452,6 @@ public partial class SpreadsheetGUI
 
         ConvertCellNameToRowCol("A1", out int row, out int col);
         FocusMainInput(row, col);
-        HighlightStartingCell(0, 0);
 
         StateHasChanged(); // Refresh UI
 

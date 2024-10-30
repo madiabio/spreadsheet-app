@@ -177,25 +177,6 @@ else
             StateHasChanged();
         }
     }
-
-    /// <summary>
-    ///   Outline the current cell. erase outlines from everyone else.
-    /// </summary>
-    /// <param name="theRow">the cell's row.</param>
-    /// <param name="theCol">the cell's col.</param>
-    private void HighlightStartingCell(int theRow, int theCol)
-    {
-        for (int row=0;row<rowSize;row++)
-        {
-            for (int col=0;col<columnSize;col++)
-            {
-                CellsClassBackingStore[row, col] = string.Empty;
-            }
-        }
-
-        CellsClassBackingStore[0, 0] = "selected";
-        currentCell = $"{CellNameFromRowCol(theRow, theCol)}";
-    }
     
     /// <summary>
     ///   Outline the current cell. erase outlines from everyone else.
