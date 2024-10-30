@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 /// <summary>
 /// <para>
-///     Authors/Partnership:    Madeline Abio & Sadie Bowen
+///     Authors/Partnership:    Madeline Abio and Sadie Bowen
 ///     Date:      20/09/2024
 ///     Course:    CS 3500, University of Utah, School of Computing
 ///     Copyright: CS 3500 and Madeline Abio - This work may not
@@ -22,7 +22,7 @@ using System.Diagnostics;
 /// </para>
 ///
 /// <para>
-///     We, Madeline Abio & Sadie Bowen, certify that I wrote this code from scratch and
+///     We, Madeline Abio and Sadie Bowen, certify that I wrote this code from scratch and
 ///     did not copy it in part or whole from another source.  All
 ///     references used in the completion of the assignments are cited
 ///     in my README file.
