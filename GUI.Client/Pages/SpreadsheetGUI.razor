@@ -5,9 +5,6 @@
 
 @namespace SpreadsheetNS  
 
-@using System.Diagnostics
-@using CS3500.Formula
-
 <NavigationLock ConfirmExternalNavigation="true"
                 OnBeforeInternalNavigation="OnBeforeLeavePage" />
 
@@ -15,27 +12,28 @@
 
 <h1>Simple SpreadSheet GUI @(false ? "*" : "")</h1>
 
-@* <remarks> Example of how to have two pages or an "alert" GUI. </remarks> *@
 @if (SaveGUIView)
 {
     <label for="SavefileName">Name:</label>
-    <input id="SaveFileName" @bind="SaveFileName" type="text">
+    <input id="SaveFileName" @bind="_saveFileName" type="text">
 
     <br/>
 
     <button class="btn btn-primary" @onclick="HandleSaveFile">Save</button>
     <button class="btn btn-primary" @onclick="() => ShowHideSaveGUI(false)">Cancel</button>
 }
+/* Beta Cell Editor represents the beta feature added page.
+ This was done to separate this implementation with the original/ basic one. */
 else if (BetaCellEditor)
 {
     <div id="toolbar">
         <div>
-            <p role="CurrentCell">@currentCell</p>
+            <p role="CurrentCell">@_currentCell</p>
             <label for="FormulaContent">Content:</label>
             <input name="FormulaContent" id="FormulaContent" @oninput="UpdateCellValues" 
-                   @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
+                   @ref="FormulaContentEditableInput" value="@_inputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
-            <input @bind="cellValue" readonly class="input-box"/>
+            <input @bind="_cellValue" readonly class="input-box"/>
         </div>
     </div>
 
@@ -46,7 +44,7 @@ else if (BetaCellEditor)
                     <thead>
                         <tr class="fixed-header">
                             <th scope="col">&nbsp;</th>
-                            @for ( int col = 0; col < columnSize; col++ )
+                            @for ( int col = 0; col < _columnSize; col++ )
                             {
                                 <th scope="col">@Alphabet[col]</th>
                             }
@@ -54,14 +52,16 @@ else if (BetaCellEditor)
                     </thead>
 
                     <tbody>
-                        @for ( int row = 0; row < rowSize; row++ )
+                        @for ( int row = 0; row < _rowSize; row++ )
                         {
                             <tr style="padding:0px !important;">
                                 <th style="padding:0px !important;" scope="row" class="fixed-column">@(row + 1)</th>
-                                @for ( int col = 0; col < columnSize; col++ )
+                                @for ( int col = 0; col < _columnSize; col++ )
                                 {
                                     int r = row;
                                     int c = col;
+                                    /* update the cells to take a text input that updates the cell contents and allows the user to directly type their contents
+                                     into a cell. */
                                     <td class="@CellsClassBackingStore[r, c]">
                                         <input type="text" 
                                                value="@CellsBackingStore[r, c]" @onchange="@(e => HandleUpdateCellInSpreadsheet(e.Value!.ToString() ?? throw new InvalidOperationException(), r, c))"
@@ -88,22 +88,23 @@ else if (BetaCellEditor)
             <br/>
 
             <label for="RowsInput"> Number of Rows: </label>
-            <input @bind="rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
+            <input @bind="_rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
             <label for="ColsInput"> Number of Cols: </label>
-            <input @bind="columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
+            <input @bind="_columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
         </div>
     </div>
 }
+/* This represents the main / basic spreadsheet implementation page. */
 else
 {
     <div id="toolbar">
         <div>
-            <p role="CurrentCell">@currentCell</p>
+            <p role="CurrentCell">@_currentCell</p>
             <label for="FormulaContent">Content:</label>
             <input name="FormulaContent" id="FormulaContent" @oninput="UpdateCellValues" 
-                   @ref="FormulaContentEditableInput" value="@InputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
+                   @ref="FormulaContentEditableInput" value="@_inputWidgetBackingStore" @onchange="ChangeSpreadsheetCellValue" />
             <label for="FormulaValue">Value:</label>
-            <input @bind="cellValue" readonly class="input-box"/>
+            <input @bind="_cellValue" readonly class="input-box"/>
         </div>
     </div>
 
@@ -114,7 +115,7 @@ else
                     <thead>
                         <tr class="fixed-header">
                             <th scope="col">&nbsp;</th>
-                            @for ( int col = 0; col < columnSize; col++ )
+                            @for ( int col = 0; col < _columnSize; col++ )
                             {
                                 <th scope="col">@Alphabet[col]</th>
                             }
@@ -122,11 +123,11 @@ else
                     </thead>
 
                     <tbody>
-                        @for ( int row = 0; row < rowSize; row++ )
+                        @for ( int row = 0; row < _rowSize; row++ )
                         {
                             <tr style="padding:0px !important;">
                                 <th style="padding:0px !important;" scope="row" class="fixed-column">@(row + 1)</th>
-                                @for ( int col = 0; col < columnSize; col++ )
+                                @for ( int col = 0; col < _columnSize; col++ )
                                 {
                                     int r = row;
                                     int c = col;
@@ -155,19 +156,19 @@ else
             <br/>
 
             <label for="RowsInput"> Number of Rows: </label>
-            <input @bind="rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
+            <input @bind="_rowSize" @oninput="UpdateSpreadsheetRowSize" name="RowsInput" id="RowsInput" min="1" step="1" max="99"/>
             <label for="ColsInput"> Number of Cols: </label>
-            <input @bind="columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
+            <input @bind="_columnSize" @oninput="UpdateSpreadsheetColumnSize" name="ColsInput" id="ColsInput" min="1" max="26"/>
         </div>
     </div>
 }
 
 @code
 {
-    // <remark> 
-    //   The code in this section should be 100% GUI related.  Otherwise
-    //   place the code in the .cs file.
-    // </remark>
+    // <summary> 
+    //   This code represents all actions that are GUI related.
+    //   For C# code and spreadsheet implementation functions, see Spreadsheet.GUI.razor.cs
+    // </summary>
 
     /// <summary>
     ///   Direct reference to the html element (so we can focus it).
@@ -178,20 +179,20 @@ else
     ///   The value of the main input widget where users type
     ///   their formulas and numbers and strings.
     /// </summary>
-    private string InputWidgetBackingStore = "";
+    private string _inputWidgetBackingStore = "";
     
     
     /// <summary>
     ///   The name of the file that we want to download to.
     /// </summary>
-    private string SaveFileName = "Spreadsheet.sprd";
+    private string _saveFileName = "Spreadsheet.sprd";
 
-    private string currentCell = "A1";
-    private string? cellValue = "";
+    private string _currentCell = "A1";
+    private string? _cellValue = "";
     
-    private static int rowSize = 99;
+    private static int _rowSize = 99;
 
-    private static int columnSize = 26;
+    private static int _columnSize = 26;
     
     /// <summary>
     ///   When a cell is clicked on, put the focus on the main
@@ -215,55 +216,48 @@ else
     /// </summary>
     private void UpdateToolbar()
     {
-        InputWidgetBackingStore = UpdateToolbarContents(currentCell);
-        cellValue = UpdateToolbarValue(currentCell);
+        _inputWidgetBackingStore = UpdateToolbarContents(_currentCell);
+        _cellValue = UpdateToolbarValue(_currentCell);
         StateHasChanged();
     }
     
     /// <summary>
-    ///   Make the value and content display/input of the tool bar match the
-    ///   spreadsheet.
+    ///   Allow the user to update the spreadsheet row size. Max size 99 rows.
     /// </summary>
     private void UpdateSpreadsheetRowSize(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int inputValue))
-        {
-            Debug.WriteLine($"Input changed to: {inputValue}");
-            rowSize = inputValue;
-            StateHasChanged();
-        }
+        if (!int.TryParse(e.Value?.ToString(), out int inputValue)) return;
+        _rowSize = inputValue;
+        StateHasChanged();
     }
     
     /// <summary>
-    ///   Update spreadsheet to have more columns.
+    ///   Allow the user to update the column size. Max size 26 columns.
     /// </summary>
     private void UpdateSpreadsheetColumnSize(ChangeEventArgs e)
     {
-        if (int.TryParse(e.Value?.ToString(), out int inputValue))
-        {
-            Debug.WriteLine($"Input changed to: {inputValue}");
-            columnSize = inputValue;
-            StateHasChanged();
-        }
+        if (!int.TryParse(e.Value?.ToString(), out int inputValue)) return;
+        _columnSize = inputValue;
+        StateHasChanged();
     }
     
     /// <summary>
     ///   Outline the current cell. erase outlines from everyone else.
     /// </summary>
-    /// <param name="theRow">the cell's row.</param>
-    /// <param name="theCol">the cell's col.</param>
+    /// <param name="theRow"> the cell's row.</param>
+    /// <param name="theCol"> the cell's col.</param>
     private void HighlightCell(int theRow, int theCol)
     {
-        for (int row=0;row<rowSize;row++)
+        for (int row=0;row<_rowSize;row++)
         {
-            for (int col=0;col<columnSize;col++)
+            for (int col=0;col<_columnSize;col++)
             {
                 CellsClassBackingStore[row, col] = string.Empty;
             }
         }
 
         CellsClassBackingStore[theRow, theCol] = "selected";
-        currentCell = $"{CellNameFromRowCol(theRow, theCol)}";
+        _currentCell = $"{CellNameFromRowCol(theRow, theCol)}";
     }
 
     /// <summary>
@@ -273,10 +267,10 @@ else
     /// <param name="eventArgs"></param>
     private void ChangeSpreadsheetCellValue( ChangeEventArgs eventArgs )
     {
-        ConvertCellNameToRowCol(currentCell, out var row, out var col);
+        ConvertCellNameToRowCol(_currentCell, out var row, out var col);
 
-        string newInput = eventArgs.Value?.ToString() ?? "oops"; // TODO: maybe change from oops to string.Empty? ie no update occurs
-        InputWidgetBackingStore = newInput;
+        string newInput = eventArgs.Value?.ToString() ?? string.Empty;
+        _inputWidgetBackingStore = newInput;
 
         HandleUpdateCellInSpreadsheet( newInput, row, col );
 
@@ -284,7 +278,7 @@ else
     }
 
     /// <summary>
-    ///   What to do before the browser is allowed to leave the page.
+    ///   Before the browser is allowed to leave the page, confirm the user wants to navigate away.
     /// </summary>
     /// <param name="context"></param>
     /// <returns></returns>
