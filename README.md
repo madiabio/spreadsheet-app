@@ -11,22 +11,55 @@
 ### Important Dates
 - Solution Start Date -> 01-Sep-2024 
 - Partnership Start Date ->  17-Oct-2024
-- Commit Date -> 20-Oct-2024
+- Commit Date -> 29-Oct-2024
 
 # Comments to Evaluators:
 ``
-At this stage, the Spreadsheet functionality has been implemented, though no GUI exists and also no methods for handling values of cells exist when the value relies on formulas.
-There was an issue with submission and we had to submit the branch. Submitting main was timing out.
+There are no comments for evaluators at this time. For GUI related questions, see the GUI homepage for information.
 ``
 
 # Assignment Specific Topics:
 
-### Time Management Skill Paragraph:
+### Partnership Contributions
+``
+All work was done via pair programming. We each took turns implementing code while the other took on a passenger style role
+and helped make comments and provide support to one another. There was a branch made, detailed below created by Sadie Bowen to try to mitigate issues
+that arose when the starter code files were created by Madi. This consisted simply of re-adding the files.
+``
+
+### Branching
+``
+A branch was made for the PS7 re-adding of starer code. This was not done for separating work purposes, it was done because when on Madi's computer
+the files were not adding correctly. We made a branch so that we could re-add the starter code to create a safe environment away from the README's we had already created.
+The branch was promptly re-merged back into the PS7 branch.
+``
+
+### Time Management Skill Paragraph (PS6):
 ``
 We discussed how our time management has improved. We have learned that it is quite hard to predict how long something will take you. It can be difficult to not be too optimistic with time estimates 
 which would not serve us well at a job. We have both found the most useful way to predict how long somethign will take is easier done when you 
 break down the different aspects of what you are being asked to do and then predict how long those components will take.
 ``
+### Time Management Skill Table (PS7):
+``
+Time estimates are getting somewhat worse as the task complexity inceeased over the past two assignments. Debugging has been considered more in the time estimations, but learning 
+new material was not completely considered for A7 as neither partners were familiar with Blazor before this project. This says that there is still much to leran about time
+estimations and how to make them more accurate, especially when new material is incorporated into an assignment.
+``
+
+### Partnership evaluation
+```
+This partnership proved highly effective, particularly in our collaborative approach to debugging and the open exchange of assistance throughout the assignment. 
+When encountering complex bugs, working together provided invaluable insights that one of us alone might not have spotted. For example, debugging as a 
+team brought fresh perspectives and ideas, often leading to faster and more effective problem-solving. Additionally, although we didn�t divide tasks explicitly, 
+we maintained a fluid dynamic, where each of us readily provided support when the other needed it. This unstructured but collaborative approach allowed us to 
+maximize our individual strengths and work through challenges as a unit, leading to a more refined final product.
+
+However, an area for improvement in our teamwork is in managing our time and scheduling collaborative work sessions. Coordinating times to work together was 
+challenging, and this sometimes led to delays or interruptions in our workflow. Improving our time management skills and proactively setting dedicated times for 
+joint work could make our process smoother and more efficient in future collaborations. This would help us avoid scheduling conflicts and ensure that both partners 
+are consistently on the same page, ultimately allowing us to complete tasks more seamlessly and with less stress.
+```
 
 ### Time Expenditures:
 | Assignment | Predicted Hours | Actual Hours |                                                                   Notes                                                                   |         Ownership         |
@@ -36,8 +69,10 @@ break down the different aspects of what you are being asked to do and then pred
 |     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
 |     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
 |     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
+|     A7     |        8        |      12      |                                                  Spent extra time learning to use Blazor                                                  | Madi Abio and Sadie Bowen |
 
 # References:
+- [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
 - [ChatGPT](https://chatgpt.com/)
 - [Dot Net Pearls](https://www.dotnetperls.com/)
