@@ -100,7 +100,7 @@ can you fix this regex pattern for me:
 /// </summary>
 private const string ValidTokensPattern = @"^[a-zA-Z0-9()+-*/]+$";
 ~~~
-_Respose:_
+_Response:_
 ~~~
 private const string ValidTokensPattern = @"^[a-zA-Z0-9\(\)\+\-\*/]+$";
 ~~~
@@ -167,7 +167,7 @@ Regex Pattern:
 ## Consulted Sources
 - Professor de St. Germain's lecture slides were consulted.
 - Consulted Piazza to help learn from other students' questions.
-- [ChatGPT](chatgpt.com)
+- [ChatGPT](https://chatgpt.com)
 
 ## Consulted Peers
 - No peers outside of this partnership were consulted.
