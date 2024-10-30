@@ -112,8 +112,13 @@ public partial class SpreadsheetGUI
     /// <returns> return. </returns>
     public string UpdateToolbarContents(string currentCell)
     {
-        string contents = _spreadsheet.GetCellContents(currentCell).ToString() ?? throw new InvalidOperationException();
-        return "=" + contents;
+        object contents = _spreadsheet.GetCellContents(currentCell);
+        if (contents is Formula)
+        {
+            return "=" + contents;
+        }
+
+        return contents.ToString() ?? throw new InvalidOperationException();
     }
 
     /// <summary>
@@ -151,7 +156,7 @@ public partial class SpreadsheetGUI
     /// </summary>
     protected override void OnInitialized( )
     {
-        Debug.WriteLine( $"{"OnInitialized",-30}: {Navigator.Uri}. Remove Me." );
+        HighlightCell(0, 0);
     }
 
     /// <summary>
@@ -233,14 +238,19 @@ public partial class SpreadsheetGUI
             foreach (string item in list)
             {
                 ConvertCellNameToRowCol(item, out int updateRow, out int updateCol);
-                CellsBackingStore[updateRow, updateCol] = _spreadsheet.GetCellValue(item).ToString() ?? throw new InvalidOperationException();
+                if (_spreadsheet.GetCellValue(currentCell) is FormulaError)
+                {
+                    CellsBackingStore[updateRow, updateCol] = "ERROR";
+                }
+                else
+                {
+                    CellsBackingStore[updateRow, updateCol] = _spreadsheet.GetCellValue(item).ToString() ?? throw new InvalidOperationException();
+                }
             }
 
             // FIXME this might be not needed.
             cellValue = _spreadsheet.GetCellValue(cellName).ToString();
-
-            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString()
-                                          ?? throw new InvalidOperationException();
+            CellsBackingStore[row, col] = _spreadsheet.GetCellValue(cellName).ToString() ?? throw new InvalidOperationException();
         }
         catch
         {
@@ -252,7 +262,7 @@ public partial class SpreadsheetGUI
     // FIXME: make a summary for this?
     private void UpdateCellValues(ChangeEventArgs e)
     {
-            cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
+        cellValue = _spreadsheet.GetCellValue(currentCell).ToString();
     }
 
     /// <summary>
