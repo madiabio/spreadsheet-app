@@ -13,20 +13,6 @@
 - Partnership Start Date ->  17-Oct-2024
 - Commit Date -> 29-Oct-2024
 
-### Partnership evaluation
-```
-This partnership proved highly effective, particularly in our collaborative approach to debugging and the open exchange of assistance throughout the assignment. 
-When encountering complex bugs, working together provided invaluable insights that one of us alone might not have spotted. For example, debugging as a 
-team brought fresh perspectives and ideas, often leading to faster and more effective problem-solving. Additionally, although we didn�t divide tasks explicitly, 
-we maintained a fluid dynamic, where each of us readily provided support when the other needed it. This unstructured but collaborative approach allowed us to 
-maximize our individual strengths and work through challenges as a unit, leading to a more refined final product.
-
-However, an area for improvement in our teamwork is in managing our time and scheduling collaborative work sessions. Coordinating times to work together was 
-challenging, and this sometimes led to delays or interruptions in our workflow. Improving our time management skills and proactively setting dedicated times for 
-joint work could make our process smoother and more efficient in future collaborations. This would help us avoid scheduling conflicts and ensure that both partners 
-are consistently on the same page, ultimately allowing us to complete tasks more seamlessly and with less stress.
-```
-
 # References:
 - [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
 - [C# Documentation](https://learn.microsoft.com/en-us/dotnet/csharp/programming-guide/)
