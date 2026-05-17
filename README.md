@@ -13,40 +13,6 @@
 - Partnership Start Date ->  17-Oct-2024
 - Commit Date -> 29-Oct-2024
 
-# Comments to Evaluators:
-``
-There are no comments for evaluators at this time. For GUI related questions, see the GUI homepage for information.
-``
-
-# Assignment Specific Topics:
-
-### Partnership Contributions
-``
-All work was done via pair programming. We each took turns implementing code while the other took on a passenger style role
-and helped make comments and provide support to one another. There was a branch made, detailed below created by Sadie Bowen to try to mitigate issues
-that arose when the starter code files were created by Madi. This consisted simply of re-adding the files.
-``
-
-### Branching
-``
-A branch was made for the PS7 re-adding of starer code. This was not done for separating work purposes, it was done because when on Madi's computer
-the files were not adding correctly. We made a branch so that we could re-add the starter code to create a safe environment away from the README's we had already created.
-The branch was promptly re-merged back into the PS7 branch.
-``
-
-### Time Management Skill Paragraph (PS6):
-``
-We discussed how our time management has improved. We have learned that it is quite hard to predict how long something will take you. It can be difficult to not be too optimistic with time estimates 
-which would not serve us well at a job. We have both found the most useful way to predict how long somethign will take is easier done when you 
-break down the different aspects of what you are being asked to do and then predict how long those components will take.
-``
-### Time Management Skill Table (PS7):
-``
-Time estimates are getting somewhat worse as the task complexity inceeased over the past two assignments. Debugging has been considered more in the time estimations, but learning 
-new material was not completely considered for A7 as neither partners were familiar with Blazor before this project. This says that there is still much to leran about time
-estimations and how to make them more accurate, especially when new material is incorporated into an assignment.
-``
-
 ### Partnership evaluation
 ```
 This partnership proved highly effective, particularly in our collaborative approach to debugging and the open exchange of assistance throughout the assignment. 
@@ -60,16 +26,6 @@ challenging, and this sometimes led to delays or interruptions in our workflow. 
 joint work could make our process smoother and more efficient in future collaborations. This would help us avoid scheduling conflicts and ensure that both partners 
 are consistently on the same page, ultimately allowing us to complete tasks more seamlessly and with less stress.
 ```
-
-### Time Expenditures:
-| Assignment | Predicted Hours | Actual Hours |                                                                   Notes                                                                   |         Ownership         |
-|:----------:|:---------------:|:------------:|:-----------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------:|
-|     A2     |        3        |      4       |                                                                    N/A                                                                    |         Madi Abio         |
-|     A3     |        3        |      5       |                                                  Spent about an hour extra debugging A2.                                                  |         Madi Abio         |
-|     A4     |        3        |      6       |                                         Was tired and a little defeated so took longer than usual                                         |         Madi Abio         |
-|     A5     |        4        |      9       | Spent 2 hours fixing an issue where the Formula project wouldn't load, and then SpreadsheetTests wasn't being recognised. Also was tired. |         Madi Abio         |
-|     A6     |        8        |      9       |                                          Spent some extra time for whiteboards and debugging A5.                                          | Madi Abio and Sadie Bowen |
-|     A7     |        8        |      12      |                                                  Spent extra time learning to use Blazor                                                  | Madi Abio and Sadie Bowen |
 
 # References:
 - [Blazor Documentation](https://learn.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-8.0)
